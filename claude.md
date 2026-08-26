@@ -1,8 +1,8 @@
-# [Project Title]
+# Credit Lines - Peru
 
 ## Project Overview
 
-This project [complete]
+This project will investigate the supply of credit lines in Peru. 
 
 ---
 
@@ -13,7 +13,7 @@ project/
 ├── claude.md                  # This file
 ├── data/
 │   ├── raw/                   # Raw data, never modified
-│   └──  processed/             # Cleaned, analysis-ready datasets
+│   └── processed/             # Cleaned, analysis-ready datasets
 ├── code/
 │   ├── 01_collect.R           # Data download and API pulls
 │   ├── 02_clean.R             # Cleaning, merging, variable construction
@@ -34,7 +34,11 @@ project/
 
 ## Data Sources
 
-[complete]
+- Publicly available
+  - SBS - Carpeta de Información del Sistema Financiero
+  - SBS - Boletín Informativo Mensual de la Banca Múltiple
+  - SBS - Series Estadísticas
+  - SBS - Información Estadística de Entidades Financieras
 
 ---
 
