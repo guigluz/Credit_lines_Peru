@@ -1,0 +1,27 @@
+=== 04_figures_unused_credit.R ===
+ 2026-08-26 12:20:48 
+
+system months: 306 (2001-01-31 .. 2026-06-30) | published rows: 296 | summed: 10
+used-credit months: 261 (2001-01-31 .. 2022-09-30)
+
+  wrote fig_used_vs_unused_credit.pdf (18990 bytes)
+  wrote fig_unused_credit_composition.pdf (40155 bytes)
+
+--- figure 1 ---
+months: 261 (2001-01-31 .. 2022-09-30)
+used  : 37.2 -> 361.9 S/bn
+unused: 8.6 -> 237.6 S/bn
+
+--- figure 2 ---
+months: 306 (2001-01-31 .. 2026-06-30)
+category totals at the last month (S/bn):
+                                      category       bn
+          Letters of guarantee (cartas fianza)  61.6710
+                             Letters of credit   7.6759
+                          Bankers' acceptances   0.8687
+                           Guarantees (avales)   0.6068
+ Unused credit lines & undisbursed commitments 177.6879
+
+unused-lines category is NA in 114 of 306 months (all before 2010-07-31)
+
+Done.

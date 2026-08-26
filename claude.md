@@ -58,6 +58,12 @@ project/
 
 ---
 
+## Figures Convetions
+
+- Save as .pdf
+
+---
+
 ## Claude Instructions
 
 When helping with this project:
