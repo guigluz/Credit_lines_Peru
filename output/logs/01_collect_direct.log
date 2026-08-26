@@ -1,0 +1,61 @@
+=== 01_collect_direct.R ===
+ 2026-08-26 11:19:20 
+
+Enumerated 306 monthly URLs for B-2343 (2001-01 .. 2026-06)
+
+  [ 25/306] B-2343-en2003.XLS  cached=TRUE
+  [ 50/306] B-2343-fe2005.XLS  cached=TRUE
+  [ 75/306] B-2343-ma2007.XLS  cached=TRUE
+  [100/306] B-2343-ab2009.XLS  cached=TRUE
+  [125/306] B-2343-my2011.XLS  cached=TRUE
+  [150/306] B-2343-jn2013.XLS  cached=TRUE
+  [175/306] B-2343-jl2015.xlsx  cached=TRUE
+  [200/306] B-2343-ag2017.xlsx  cached=TRUE
+  [225/306] B-2343-se2019.xlsx  cached=TRUE
+  [250/306] B-2343-oc2021.xlsx  cached=TRUE
+  [275/306] B-2343-no2023.xlsx  cached=TRUE
+  [300/306] B-2343-di2025.xlsx  cached=TRUE
+  [306/306] B-2343-jn2026.xlsx  cached=TRUE
+
+--- summary ---
+files enumerated : 306
+available        : 306
+newly downloaded : 0
+served from cache: 306
+unavailable      : 0
+
+Container format by year (true signature, not the .XLS extension):
+ report_year xls xlsx
+        2001  12    0
+        2002  12    0
+        2003  12    0
+        2004  12    0
+        2005  12    0
+        2006  12    0
+        2007  12    0
+        2008  12    0
+        2009  12    0
+        2010  12    0
+        2011  12    0
+        2012  12    0
+        2013   8    4
+        2014   0   12
+        2015   0   12
+        2016   0   12
+        2017   0   12
+        2018   0   12
+        2019   0   12
+        2020   0   12
+        2021   0   12
+        2022   0   12
+        2023   0   12
+        2024   0   12
+        2025   0   12
+        2026   0    6
+
+Format transitions:
+ report_year report_month prev detected_format
+        2013            9  xls            xlsx
+
+Manifest written: data/raw/sbs_boletin/manifest_B-2343.csv
+Done.

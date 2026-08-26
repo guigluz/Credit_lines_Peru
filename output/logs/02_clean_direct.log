@@ -1,0 +1,36 @@
+=== 02_clean_direct.R ===
+ 2026-08-26 11:57:43 
+
+Parsing 306 workbooks...
+
+--- parse status ---
+      status   n
+          ok 305
+ wrong_table   1
+
+Non-ok files:
+       source_file      status
+ B-2343-no2010.XLS wrong_table
+                                                                                                        message
+ table not found: Error in sbs_pick_sheet(path, TITLE_RX) : no sheet matches title pattern in B-2343-no2010.XLS
+
+--- panel ---
+rows                : 49584
+months parsed       : 305  (2001-01-31 .. 2026-06-30)
+distinct bank_raw   : 52
+unmatched bank names: 0
+review_required     : 0 of 52 entity names
+modality labels     : 28 raw -> 10 standardized
+label repairs       : 2 files
+date != filename    : 0 files
+files w/o total row : 10
+
+value_flag:
+     value_flag     n
+    float_noise   629
+ missing_marker  7068
+ negative_share     7
+             ok 41880
+
+Outputs written to data/processed/ and output/validation/.
+Done.

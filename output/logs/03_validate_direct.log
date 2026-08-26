@@ -1,0 +1,89 @@
+=== 03_validate_direct.R ===
+ 2026-08-26 11:58:04 
+
+--- Source B (Series Estadisticas) ---
+rows: 7270 | entities: 62 | months: 261 (2001-01-31 .. 2022-09-30)
+entities NOT in the banca multiple universe (excluded): 31
+entities kept: 28
+
+Excel months   : 305 (2001-01-31 .. 2026-06-30)
+Series months  : 261 (2001-01-31 .. 2022-09-30)
+OVERLAP        : 260 (2001-01-31 .. 2022-09-30)
+
+--- LEVEL 1: bank x modality x month (internal) ---
+bank-months                    : 4716
+zero-credit bank-months        : 117
+share-sum == 100 (<=1e-06 pp)  : 4575 of 4599 active (99.4781%)
+max |share sum - 100| (active) : 0.0049224711 pp
+shares outside [0,100]         : 7 bank-months
+negative share cells           : 7
+float-noise cells (|v|<1e-6)   : 629
+
+--- LEVEL 2: bank x month (cross-source) ---
+   coverage    n
+       both 3918
+ excel_only    1
+
+                                                                                                    level
+ 1. bank x modality x month (cross-source) -- NOT POSSIBLE: Series Estadisticas has no modality breakdown
+                                              2. bank x month (cross-source, matched entities) [miles S/]
+                                     2b. bank x month (cross-source, incl. one-sided coverage) [miles S/]
+                           3. modality x month (internal: published vs implied share) [percentage points]
+                                                              4. system x month (cross-source) [miles S/]
+ n_comparable share_match_exact share_match_loose share_mismatch max_abs_diff
+            0                NA                NA             NA           NA
+         3918         0.8524758         0.9931087   0.0068912711 1.228760e+05
+         3918         0.8524758         0.9931087   0.0068912711 1.228760e+05
+         2631         0.9946788         0.9992398   0.0007601672 3.634965e-03
+          260         0.6846154         0.9307692   0.0692307692 1.607080e+05
+ mean_abs_diff median_abs_diff max_rel_diff
+            NA              NA           NA
+  3.935363e+02    1.860000e-01 0.0506920353
+  3.935363e+02    1.860000e-01 0.0506920353
+  2.944098e-06    1.110223e-16 0.0009271816
+  5.926514e+03    3.340000e-01 0.0043313634
+
+--- discrepancy concentration (bank x month, mismatch = outside 1e-4 relative) ---
+         dimension             key    n n_mismatch share_mismatch max_abs_diff
+ bank_standardized banco_pichincha  260         12    0.046153846    51085.000
+ bank_standardized       interbank  260         11    0.042307692   122876.000
+ bank_standardized      bankboston   55          2    0.036363636        1.000
+ bank_standardized  banco_cencosud   79          2    0.025316456        0.504
+       file_format             xls 2158         27    0.012511585   122876.000
+         has_scope           FALSE 3354         27    0.008050089   122876.000
+       report_year            2002  180         13    0.072222222   117313.000
+       report_year            2001  180         10    0.055555556   122876.000
+       report_year            2005  158          2    0.012658228        1.000
+       report_year            2012  185          2    0.010810811        0.502
+ max_rel_diff
+  0.050692035
+  0.040636420
+  0.001883239
+  0.003942857
+  0.050692035
+  0.050692035
+  0.050692035
+  0.040636420
+  0.001883239
+  0.003942857
+
+mismatches: 23 material, 4 rounding/precision (<= 1 miles S/)
+
+--- discrepancy window: 2001-05-31 .. 2002-10-31 ---
+banks accounting for every mismatch in the window: interbank, banco_pichincha
+ bank_standardized n_months n_mismatch total_diff
+         interbank       18         11   -1101933
+   banco_pichincha       18         12    -438851
+system gap vs sum of bank gaps: max |residual| = 5 miles S/ over 18 months
+OUTSIDE the window: n=3648, exact=87.3629%, within 1e-4 rel=99.8904%, max |diff|=2 miles S/
+
+--- review queue ---
+                item severity  n
+ bank_month_mismatch     high 23
+ bank_month_mismatch   medium  4
+ coverage_excel_only   medium  1
+   share_sum_off_100      low 24
+       unparsed_file     high  1
+
+Outputs written to output/validation/.
+Done.

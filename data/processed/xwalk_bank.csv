@@ -1,0 +1,53 @@
+bank_raw,bank_standardized,bank_id,scope_note,bank_footnote,source,first_seen,last_seen,n_months,mapping_method,mapping_confidence,review_required,mapping_note
+TOTAL BANCA MÚLTIPLE,__SYSTEM__,__SYSTEM__,NA,,excel_B-2343,2001-11-30,2026-06-30,295,exact_canonical,high,FALSE,NA
+B. Azteca Perú,alfin_banco,alfin_banco,NA,,excel_B-2343,2008-01-31,2021-10-31,165,exact_canonical,high,FALSE,NA
+Alfin Banco 4/,alfin_banco,alfin_banco,NA,4/,excel_B-2343,2021-11-30,2022-06-30,8,exact_canonical,high,FALSE,NA
+Alfin Banco,alfin_banco,alfin_banco,NA,,excel_B-2343,2022-07-31,2026-06-30,48,exact_canonical,high,FALSE,NA
+Banco BCI Perú**,banco_bci,banco_bci,NA,**,excel_B-2343,2022-07-31,2022-10-31,4,exact_canonical,high,FALSE,NA
+Banco BCI Perú,banco_bci,banco_bci,NA,,excel_B-2343,2022-11-30,2026-06-30,44,exact_canonical,high,FALSE,NA
+B. Cencosud,banco_cencosud,banco_cencosud,NA,,excel_B-2343,2012-08-31,2019-02-28,79,exact_canonical,high,FALSE,NA
+B. del Trabajo,banco_del_trabajo,banco_del_trabajo,NA,,excel_B-2343,2001-01-31,2008-12-31,96,exact_canonical,high,FALSE,NA
+B. Efectiva*,banco_efectiva,banco_efectiva,NA,*,excel_B-2343,2026-06-30,2026-06-30,1,exact_canonical,high,FALSE,NA
+Falabella Perú S.A,banco_falabella,banco_falabella,NA,,excel_B-2343,2007-06-30,2007-12-31,7,exact_canonical,high,FALSE,NA
+B. Falabella Perú,banco_falabella,banco_falabella,NA,,excel_B-2343,2008-01-31,2026-06-30,221,exact_canonical,high,FALSE,NA
+B.GNB,banco_gnb,banco_gnb,NA,,excel_B-2343,2013-10-31,2013-10-31,1,exact_canonical,high,FALSE,NA
+B. GNB,banco_gnb,banco_gnb,NA,,excel_B-2343,2013-11-30,2026-06-30,152,exact_canonical,high,FALSE,NA
+B. ICBC,banco_icbc,banco_icbc,NA,,excel_B-2343,2014-02-28,2026-06-30,149,exact_canonical,high,FALSE,NA
+B. Financiero,banco_pichincha,banco_pichincha,NA,,excel_B-2343,2001-01-31,2018-07-31,199,exact_canonical,high,FALSE,NA
+B. Financiero 2/,banco_pichincha,banco_pichincha,NA,2/,excel_B-2343,2001-11-30,2002-10-31,11,exact_canonical,high,FALSE,NA
+B. Pichincha*,banco_pichincha,banco_pichincha,NA,*,excel_B-2343,2018-08-31,2018-09-30,2,exact_canonical,high,FALSE,NA
+B. Pichincha,banco_pichincha,banco_pichincha,NA,,excel_B-2343,2018-10-31,2026-06-30,93,exact_canonical,high,FALSE,NA
+B. Ripley,banco_ripley,banco_ripley,NA,,excel_B-2343,2008-01-31,2026-06-30,221,exact_canonical,high,FALSE,NA
+B. Sudamericano,banco_sudamericano,banco_sudamericano,NA,,excel_B-2343,2001-01-31,2002-09-30,21,exact_canonical,high,FALSE,NA
+B. Sudamericano (con sucursales en el exterior),banco_sudamericano,banco_sudamericano,(con sucursales en el exterior),,excel_B-2343,2002-10-31,2006-04-30,43,canonical_after_scope_strip,medium,FALSE,NA
+B. de Comercio,bancom,bancom,NA,,excel_B-2343,2001-01-31,2023-08-31,271,exact_canonical,high,FALSE,NA
+BANCOM,bancom,bancom,NA,,excel_B-2343,2023-09-30,2026-06-30,34,exact_canonical,high,FALSE,current name
+Bank of China*,bank_of_china,bank_of_china,NA,*,excel_B-2343,2020-07-31,2020-07-31,1,exact_canonical,high,FALSE,NA
+Bank of China,bank_of_china,bank_of_china,NA,,excel_B-2343,2020-08-31,2026-06-30,71,exact_canonical,high,FALSE,NA
+BankBoston,bankboston,bankboston,NA,,excel_B-2343,2001-01-31,2005-07-31,55,exact_canonical,high,FALSE,NA
+B. Continental,bbva_peru,bbva_peru,NA,,excel_B-2343,2001-01-31,2019-05-31,220,exact_canonical,high,FALSE,NA
+B. BBVA Perú*,bbva_peru,bbva_peru,NA,*,excel_B-2343,2019-06-30,2019-06-30,1,exact_canonical,high,FALSE,NA
+B. BBVA Perú,bbva_peru,bbva_peru,NA,,excel_B-2343,2019-07-31,2026-06-30,84,exact_canonical,high,FALSE,NA
+B. de Crédito del Perú,bcp,bcp,NA,,excel_B-2343,2001-01-31,2001-01-31,1,exact_canonical,high,FALSE,NA
+B. de Crédito del Perú (con sucursales en el exterior),bcp,bcp,(con sucursales en el exterior),,excel_B-2343,2001-02-28,2026-06-30,304,canonical_after_scope_strip,medium,FALSE,NA
+B. Interamericano de Finanzas,bif,bif,NA,,excel_B-2343,2001-01-31,2026-06-30,305,exact_canonical,high,FALSE,NA
+BNP Paribas Andes,bnp_paribas,bnp_paribas,NA,,excel_B-2343,2001-01-31,2006-10-31,70,exact_canonical,high,FALSE,NA
+B. Santander Central Hispano,bsch_peru,bsch_peru,NA,,excel_B-2343,2001-01-31,2003-02-28,26,exact_canonical,high,FALSE,NA
+Citibank,citibank,citibank,NA,,excel_B-2343,2001-01-31,2026-06-30,305,exact_canonical,high,FALSE,NA
+Compartamos Banco*,compartamos_banco,compartamos_banco,NA,*,excel_B-2343,2025-01-31,2025-03-31,3,exact_canonical,high,FALSE,NA
+Compartamos Banco,compartamos_banco,compartamos_banco,NA,,excel_B-2343,2025-04-30,2026-06-30,15,exact_canonical,high,FALSE,NA
+Deutsche Bank Perú,deutsche_bank,deutsche_bank,NA,,excel_B-2343,2008-07-31,2016-06-30,95,exact_canonical,high,FALSE,NA
+HSBC Bank Perú,hsbc_peru,hsbc_peru,NA,,excel_B-2343,2006-10-31,2013-09-30,83,exact_canonical,high,FALSE,NA
+Interbank,interbank,interbank,NA,,excel_B-2343,2001-01-31,2026-06-30,160,exact_canonical,high,FALSE,NA
+Interbank 2/,interbank,interbank,NA,2/,excel_B-2343,2001-05-31,2002-03-31,10,exact_canonical,high,FALSE,NA
+Interbank (con sucursales en el exterior),interbank,interbank,(con sucursales en el exterior),,excel_B-2343,2010-06-30,2021-09-30,135,canonical_after_scope_strip,medium,FALSE,NA
+Mibanco,mibanco,mibanco,NA,,excel_B-2343,2001-01-31,2026-06-30,305,exact_canonical,high,FALSE,NA
+Santander Consumer Bank*,santander_consumer,santander_consumer,NA,*,excel_B-2343,2025-06-30,2025-08-31,3,exact_canonical,high,FALSE,NA
+Santander Consumer Bank,santander_consumer,santander_consumer,NA,,excel_B-2343,2025-09-30,2026-06-30,10,exact_canonical,high,FALSE,NA
+Santander Perú S.A.,santander_peru,santander_peru,NA,,excel_B-2343,2007-10-31,2007-12-31,3,exact_canonical,high,FALSE,NA
+B. Santander Perú,santander_peru,santander_peru,NA,,excel_B-2343,2008-01-31,2026-06-30,221,exact_canonical,high,FALSE,NA
+Scotiabank Perú (con sucursales en el exterior),scotiabank,scotiabank,(con sucursales en el exterior),,excel_B-2343,2006-05-31,2016-12-31,127,canonical_after_scope_strip,medium,FALSE,NA
+Scotiabank Perú *,scotiabank,scotiabank,NA,*,excel_B-2343,2017-01-31,2017-01-31,1,exact_canonical,high,FALSE,NA
+Scotiabank Perú,scotiabank,scotiabank,NA,,excel_B-2343,2017-02-28,2026-06-30,113,exact_canonical,high,FALSE,NA
+B. Standard Chartered,standard_chartered,standard_chartered,NA,,excel_B-2343,2001-01-31,2005-07-31,55,exact_canonical,high,FALSE,NA
+B. Wiese Sudameris,wiese_sudameris,wiese_sudameris,NA,,excel_B-2343,2001-01-31,2006-04-30,64,exact_canonical,high,FALSE,NA

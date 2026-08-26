@@ -1,0 +1,53 @@
+canon_excel,bank_standardized,note,review_required
+BANCO CONTINENTAL,bbva_peru,BBVA Continental -> BBVA Peru (rebrand),FALSE
+BANCO BBVA PERU,bbva_peru,current name,FALSE
+BBVA PERU,bbva_peru,current name,FALSE
+BANCO DE COMERCIO,bancom,Banco de Comercio -> BANCOM (rebrand),FALSE
+BANCOM,bancom,current name,FALSE
+BANCO DE CREDITO DEL PERU,bcp,BCP,FALSE
+BANCO DE CREDITO,bcp,Series Estadisticas spelling,FALSE
+BANCO FINANCIERO,banco_pichincha,Banco Financiero -> Banco Pichincha (2019 rebrand),FALSE
+BANCO PICHINCHA,banco_pichincha,current name,FALSE
+BANCO INTERAMERICANO DE FINANZAS,bif,BanBif,FALSE
+SCOTIABANK PERU,scotiabank,Scotiabank Peru,FALSE
+SCOTIABANK,scotiabank,Series Estadisticas spelling,FALSE
+CITIBANK,citibank,Citibank Peru,FALSE
+INTERBANK,interbank,Interbank,FALSE
+MIBANCO,mibanco,Mibanco,FALSE
+BANCO GNB,banco_gnb,HSBC Peru -> Banco GNB Peru (2013 acquisition),FALSE
+BANCO HSBC,hsbc_peru,kept SEPARATE from GNB; predecessor entity,FALSE
+HSBC BANK PERU,hsbc_peru,kept SEPARATE from GNB; predecessor entity,FALSE
+BANCO FALABELLA PERU,banco_falabella,Banco Falabella,FALSE
+BANCO FALABELLA,banco_falabella,Series Estadisticas spelling,FALSE
+FALABELLA PERU,banco_falabella,2007 vintages print the name without the 'B.' prefix ('Falabella Peru S.A'); unambiguous,FALSE
+BANCO SANTANDER PERU,santander_peru,Santander Peru (2007-),FALSE
+BANCO SANTANDER,santander_peru,Series Estadisticas spelling,FALSE
+SANTANDER PERU,santander_peru,2007 vintages print the name without the 'B.' prefix ('Santander Peru S.A.'); unambiguous,FALSE
+BANCO SANTANDER CENTRAL HISPANO,bsch_peru,"Banco Santander Central Hispano. ""Oper— hasta febrero 2003. En marzo 2003, fue absorbido por Banco de CrŽdito."" -- SBS",FALSE
+BANCO RIPLEY,banco_ripley,Banco Ripley,FALSE
+BANCO AZTECA PERU,alfin_banco,"Banco Azteca del Peru renamed Alfin Banco S.A. -- Res. SBS 03054-2021 (published 2021-11-09); same legal entity, so the series is continuous. Ownership changed in 2020 (Grupo Elektra sold 100%); treat as a break for ownership-based analysis, not for entity identity.",FALSE
+AZTECA DEL PERU,alfin_banco,Series Estadisticas spelling of Banco Azteca del Peru; see Res. SBS 03054-2021,FALSE
+ALFIN BANCO,alfin_banco,post-2021 denomination of the same entity (Res. SBS 03054-2021),FALSE
+BANCO ICBC,banco_icbc,ICBC Peru,FALSE
+BANK OF CHINA,bank_of_china,Bank of China Peru,FALSE
+BANCO BCI PERU,banco_bci,BCI Peru,FALSE
+BANCO BCI,banco_bci,Series Estadisticas spelling,FALSE
+BANCO EFECTIVA,banco_efectiva,Financiera Efectiva -> Banco Efectiva (Res. SBS 01444-2026),FALSE
+COMPARTAMOS BANCO,compartamos_banco,Compartamos,FALSE
+SANTANDER CONSUMER BANK,santander_consumer,distinct from Santander Peru,FALSE
+DEUTSCHE BANK PERU,deutsche_bank,exited; no successor merge,FALSE
+DEUTSCHE BANK,deutsche_bank,Series Estadisticas spelling,FALSE
+BANCO CENCOSUD,banco_cencosud,exited; no successor merge,FALSE
+BANCO DEL TRABAJO,banco_del_trabajo,exited 2009; no successor merge,FALSE
+BANCO DE TRABAJO,banco_del_trabajo,Series Estadisticas spelling,FALSE
+BANKBOSTON,bankboston,exited; no successor merge,FALSE
+BANCO STANDARD CHARTERED,standard_chartered,exited; no successor merge,FALSE
+STANDARD CHARTERED,standard_chartered,Series Estadisticas spelling,FALSE
+BANCO SUDAMERICANO,banco_sudamericano,merged into Scotiabank 2006; NOT merged here,FALSE
+BANCO WIESE SUDAMERIS,wiese_sudameris,merged into Scotiabank 2006; NOT merged here,FALSE
+WIESE SUDAMERIS,wiese_sudameris,Series Estadisticas spelling,FALSE
+BNP PARIBAS ANDES,bnp_paribas,exited; no successor merge,FALSE
+BNP PARIBAS,bnp_paribas,Series Estadisticas spelling,FALSE
+BANCO MIZUHO,banco_mizuho,Mizuho Peru,FALSE
+TOTAL BANCA MULTIPLE,__SYSTEM__,system aggregate row,FALSE
+BANCA MULTIPLE,__SYSTEM__,Series Estadisticas aggregate row,FALSE

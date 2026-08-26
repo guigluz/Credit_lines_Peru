@@ -1,0 +1,54 @@
+item,key,detail,severity
+unparsed_file,B-2343-no2010.XLS,"table not found: Error in sbs_pick_sheet(path, TITLE_RX) : no sheet matches title pattern in B-2343-no2010.XLS",high
+bank_month_mismatch,interbank 2001-05-31,excel=3022369.000 series=3106933.000 abs=84564.000 rel=2.722e-02,high
+bank_month_mismatch,interbank 2001-06-30,excel=3031301.000 series=3124479.000 abs=93178.000 rel=2.982e-02,high
+bank_month_mismatch,interbank 2001-07-31,excel=2974209.000 series=3071596.000 abs=97387.000 rel=3.171e-02,high
+bank_month_mismatch,interbank 2001-08-31,excel=2943398.000 series=3041855.000 abs=98457.000 rel=3.237e-02,high
+bank_month_mismatch,interbank 2001-09-30,excel=2915435.000 series=3026451.000 abs=111016.000 rel=3.668e-02,high
+bank_month_mismatch,interbank 2001-10-31,excel=2832125.000 series=2931753.000 abs=99628.000 rel=3.398e-02,high
+bank_month_mismatch,banco_pichincha 2001-11-30,excel=773804.000 series=805141.000 abs=31337.000 rel=3.892e-02,high
+bank_month_mismatch,interbank 2001-11-30,excel=2816374.000 series=2918470.000 abs=102096.000 rel=3.498e-02,high
+bank_month_mismatch,banco_pichincha 2001-12-31,excel=923679.000 series=961512.000 abs=37833.000 rel=3.935e-02,high
+bank_month_mismatch,interbank 2001-12-31,excel=2900914.000 series=3023790.000 abs=122876.000 rel=4.064e-02,high
+bank_month_mismatch,banco_pichincha 2002-01-31,excel=898543.000 series=925925.000 abs=27382.000 rel=2.957e-02,high
+bank_month_mismatch,interbank 2002-01-31,excel=2842577.000 series=2959890.000 abs=117313.000 rel=3.963e-02,high
+bank_month_mismatch,banco_pichincha 2002-02-28,excel=880287.000 series=907615.000 abs=27328.000 rel=3.011e-02,high
+bank_month_mismatch,interbank 2002-02-28,excel=2864354.000 series=2964601.000 abs=100247.000 rel=3.381e-02,high
+bank_month_mismatch,banco_pichincha 2002-03-31,excel=904727.000 series=930291.000 abs=25564.000 rel=2.748e-02,high
+bank_month_mismatch,interbank 2002-03-31,excel=2822232.000 series=2897402.000 abs=75170.000 rel=2.594e-02,high
+bank_month_mismatch,banco_pichincha 2002-04-30,excel=905845.000 series=938222.000 abs=32377.000 rel=3.451e-02,high
+bank_month_mismatch,banco_pichincha 2002-05-31,excel=901138.000 series=936831.000 abs=35693.000 rel=3.810e-02,high
+bank_month_mismatch,banco_pichincha 2002-06-30,excel=925649.000 series=965335.000 abs=39686.000 rel=4.111e-02,high
+bank_month_mismatch,banco_pichincha 2002-07-31,excel=932711.000 series=976431.000 abs=43720.000 rel=4.478e-02,high
+bank_month_mismatch,banco_pichincha 2002-08-31,excel=956667.000 series=1007752.000 abs=51085.000 rel=5.069e-02,high
+bank_month_mismatch,banco_pichincha 2002-09-30,excel=964721.000 series=1011238.000 abs=46517.000 rel=4.600e-02,high
+bank_month_mismatch,banco_pichincha 2002-10-31,excel=973923.000 series=1014250.000 abs=40327.000 rel=3.976e-02,high
+bank_month_mismatch,bankboston 2005-02-28,excel=1120.000 series=1121.000 abs=1.000 rel=8.921e-04,medium
+bank_month_mismatch,bankboston 2005-04-30,excel=531.000 series=530.000 abs=1.000 rel=1.883e-03,medium
+bank_month_mismatch,banco_cencosud 2012-08-31,excel=34.862 series=35.000 abs=0.138 rel=3.943e-03,medium
+bank_month_mismatch,banco_cencosud 2012-09-30,excel=1399.280 series=1399.000 abs=0.280 rel=2.001e-04,medium
+coverage_excel_only,bnp_paribas 2006-10-31,excel=0 series=NA,medium
+share_sum_off_100,BNP Paribas Andes 2001-06-30,sum=99.9963785174 dev=3.621e-03 pp,low
+share_sum_off_100,BNP Paribas Andes 2001-08-31,sum=99.9976827177 dev=2.317e-03 pp,low
+share_sum_off_100,BNP Paribas Andes 2001-09-30,sum=99.9974722580 dev=2.528e-03 pp,low
+share_sum_off_100,BNP Paribas Andes 2001-10-31,sum=99.9950775289 dev=4.922e-03 pp,low
+share_sum_off_100,B. Continental 2001-11-30,sum=99.9998201588 dev=1.798e-04 pp,low
+share_sum_off_100,BNP Paribas Andes 2002-11-30,sum=99.9961956935 dev=3.804e-03 pp,low
+share_sum_off_100,BankBoston 2003-02-28,sum=99.9960190172 dev=3.981e-03 pp,low
+share_sum_off_100,Citibank 2003-03-31,sum=99.9983156032 dev=1.684e-03 pp,low
+share_sum_off_100,BNP Paribas Andes 2003-09-30,sum=99.9956523629 dev=4.348e-03 pp,low
+share_sum_off_100,B. Wiese Sudameris 2004-04-30,sum=99.9986532189 dev=1.347e-03 pp,low
+share_sum_off_100,BankBoston 2005-01-31,sum=99.9963614201 dev=3.639e-03 pp,low
+share_sum_off_100,HSBC Bank Perú 2007-04-30,sum=100.0008415950 dev=8.416e-04 pp,low
+share_sum_off_100,HSBC Bank Perú 2007-07-31,sum=99.9996103567 dev=3.896e-04 pp,low
+share_sum_off_100,HSBC Bank Perú 2007-08-31,sum=99.9996278460 dev=3.722e-04 pp,low
+share_sum_off_100,HSBC Bank Perú 2008-08-31,sum=99.9978810311 dev=2.119e-03 pp,low
+share_sum_off_100,B. Azteca Perú 2009-01-31,sum=99.9992493958 dev=7.506e-04 pp,low
+share_sum_off_100,Mibanco 2009-01-31,sum=99.9992423140 dev=7.577e-04 pp,low
+share_sum_off_100,B. Santander Perú 2010-07-31,sum=99.9999984748 dev=1.525e-06 pp,low
+share_sum_off_100,B. de Comercio 2010-07-31,sum=99.9999982337 dev=1.766e-06 pp,low
+share_sum_off_100,B. Santander Perú 2010-08-31,sum=99.9999985052 dev=1.495e-06 pp,low
+share_sum_off_100,B. de Comercio 2010-08-31,sum=99.9999985249 dev=1.475e-06 pp,low
+share_sum_off_100,B. Santander Perú 2010-12-31,sum=99.9999984807 dev=1.519e-06 pp,low
+share_sum_off_100,B. de Comercio 2010-12-31,sum=99.9999983262 dev=1.674e-06 pp,low
+share_sum_off_100,B. de Comercio 2011-01-31,sum=99.9999985186 dev=1.481e-06 pp,low
