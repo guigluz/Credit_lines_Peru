@@ -1,5 +1,5 @@
 === 02_clean_indirect.R ===
- 2026-08-26 12:17:20 
+ 2026-08-26 14:49:43 
 
 Parsing 306 workbooks...
 
@@ -30,17 +30,16 @@ max |gap|: 1021471.495 miles S/
 bank-months with a suspect printed total: 47
 
 --- review queue ---
-                              item   severity   n
-            no_unused_lines_column structural 114
- unused_lines_missing_while_active     medium 229
-               no_system_total_row     medium  10
-            missing_total_indirect        low 113
-                 share_sum_off_100        low   3
-      system_total_not_reconciling       high  54
-    bank_total_placeholder_suspect       high  47
-     unused_lines_level_shift_bank       high  14
-   unused_lines_series_starts_late       high   3
-   unused_lines_level_shift_system       high   2
+                              item severity   n
+ unused_lines_missing_while_active   medium 229
+               no_system_total_row   medium  10
+            missing_total_indirect      low 113
+                 share_sum_off_100      low   3
+      system_total_not_reconciling     high  54
+    bank_total_placeholder_suspect     high  47
+     unused_lines_level_shift_bank     high  14
+   unused_lines_series_starts_late     high   3
+   unused_lines_level_shift_system     high   2
 
 Outputs written to data/processed/ and output/validation/.
 Done.

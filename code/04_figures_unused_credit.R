@@ -228,6 +228,10 @@ p2 <- ggplot(f2, aes(report_date, bn, fill = category)) +
             position = position_stack(reverse = TRUE)) +
   geom_vline(xintercept = BREAK_DATE, linetype = "dashed",
              colour = INK[["secondary"]], linewidth = 0.4) +
+  geom_vline(xintercept = as.Date("2018-06-30"), linetype = "dashed",
+             colour = INK[["secondary"]], linewidth = 0.4) +
+  annotate("text", x = as.Date("2018-06-30") - 60, y = ymax2 * 0.97, label = "BCP jump on unused credit lines (?)",
+           hjust = 1, vjust = 1, size = 2.9, colour = INK[["secondary"]]) +
   annotate("text", x = BREAK_DATE - 60, y = ymax2 * 0.97, label = BREAK_LAB,
            hjust = 1, vjust = 1, size = 2.9, colour = INK[["secondary"]]) +
   scale_fill_manual(values = CAT_COL, drop = FALSE) +

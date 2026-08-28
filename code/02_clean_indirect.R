@@ -412,6 +412,16 @@ sys_shift <- unused_panel %>%
          d_pct = 100 * (unused_lines_thousand_pen / prev - 1)) %>%
   filter(!is.na(prev), abs(d_pct) >= 25, as.integer(report_date - prev_date) <= 40)
 
+# NOTE: the 114 pre-2010-07 months with no unused-lines column are deliberately
+# NOT listed here. Their absence follows from the reporting standard in force at
+# the time (the column was introduced with Res. SBS 11356-2008), so there is
+# nothing to review -- it is documented coverage, not a defect. The fact is
+# still carried in parse_diagnostics_b2322.csv (has_unused_lines) and on every
+# panel row (has_unused_lines, definition_regime), and the category stays NA
+# there rather than zero. What IS listed is the different case of a bank that
+# reports indirect credit but leaves the unused-lines cell blank AFTER the
+# column exists (unused_lines_missing_while_active) -- there "-" means not
+# reported, not zero, and that does need review.
 review <- bind_rows(
   diagnostics %>% filter(status != "ok") %>%
     transmute(item = "unparsed_or_wrong_workbook", key = source_file,
@@ -430,10 +440,6 @@ review <- bind_rows(
               detail = paste0("std=", coalesce(bank_standardized, "<none>"), "; ",
                               first_seen, "..", last_seen, "; n=", n_months),
               severity = "high"),
-  diagnostics %>% filter(!has_unused_lines) %>%
-    transmute(item = "no_unused_lines_column", key = source_file,
-              detail = "column absent: pre Res. SBS 11356-2008 definition (before 2010-07)",
-              severity = "structural"),
   diagnostics %>% filter(!has_total_row) %>%
     transmute(item = "no_system_total_row", key = source_file,
               detail = "workbook has no TOTAL BANCA MULTIPLE row; system total must be summed from bank rows",
