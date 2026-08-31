@@ -293,6 +293,33 @@ month_end <- function(year, month) {
 }
 
 # ==============================================================================
+# Merged-cell reconstruction
+# ==============================================================================
+# Excel merged ranges read back as the value in the first cell and NA in the
+# rest. Which of the two conventions SBS uses is a matter of vintage, not of
+# meaning: the same cuadro repeats "Empresa" on every branch row in the 2010-2013
+# workbooks and merges it from ~2018 on. Both are last-observation-carried-
+# forward once the blanks are treated as continuation, so these are applied
+# unconditionally rather than switched on a detected era.
+#
+# Blank strings are treated as missing: the readers hand back "" for some
+# formats and NA for others for the same empty cell.
+
+#' Carry the last non-missing value forward along a vector (merged cells read
+#' down a column, or a repeated label). Leading NAs stay NA.
+fill_down <- function(x) {
+  x <- as.character(x)
+  x[!is.na(x) & str_squish(x) == ""] <- NA_character_
+  for (i in seq_along(x)[-1]) if (is.na(x[i])) x[i] <- x[i - 1L]
+  x
+}
+
+#' Same, for a header row read left-to-right (merged group labels spanning
+#' several columns). Identical mechanics; named separately so the intent is
+#' readable at the call site.
+fill_right <- function(x) fill_down(x)
+
+# ==============================================================================
 # Anchor detection -- find structure by CONTENT, never by fixed row/col index
 # ==============================================================================
 
@@ -371,8 +398,12 @@ canon_bank <- function(x) {
   s <- str_squish(as.character(x))
   s <- str_remove(s, "(?:[0-9]+/|\\*+)\\s*$")     # trailing footnote marker
   s <- norm_txt(s)
-  s <- str_remove(s, "\\bS\\s*[.]?\\s*A\\s*[.]?\\s*A?\\s*[.]?\\s*$")  # S.A. / S.A.A.
+  # Punctuation is normalized BEFORE the legal suffix is stripped: one B-2358
+  # vintage (Abril 2025) prints "ICBC PERU BANK S,A," with commas for periods,
+  # which the suffix pattern would otherwise miss. Verified behaviour-preserving
+  # across every entity name in the project -- this is the only string it changes.
   s <- str_replace_all(s, "[.,;]+", " ")
+  s <- str_remove(s, "\\bS\\s*[.]?\\s*A\\s*[.]?\\s*A?\\s*[.]?\\s*$")  # S.A. / S.A.A.
   s <- str_replace(s, "^B\\s+", "BANCO ")
   s <- str_replace(s, "^B$", "BANCO")
   str_squish(s)

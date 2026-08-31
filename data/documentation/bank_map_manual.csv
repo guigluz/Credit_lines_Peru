@@ -51,3 +51,18 @@ BNP PARIBAS,bnp_paribas,Series Estadisticas spelling,FALSE
 BANCO MIZUHO,banco_mizuho,Mizuho Peru,FALSE
 TOTAL BANCA MULTIPLE,__SYSTEM__,system aggregate row,FALSE
 BANCA MULTIPLE,__SYSTEM__,Series Estadisticas aggregate row,FALSE
+BANCO B V A BANCO CONTIN,bbva_peru,"B-2358 prints entity names truncated to 20 characters; ""B B V A BANCO CONTIN"" is BBVA Continental. canon_bank() expands the leading ""B "" to ""BANCO "", hence this canonical form.",FALSE
+BBVA,bbva_peru,B-2358 20-character truncation of BBVA Peru (2020 vintages onward),FALSE
+CREDITO,bcp,B-2358 20-character truncation of Banco de Credito del Peru,FALSE
+COMERCIO,bancom,B-2358 20-character truncation of Banco de Comercio,FALSE
+BANCOM2,bancom,"B-2358 prints ""BANCOM"" with a trailing footnote digit and no slash, which canon_bank() does not strip; same entity as BANCOM / Banco de Comercio",FALSE
+FINANCIERO,banco_pichincha,B-2358 20-character truncation of Banco Financiero (now Banco Pichincha),FALSE
+BANBIF,bif,B-2358 short form of Banco Interamericano de Finanzas,FALSE
+BANCO INTERAMERICANO,bif,B-2358 20-character truncation of Banco Interamericano de Finanzas,FALSE
+CITIBANK PERU,citibank,B-2358 spelling of Citibank Peru,FALSE
+CITIBANK DEL PERU,citibank,B-2358 spelling of Citibank Peru,FALSE
+ICBC BANK,banco_icbc,B-2358 spelling of ICBC Peru Bank,FALSE
+ICBC PERU BANK,banco_icbc,B-2358 spelling of ICBC Peru Bank (canonical form after canon_bank() strips the trailing S.A.),FALSE
+BANK OF CHINA (PERU),bank_of_china,"B-2358 spelling of Bank of China Peru; the parenthetical is not a scope qualifier, so it survives canon_bank()",FALSE
+BANCO AZTECA,alfin_banco,B-2358 20-character truncation of Banco Azteca del Peru; see Res. SBS 03054-2021 (renamed Alfin Banco),FALSE
+BANCO RIPLEY PERU,banco_ripley,B-2358 spelling of Banco Ripley Peru (canonical form after canon_bank() strips the trailing S.A.),FALSE

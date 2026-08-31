@@ -1,0 +1,43 @@
+bank_raw,bank_standardized,scope_note,bank_footnote,source,first_seen,last_seen,n_months,mapping_method,mapping_confidence,review_required
+AZTECA DEL PERU,alfin_banco,NA,,excel_B-2358,2010-01-31,2012-04-30,28,exact_canonical,high,FALSE
+BANCO AZTECA,alfin_banco,NA,,excel_B-2358,2012-05-31,2021-10-31,113,exact_canonical,high,FALSE
+ALFIN BANCO,alfin_banco,NA,,excel_B-2358,2021-08-31,2026-06-30,57,exact_canonical,high,FALSE
+BANCO BCI,banco_bci,NA,,excel_B-2358,2022-07-31,2026-06-30,48,exact_canonical,high,FALSE
+BANCO CENCOSUD,banco_cencosud,NA,,excel_B-2358,2012-08-31,2019-02-28,79,exact_canonical,high,FALSE
+BANCO EFECTIVA,banco_efectiva,NA,,excel_B-2358,2026-06-30,2026-06-30,1,exact_canonical,high,FALSE
+FALABELLA PERÚ S A,banco_falabella,NA,,excel_B-2358,2010-01-31,2012-04-30,28,exact_canonical,high,FALSE
+BANCO FALABELLA,banco_falabella,NA,,excel_B-2358,2012-05-31,2026-06-30,170,exact_canonical,high,FALSE
+BANCO GNB,banco_gnb,NA,,excel_B-2358,2013-03-31,2026-06-30,155,exact_canonical,high,FALSE
+ICBC BANK,banco_icbc,NA,,excel_B-2358,2014-03-31,2021-01-31,83,exact_canonical,high,FALSE
+ICBC PERU BANK S.A.,banco_icbc,NA,,excel_B-2358,2021-02-28,2026-06-30,64,exact_canonical,high,FALSE
+"ICBC PERU BANK S,A,",banco_icbc,NA,,excel_B-2358,2025-04-30,2025-04-30,1,exact_canonical,high,FALSE
+FINANCIERO,banco_pichincha,NA,,excel_B-2358,2010-01-31,2012-04-30,28,exact_canonical,high,FALSE
+BANCO FINANCIERO,banco_pichincha,NA,,excel_B-2358,2012-05-31,2017-01-31,57,exact_canonical,high,FALSE
+BANCO PICHINCHA,banco_pichincha,NA,,excel_B-2358,2017-02-28,2026-06-30,113,exact_canonical,high,FALSE
+BANCO RIPLEY PERU SA,banco_ripley,NA,,excel_B-2358,2010-01-31,2012-04-30,28,exact_canonical,high,FALSE
+BANCO RIPLEY,banco_ripley,NA,,excel_B-2358,2012-05-31,2026-06-30,170,exact_canonical,high,FALSE
+COMERCIO,bancom,NA,,excel_B-2358,2010-01-31,2012-04-30,28,exact_canonical,high,FALSE
+BANCO DE COMERCIO,bancom,NA,,excel_B-2358,2012-05-31,2023-08-31,136,exact_canonical,high,FALSE
+BANCOM2,bancom,NA,,excel_B-2358,2023-09-30,2026-06-30,33,exact_canonical,high,FALSE
+BANCOM,bancom,NA,,excel_B-2358,2024-03-31,2024-03-31,1,exact_canonical,high,FALSE
+BANK OF CHINA (PERU),bank_of_china,NA,,excel_B-2358,2020-09-30,2026-06-30,70,exact_canonical,high,FALSE
+B B V A BANCO CONTIN,bbva_peru,NA,,excel_B-2358,2010-01-31,2012-04-30,28,exact_canonical,high,FALSE
+BANCO CONTINENTAL,bbva_peru,NA,,excel_B-2358,2012-05-31,2019-05-31,85,exact_canonical,high,FALSE
+BBVA*,bbva_peru,NA,*,excel_B-2358,2019-06-30,2019-06-30,1,exact_canonical,high,FALSE
+BBVA,bbva_peru,NA,,excel_B-2358,2019-07-31,2026-06-30,84,exact_canonical,high,FALSE
+CREDITO,bcp,NA,,excel_B-2358,2010-01-31,2012-04-30,28,exact_canonical,high,FALSE
+BANCO DE CREDITO,bcp,NA,,excel_B-2358,2012-05-31,2026-06-30,168,exact_canonical,high,FALSE
+BANCO DE CREDITO*,bcp,NA,*,excel_B-2358,2024-06-30,2024-07-31,2,exact_canonical,high,FALSE
+BANCO INTERAMERICANO,bif,NA,,excel_B-2358,2010-01-31,2011-12-31,24,exact_canonical,high,FALSE
+BANBIF,bif,NA,,excel_B-2358,2012-01-31,2026-06-30,174,exact_canonical,high,FALSE
+CITIBANK PERU,citibank,NA,,excel_B-2358,2010-01-31,2012-04-30,28,exact_canonical,high,FALSE
+CITIBANK DEL PERU,citibank,NA,,excel_B-2358,2012-05-31,2026-06-30,170,exact_canonical,high,FALSE
+COMPARTAMOS BANCO,compartamos_banco,NA,,excel_B-2358,2025-01-31,2026-06-30,18,exact_canonical,high,FALSE
+DEUTSCHE BANK PERU,deutsche_bank,NA,,excel_B-2358,2010-01-31,2016-04-30,76,exact_canonical,high,FALSE
+HSBC BANK PERU,hsbc_peru,NA,,excel_B-2358,2010-01-31,2013-08-31,43,exact_canonical,high,FALSE
+INTERBANK,interbank,NA,,excel_B-2358,2010-01-31,2026-06-30,198,exact_canonical,high,FALSE
+MIBANCO,mibanco,NA,,excel_B-2358,2010-01-31,2026-06-30,196,exact_canonical,high,FALSE
+MIBANCO*,mibanco,NA,*,excel_B-2358,2024-03-31,2024-11-30,2,exact_canonical,high,FALSE
+SANTANDER CONSUMER BANK,santander_consumer,NA,,excel_B-2358,2025-06-30,2026-06-30,13,exact_canonical,high,FALSE
+SANTANDER PERU,santander_peru,NA,,excel_B-2358,2010-01-31,2026-06-30,198,exact_canonical,high,FALSE
+SCOTIABANK PERU,scotiabank,NA,,excel_B-2358,2010-01-31,2026-06-30,198,exact_canonical,high,FALSE

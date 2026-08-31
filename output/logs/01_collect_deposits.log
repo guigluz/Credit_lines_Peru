@@ -1,0 +1,51 @@
+=== 01_collect_deposits.R ===
+ 2026-08-28 10:31:48 
+
+Enumerated 198 monthly URLs for B-2358 (2010-01 .. 2026-06)
+
+  [ 25/198] B-2358-en2012.XLS  cached=FALSE
+  [ 50/198] B-2358-fe2014.xlsx  cached=FALSE
+  [ 75/198] B-2358-ma2016.XLS  cached=FALSE
+  [100/198] B-2358-ab2018.xlsx  cached=FALSE
+  [125/198] B-2358-my2020.xlsx  cached=FALSE
+  [150/198] B-2358-jn2022.xlsx  cached=FALSE
+  [175/198] B-2358-jl2024.xlsx  cached=FALSE
+  [198/198] B-2358-jn2026.xlsx  cached=FALSE
+
+--- summary ---
+files enumerated : 198
+available        : 198
+newly downloaded : 198
+served from cache: 0
+unavailable      : 0
+
+Container format by year (true signature, not the .XLS extension):
+ report_year xls xlsx
+        2010  12    0
+        2011  12    0
+        2012  12    0
+        2013   8    4
+        2014   0   12
+        2015   6    6
+        2016  12    0
+        2017   1   11
+        2018   0   12
+        2019   0   12
+        2020   0   12
+        2021   0   12
+        2022   0   12
+        2023   0   12
+        2024   0   12
+        2025   0   12
+        2026   0    6
+
+Format transitions:
+ report_year report_month prev detected_format
+        2013            9  xls            xlsx
+        2015            6 xlsx             xls
+        2015            9  xls            xlsx
+        2015           10 xlsx             xls
+        2017            2  xls            xlsx
+
+Manifest written: data/raw/sbs_boletin/manifest_B-2358.csv
+Done.

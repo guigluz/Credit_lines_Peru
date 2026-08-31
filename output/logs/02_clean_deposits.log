@@ -1,0 +1,51 @@
+=== 02_clean_deposits.R ===
+ 2026-08-31 08:09:02 
+
+Parsing 198 workbooks...
+
+--- parse status ---
+ status   n
+     ok 198
+
+--- panel ---
+long rows            : 4564989 (b2358_long.csv.gz)
+months parsed        : 198 (2010-01-31 .. 2026-06-30)
+branch-months        : 350603 | distinct branches: 3172
+branches per month   : min 1439, median 1756, max 2154
+foreign branch-months: 584
+distinct bank_raw    : 42 | unmatched: 0 | review_required: 0
+date != filename     : 0 files
+duplicate workbooks  : 0
+
+--- identifier validity: bank_standardized + codigo_oficina ---
+blank codigo (excluded from panel)            : 0 rows
+duplicate (bank, codigo, month) keys (summed) : 0
+branch-months where printed location changes  : 809 over 132 branches
+branches with an interior gap in their series : 352
+
+--- published Total general vs sum of branch rows ---
+months printing a Total general row : 153 of 198
+  reconciling: 153 | NOT reconciling: 0 | worst |relative gap|: 8.432e-15
+months with NO Total general row (nothing to compare): 45
+
+--- internal identities (checked every run; not persisted in the panel) ---
+Total Depositos = vista+ahorro+plazo : 350603 of 350603
+Total Creditos  = MN+ME              : 350603 of 350603
+Total Depositos = MN+ME              : 3575 of 3575 (where printed)
+worst |residual| across all three    : 7.451e-09 miles S/
+
+--- coverage caveat ---
+SBS note on this table: figures come from Anexo N. 10 and, in several
+vintages, EXCLUDE 'Depositos judiciales y administrativos'. Branch deposits
+summed to bank level therefore need NOT equal published bank deposits.
+
+--- review queue ---
+                       item severity   n
+    branch_location_changed   medium 809
+             negative_level      low 381
+ branch_series_interior_gap      low 352
+     header_footnote_marker      low  11
+        extra_value_columns      low   2
+
+Outputs written to data/processed/ and output/validation/.
+Done.
