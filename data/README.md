@@ -20,7 +20,9 @@ README
 
 # Processed
 
-
+- b2358_branch_panel.csv.gz -- branch-level panel of deposits and credit (from B-2358)
+- b2322_unused_credit_panel.csv -- bank-level panel of unused credit (from B-2322)
+- b2343_total_credits.csv -- bank-level panel of total credit (from B-2343)
 
 
 # Documentation
