@@ -12,8 +12,14 @@ README
   Coverage: Banca Múltiple and Empresas Financieras only.
 
   Format: UTF-32LE with no BOM (4 bytes/char).
+  
+- sbs_boletin -- Folder for data downloaded from SBS's Información Estdística de Banca Múltiple 
+  - B-2343 -- "direct" credit by type of product by bank (downloaded by 01_collect_direct.R)
+  - B-2322 -- "indirect" credit by type of product by bank (downloaded by 01_collect_indirect.R)
+  - B-2358 -- deposits and credit by branch and location (downloaded by 01_collect_deposits.R) 
 
 # Processed
+
 
 
 
