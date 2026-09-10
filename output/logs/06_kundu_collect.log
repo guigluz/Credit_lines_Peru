@@ -1,0 +1,8 @@
+15:49:05 | collecting geographic inputs into data/raw/geo 
+15:49:05 | skip (already on disk): pop_geodir_ubigeo_inei.csv 
+15:49:05 | skip (already on disk): pop_ubigeo_aumentado.csv 
+15:49:05 | skip (already on disk): per_admin_boundaries.shp.zip 
+15:49:05 | skip unzip (per_admin3.shp already present) 
+15:49:05 | done. files in data/raw/geo : 
+[1] "per_admin_boundaries.shp.zip" "per_admin_shp"               
+[3] "pop_geodir_ubigeo_inei.csv"   "pop_ubigeo_aumentado.csv"    

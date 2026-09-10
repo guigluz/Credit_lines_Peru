@@ -1,0 +1,32 @@
+Warning messages:
+1: package ‘data.table’ was built under R version 4.3.3 
+2: package ‘sf’ was built under R version 4.3.3 
+17:33:21 | [1/4] district population 
+17:33:21 |   districts: 1874 
+17:33:21 |   total population: 32,162,178 
+17:33:21 | [2/4] INDECI emergency records 
+17:33:22 |   raw events: 142139 | years 2003 - 2025 
+17:33:22|  hazard filter 'ORIGEN NATURAL': keeping 106301 of 142139 events
+17:33:22 |   after year filter 2010 - 2023 : 63526 events 
+17:33:22 |   event ubigeos not in the district list: 16 (126 events, 0.20% of the filtered sample) 
+17:33:22 |   districts with >=1 event: 1861 of 1874 
+17:33:22 |   total dwellings damaged/destroyed: 1,668,443 | deaths: 1,098 
+17:33:22 | [3/4] bank x district deposits at 2023-12-31 
+17:33:23 |   branches at snapshot: 1494 | banks: 17 
+17:33:23|  location crosswalk: 251 triples | exact 246 | manual 4 | prefix 1 | UNMATCHED 0
+17:33:23 |   deposits dropped for want of a ubigeo: 0.0000% of the total 
+17:33:23 |   banks retained: 17 
+17:33:23 |   bank x district cells: 849 | districts covered: 251 
+17:33:23 | [4/4] district boundaries 
+17:33:26 |   polygons: 1873 | ubigeos also in the population file: 1872 
+17:33:26 |   districts with population but no polygon: 2 
+17:33:26 |   bank districts without a polygon (after the crosswalk): 0 
+17:33:29 |   polygons after simplification: 1873 | vertices 1,598,003 -> 93,529 
+17:33:29 |   departamento polygons: 25 
+17:33:29 | done. wrote: 
+[1] "kundu_admin1_sf.rds"              "kundu_admin3_sf.rds"             
+[3] "kundu_bank_district.rds"          "kundu_disaster_district.rds"     
+[5] "kundu_disaster_district_year.rds" "kundu_district_population.rds"   
+
+sessionInfo:
+[1] "sf"         "stringi"    "data.table"

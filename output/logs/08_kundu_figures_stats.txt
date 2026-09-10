@@ -1,0 +1,5 @@
+
+ ========================================================================== 
+ OUTPUT 1  Natural disaster impacts per capita, districts of Peru 
+ ========================================================================== 
+Event records: 63,526 of 142,139 kept (2010-2023, hazard type ORIGEN NATURAL). 
