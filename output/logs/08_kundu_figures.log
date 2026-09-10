@@ -70,6 +70,18 @@ replace the existing one.
 -> output/figures/fig_kundu_largest_district_map.pdf 
 
  ========================================================================== 
+ OUTPUT 5  Bank branches by departamento 
+ ========================================================================== 
+
+-> output/figures/fig_kundu_branches_by_department.pdf 
+
+ ========================================================================== 
+ OUTPUT 6  Population by departamento 
+ ========================================================================== 
+
+-> output/figures/fig_kundu_population_by_department.pdf 
+
+ ========================================================================== 
  Session 
  ========================================================================== 
 R version 4.3.2 (2023-10-31) 

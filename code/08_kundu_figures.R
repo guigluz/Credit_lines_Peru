@@ -6,6 +6,8 @@
 #   Output 2  fig_kundu_deposit_share_rank.pdf average deposit share by rank
 #   Output 3  tab_kundu_deposit_concentration.tex  + fig_kundu_dep_vs_branch.pdf
 #   Output 4  fig_kundu_largest_district_map.pdf   where banks raise deposits
+#   Output 5  fig_kundu_branches_by_department.pdf  branch network by departamento
+#   Output 6  fig_kundu_population_by_department.pdf population by departamento
 #
 # Inputs are the .rds files written by code/07_kundu_clean.R.
 # Summary statistics requested alongside each output are printed to stdout and
@@ -479,6 +481,139 @@ fig4 <- (p4a | p4b) +
 ggsave(file.path(FIG_DIR, "fig_kundu_largest_district_map.pdf"), fig4,
        width = 9.5, height = 6.4)
 say("\n-> output/figures/fig_kundu_largest_district_map.pdf")
+
+# ==============================================================================
+# OUTPUT 5 -- bank branches by departamento
+# ==============================================================================
+hdr("OUTPUT 5  Bank branches by departamento")
+
+# The first two digits of the ubigeo are the departamento, and the HDX ADM1
+# pcode is "PE" plus those same two digits, so no name matching is needed.
+adm1$dep_code <- substr(adm1$dep_pcode, 3, 4)
+
+dep_br <- bd[, .(n_branches = sum(n_branches),
+                 n_banks    = uniqueN(bank),
+                 deposits   = sum(deposits)),
+             by = .(dep_code = substr(ubigeo, 1, 2))]
+
+# Population, for the per-capita figures quoted in the log.
+# dep_pop <- pop[, .(population = sum(population)), by = .(dep_code = substr(ubigeo, 1, 2))]
+# dep_br  <- merge(dep_br, dep_pop, by = "dep_code", all.y = TRUE)
+# for (v in c("n_branches", "n_banks", "deposits")) dep_br[is.na(get(v)), (v) := 0]
+# dep_br[, `:=`(branch_share = 100 * n_branches / sum(n_branches),
+#               br_per100k   = 1e5 * n_branches / population)]
+
+map5 <- merge(adm1, dep_br, by = "dep_code", all.x = TRUE)
+stopifnot(nrow(map5) == nrow(adm1),
+          sum(map5$n_branches) == bd[, sum(n_branches)])
+
+
+# Lima holds half of all branches, so a linear ramp would render the other 24
+# departamentos indistinguishable. The fill is log10 and every polygon carries
+# its own count, which keeps the map readable independently of the colour.
+# A departamento with zero branches would break log10, so it is drawn in grey.
+map5$fill_v  <- ifelse(map5$n_branches > 0, map5$n_branches, NA_real_)
+
+ctr5   <- suppressWarnings(st_coordinates(st_point_on_surface(st_geometry(map5))))
+lab5   <- data.table(x = ctr5[, 1], y = ctr5[, 2],
+                     lab = sprintf("%s\n%s", map5$dep_name,
+                                   format(map5$n_branches, big.mark = ",", trim = TRUE)))
+
+fig5 <- ggplot(map5) +
+  geom_sf(aes(fill = fill_v), colour = "grey40", linewidth = 0.15) +
+  scale_fill_distiller(palette = "Blues", direction = 1, trans = "log10",
+                       na.value = "grey90",
+                       breaks = c(5, 20, 100, 500),
+                       labels = label_number(accuracy = 1, big.mark = ","),
+                       name = "Branches (color in log scale)",
+                       guide = guide_colourbar(title.position = "top", title.hjust = 0.5)) +
+  # A white halo (bg.colour, passed through to GeomTextRepel's aes) keeps the
+  # labels legible over Lima's near-black fill as well as over the pale polygons.
+  ggrepel::geom_text_repel(
+    data = lab5, aes(x, y, label = lab), inherit.aes = FALSE,
+    size = 2.1, family = "serif", colour = "grey10", lineheight = 0.9,
+    bg.colour = "white", bg.r = 0.12,
+    box.padding = 0.25, point.padding = 0.1, min.segment.length = 0.25,
+    segment.size = 0.2, segment.colour = "grey45", max.overlaps = 40, seed = 1) +
+  coord_sf(expand = FALSE) +
+  labs(title    = "Bank Branches by Departamento",
+       subtitle = sprintf("Branch network of the %d private banks in the SBS branch table, %s",
+                          n_banks, SNAP_LAB),
+       caption  = paste0(
+         sprintf("%s branches in total; Lima holds %d of them (%.0f%%). The fill is log10 and\n",
+                 format(sum(dep_br$n_branches), big.mark = ","),
+                 dep_br[dep_code == "15", n_branches],
+                 dep_br[dep_code == "15", n_branches]/sum(dep_br$n_branches) * 100),
+         "each departamento carries its own count, so the numbers read independently of the colour.\n",
+         "Banca multiple only: Banco de la Nacion, cajas municipales and cajas rurales are absent,\n",
+         "which understates branch presence outside Lima.\n",
+         "Source: SBS Boletin B-2358; boundaries from the OCHA/HDX Peru COD-AB (ADM1).")) +
+  map_theme +
+  theme(plot.caption = element_text(size = 6.5, colour = "grey30", hjust = 0))
+
+ggsave(file.path(FIG_DIR, "fig_kundu_branches_by_department.pdf"), fig5,
+       width = 6.6, height = 7.8)
+say("\n-> output/figures/fig_kundu_branches_by_department.pdf")
+
+# ==============================================================================
+# OUTPUT 6 -- population by departamento
+# ==============================================================================
+hdr("OUTPUT 6  Population by departamento")
+
+dep_pop <- pop[, .(population = sum(population)), by = .(dep_code = substr(ubigeo, 1, 2))]
+
+map6 <- merge(adm1, dep_pop, by = "dep_code", all.x = TRUE)
+stopifnot(nrow(map6) == nrow(adm1),
+          isTRUE(all.equal(sum(map6$population), pop[, sum(population)])))
+
+# Log10 again, and for the same reason as Output 5: Lima holds 32% of the
+# population and is 70 times the smallest departamento. Keeping both maps on a
+# log fill is also what makes them comparable side by side.
+map6$fill_v <- ifelse(map6$population > 0, map6$population, NA_real_)
+
+# Counts run from 147 thousand to 10.3 million, so the polygon label switches
+# unit at a million rather than printing either unreadable digits or a string of
+# zeros. The colourbar breaks are round numbers and get their labels spelled out
+# directly, which reads better than putting this function to work on them.
+pop_lab <- function(x) fifelse(x >= 1e6, sprintf("%.1fm", x / 1e6),
+                               sprintf("%.0fk", x / 1e3))
+
+ctr6 <- suppressWarnings(st_coordinates(st_point_on_surface(st_geometry(map6))))
+lab6 <- data.table(x = ctr6[, 1], y = ctr6[, 2],
+                   lab = sprintf("%s\n%s", map6$dep_name, pop_lab(map6$population)))
+
+fig6 <- ggplot(map6) +
+  geom_sf(aes(fill = fill_v), colour = "grey40", linewidth = 0.15) +
+  scale_fill_distiller(palette = "Purples", direction = 1, trans = "log10",
+                       na.value = "grey90",
+                       breaks = c(2e5, 5e5, 1e6, 5e6, 1e7),
+                       labels = c("200k", "500k", "1m", "5m", "10m"),
+                       name = "Residents (color in log scale)",
+                       guide = guide_colourbar(title.position = "top", title.hjust = 0.5)) +
+  ggrepel::geom_text_repel(
+    data = lab6, aes(x, y, label = lab), inherit.aes = FALSE,
+    size = 2.1, family = "serif", colour = "grey10", lineheight = 0.9,
+    bg.colour = "white", bg.r = 0.12,
+    box.padding = 0.25, point.padding = 0.1, min.segment.length = 0.25,
+    segment.size = 0.2, segment.colour = "grey45", max.overlaps = 40, seed = 1) +
+  coord_sf(expand = FALSE) +
+  labs(title    = "Population by Departamento",
+       subtitle = "INEI district population, 2017 census vintage, summed to departamento",
+       caption  = paste0(
+         sprintf("%s residents in total; Lima holds %s of them (%.0f%%). The fill is log10 and\n",
+                 format(round(sum(dep_pop$population)), big.mark = ","),
+                 pop_lab(dep_pop[dep_code == "15", population]),
+                 100 * dep_pop[dep_code == "15", population] / sum(dep_pop$population)),
+         "each departamento carries its own count, so the numbers read independently of the colour.\n",
+         "This is the same district register used as the per-capita denominator elsewhere in this\n",
+         "script, so it is a fixed cross-section rather than a yearly series.\n",
+         "Source: INEI via geodir/ubigeo-peru; boundaries from the OCHA/HDX Peru COD-AB (ADM1).")) +
+  map_theme +
+  theme(plot.caption = element_text(size = 6.5, colour = "grey30", hjust = 0))
+
+ggsave(file.path(FIG_DIR, "fig_kundu_population_by_department.pdf"), fig6,
+       width = 6.6, height = 7.8)
+say("\n-> output/figures/fig_kundu_population_by_department.pdf")
 
 hdr("Session")
 say(R.version.string)

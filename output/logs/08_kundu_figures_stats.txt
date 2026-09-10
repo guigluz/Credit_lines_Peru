@@ -3,3 +3,78 @@
  OUTPUT 1  Natural disaster impacts per capita, districts of Peru 
  ========================================================================== 
 Event records: 63,526 of 142,139 kept (2010-2023, hazard type ORIGEN NATURAL). 
+Dropped at the population join: 16 ubigeo(s) absent from the 2017 register (126 records). 
+Window: 2010-2023, natural-origin hazards only (INDECI/SINPAD). 
+Districts drawn: 1873 of 1873 polygons carry a population denominator. 
+Dwellings damaged or destroyed, total: 1,668,443 
+Deaths, total: 1,098 
+Damage per 1,000 residents  -- median 59.06, p90 486.68, p99 2001.66, max 6018.3 
+Districts with zero recorded dwelling damage: 51 (2.7%) 
+Districts with zero recorded deaths: 1480 (79.0%) 
+
+-> output/figures/fig_kundu_disaster_maps.pdf 
+
+ ========================================================================== 
+ OUTPUT 2  Average deposit share by district rank 
+ ========================================================================== 
+Number of banks in the sample: 17 
+Average number of distritos per bank: 49.9 (median 41, min 1, max 216) 
+District #1 deposit share: mean 58.4%, median 50.9% 
+Top-3 districts combined:  mean 71.0%, median 64.8% 
+Excluding the 5 single-district banks: 
+  District #1 share: mean 41.1%, median 41.2% 
+  Top-3 combined:    mean 58.9%, median 56.6% 
+
+-> output/figures/fig_kundu_deposit_share_rank.pdf 
+
+ ========================================================================== 
+ OUTPUT 3  Deposit concentration and branch presence 
+ ========================================================================== 
+Mean deposit share in largest district:   58.4% 
+Median deposit share in largest district: 50.9% 
+Mean branches in largest district:        3.4 (median 1) 
+Mean branch share in largest district:    32.9% 
+Correlation deposit share vs branch share: Pearson 0.91, Spearman 0.75 
+Excluding the 5 single-office banks (n=12): Pearson 0.53, Spearman 0.31 
+
+-> output/tables/tab_kundu_deposit_concentration.tex 
+-> output/figures/fig_kundu_dep_vs_branch.pdf 
+
+ ========================================================================== 
+ OUTPUT 4  Geographic distribution of banks' largest deposit districts 
+ ========================================================================== 
+Distritos that are the largest deposit district for at least one bank: 6 
+Banks whose largest deposit district lies in Lima Metropolitana (Lima province or Callao): 100.0% (17 of 17) 
+Top districts by number of banks: 
+     dist_name   prov    dep n_banks_top
+        <char> <char> <char>       <int>
+1:  San Isidro   Lima   Lima          11
+2:  Miraflores   Lima   Lima           2
+3: La Victoria   Lima   Lima           1
+4:        Lima   Lima   Lima           1
+5:   San Borja   Lima   Lima           1
+6:   Surquillo   Lima   Lima           1
+
+-> output/figures/fig_kundu_largest_district_map.pdf 
+
+ ========================================================================== 
+ OUTPUT 5  Bank branches by departamento 
+ ========================================================================== 
+
+-> output/figures/fig_kundu_branches_by_department.pdf 
+
+ ========================================================================== 
+ OUTPUT 6  Population by departamento 
+ ========================================================================== 
+
+-> output/figures/fig_kundu_population_by_department.pdf 
+
+ ========================================================================== 
+ Session 
+ ========================================================================== 
+R version 4.3.2 (2023-10-31) 
+  data.table   1.17.0 
+  sf           1.0.21 
+  ggplot2      3.5.2 
+  kableExtra   1.4.0 
+  patchwork    1.3.1 

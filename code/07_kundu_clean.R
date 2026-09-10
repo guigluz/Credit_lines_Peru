@@ -14,7 +14,7 @@
 #                                  Aggregation, the hazard filter and the time
 #                                  window all happen downstream, so each analysis
 #                                  states its own and no choice is hidden here.
-#   kundu_bank_district.rds        bank x ubigeo deposits and branch counts at
+#   kundu_bank_district.rds        bank x ubigeo deposits and branch counts at the date
 #                                  DEPOSIT_SNAPSHOT, with within-bank shares
 #                                  and the within-bank district rank.
 #   kundu_admin3_sf.rds            district polygons (sf), keyed on ubigeo.
