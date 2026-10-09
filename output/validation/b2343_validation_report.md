@@ -293,7 +293,7 @@ data can prove.
 | `data/raw/sbs_boletin/manifest_B-2343.csv` | URL, status, bytes, sha256, true format, timestamp |
 | `data/processed/b2343_long.csv` | 49,584 rows, bank × modality × month, full provenance |
 | `data/processed/b2343_total_credits.csv` | bank × month total direct credit (reconciliation key) |
-| `data/processed/xwalk_bank.csv` | 52 raw names → 30 banks, with confidence and review flags |
+| `data/processed/crosswalks/xwalk_b2343.csv` | 52 raw names → 30 banks, with review flags (minimal crosswalk: `bank_raw`, `bank_standardized`, `review_required`) |
 | `data/documentation/bank_map_manual.csv` | curated, cited successions and aliases |
 | `output/validation/parse_diagnostics.csv` | one row per file: anchors found, counts, date check |
 | `output/validation/recon_bank_month.csv` | level 2, with `mismatch_kind` |

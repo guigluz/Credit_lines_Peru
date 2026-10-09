@@ -66,3 +66,34 @@ ICBC PERU BANK,banco_icbc,B-2358 spelling of ICBC Peru Bank (canonical form afte
 BANK OF CHINA (PERU),bank_of_china,"B-2358 spelling of Bank of China Peru; the parenthetical is not a scope qualifier, so it survives canon_bank()",FALSE
 BANCO AZTECA,alfin_banco,B-2358 20-character truncation of Banco Azteca del Peru; see Res. SBS 03054-2021 (renamed Alfin Banco),FALSE
 BANCO RIPLEY PERU,banco_ripley,B-2358 spelling of Banco Ripley Peru (canonical form after canon_bank() strips the trailing S.A.),FALSE
+AMERIKA FINANCIERA,amerika_financiera,Series Estadisticas non-bank (financiera); Reporte 2010-05..2022-09,FALSE
+CRAC CAT,crac_cat,"Series Estadisticas non-bank (caja rural); Reporte 2019-03..2020-06. Followed by CRAC Cencosud Scotia the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+CRAC CENCOSUD SCOTIA,crac_cencosud_scotia,"Series Estadisticas non-bank (caja rural); Reporte 2020-07..2022-09. Follows CRAC CAT the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+COMPARTAMOS FINANCIERA,compartamos_financiera,"Series Estadisticas non-bank (financiera); Reporte 2013-04..2022-09. B-2343 has Compartamos Banco (compartamos_banco) from 2025: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+CREDISCOTIA FINANCIERA,crediscotia_financiera,Series Estadisticas non-bank (financiera); Reporte 2009-01..2022-09,FALSE
+EDPYME CAMCO PIURA,edpyme_camco_piura,Series Estadisticas non-bank (edpyme); Reporte 2001-02..2004-12,FALSE
+EDPYME CONFIANZA,edpyme_confianza,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2009-08. Followed by Financiera Confianza the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+EDPYME CREAR AREQUIPA,edpyme_crear_arequipa,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2009-08. Followed by Financiera Crear the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+EDPYME EDYFICAR,edpyme_edyficar,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2008-02. Followed by Financiera Edyficar the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+EDPYME EFECTIVA,edpyme_efectiva,"Series Estadisticas non-bank (edpyme); Reporte 2005-01..2010-03. Followed by Financiera Efectiva the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+EDPYME NUEVA VISION,edpyme_nueva_vision,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2013-09. Followed by Financiera Nueva Vision the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+EDPYME PROEMPRESA,edpyme_proempresa,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2012-07. Followed by Financiera Proempresa the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+EMPRESAS FINANCIERAS,__SYSTEM_FINANCIERAS__,Series Estadisticas aggregate row for the Empresas Financieras subsystem; parallel to __SYSTEM__ for Banca Multiple,FALSE
+FINANCIERA CMR,financiera_cmr,"Series Estadisticas non-bank (financiera); Reporte 2001-01..2007-05. Followed by Banco Falabella the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+FINANCIERA CONFIANZA,financiera_confianza,"Series Estadisticas non-bank (financiera); Reporte 2009-09..2022-09. Follows Edpyme Confianza the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+FINANCIERA CORDILLERA,financiera_cordillera,Series Estadisticas non-bank (financiera); Reporte 2001-01..2007-12,FALSE
+FINANCIERA CREAR,financiera_crear,"Series Estadisticas non-bank (financiera); Reporte 2009-09..2013-03. Follows Edpyme Crear Arequipa the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+FINANCIERA CREDINKA,financiera_credinka,Series Estadisticas non-bank (financiera); Reporte 2015-09..2022-09,FALSE
+FINANCIERA DAEWOO,financiera_daewoo,Series Estadisticas non-bank (financiera); Reporte 2001-01..2003-04,FALSE
+FINANCIERA EDYFICAR,financiera_edyficar,"Series Estadisticas non-bank (financiera); Reporte 2008-03..2015-11. Follows Edpyme Edyficar the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+FINANCIERA EFECTIVA,financiera_efectiva,"Series Estadisticas non-bank (financiera); Reporte 2010-04..2022-09. Follows Edpyme Efectiva the previous month (candidate succession, NOT merged). Kept apart from banco_efectiva although the BANCO EFECTIVA row documents Financiera Efectiva -> Banco Efectiva (Res. SBS 01444-2026): merging would pull it into the bank-level B-2343 reconciliation",FALSE
+FINANCIERA NUEVA VISION,financiera_nueva_vision,"Series Estadisticas non-bank (financiera); Reporte 2013-10..2015-08. Follows Edpyme Nueva Vision the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+FINANCIERA OH!,financiera_oh,"Series Estadisticas non-bank (financiera); Reporte 2016-06..2022-09. Follows Financiera Uno the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+FINANCIERA PROEMPRESA,financiera_proempresa,"Series Estadisticas non-bank (financiera); Reporte 2012-08..2022-09. Follows Edpyme Proempresa the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+FINANCIERA QAPAQ,financiera_qapaq,Series Estadisticas non-bank (financiera); Reporte 2014-02..2022-09,FALSE
+FINANCIERA TFC,financiera_tfc,Series Estadisticas non-bank (financiera); Reporte 2006-04..2019-11,FALSE
+FINANCIERA UNIVERSAL,financiera_universal,Series Estadisticas non-bank (financiera); Reporte 2010-01..2014-01,FALSE
+FINANCIERA UNO,financiera_uno,"Series Estadisticas non-bank (financiera); Reporte 2010-03..2016-05. Followed by Financiera Oh! the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
+MITSUI AUTO FINANCE,mitsui_auto_finance,Series Estadisticas non-bank (finance arm of a vehicle importer); Reporte 2010-12..2022-09,FALSE
+SOLUCION FINANCIERA DE CREDITO,solucion_financiera_de_credito,Series Estadisticas non-bank (financiera); Reporte 2001-01..2010-05,FALSE
+VOLVO FINANCE,volvo_finance,Series Estadisticas non-bank (finance arm of a vehicle importer); Reporte 2001-01..2006-03,FALSE

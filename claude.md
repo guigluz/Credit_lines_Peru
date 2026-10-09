@@ -14,6 +14,7 @@ project/
 ├── data/
 │   ├── raw/                   # Raw data, never modified
 │   └── processed/             # Cleaned, analysis-ready datasets
+│       └── crosswalks/        # Bank-name crosswalks (xwalk_<dataset>.csv); join on bank_standardized
 ├── code/
 │   ├── 01_collect.R           # Data download and API pulls
 │   ├── 02_clean.R             # Cleaning, merging, variable construction

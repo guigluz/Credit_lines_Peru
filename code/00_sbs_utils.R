@@ -447,6 +447,48 @@ standardize_banks <- function(raw, source_tag, manual) {
 }
 
 # ==============================================================================
+# Bank crosswalks -- one hub (bank_standardized), one minimal spoke per dataset
+# ==============================================================================
+# bank_standardized is the only key shared across datasets. Each dataset's script
+# writes data/processed/crosswalks/xwalk_<dataset>.csv with just
+#   <name as printed in that dataset>, bank_standardized, review_required
+# To merge dataset A with dataset B on banks: A -> bank_standardized <- B.
+# The curated map those spokes are built from is hand-edited, never script-written.
+BANK_MAP  <- "data/documentation/bank_map_manual.csv"
+XWALK_DIR <- "data/processed/crosswalks"
+
+#' Read the curated bank map (canon_excel -> bank_standardized).
+#' canon_excel must be unique: a duplicate would silently duplicate panel rows
+#' in the left_join inside standardize_banks().
+read_bank_map <- function(path = BANK_MAP) {
+  if (!file.exists(path))
+    stop("bank map not found: ", path, " (run from the project root)", call. = FALSE)
+  m <- readr::read_csv(path, show_col_types = FALSE)
+  need <- c("canon_excel", "bank_standardized", "note", "review_required")
+  if (!all(need %in% names(m)))
+    stop("bank map is missing column(s): ", paste(setdiff(need, names(m)), collapse = ", "),
+         call. = FALSE)
+  dup <- unique(m$canon_excel[duplicated(m$canon_excel)])
+  if (length(dup))
+    stop("bank map has duplicate canon_excel: ", paste(dup, collapse = "; "), call. = FALSE)
+  m
+}
+
+#' Write a dataset's minimal crosswalk and return it invisibly.
+#'
+#' @param bank_std  output of standardize_banks() for this dataset's printed names
+#' @param dataset   short tag used in the file name, e.g. "b2343" -> xwalk_b2343.csv
+write_xwalk <- function(bank_std, dataset) {
+  xw <- bank_std %>%
+    transmute(bank_raw, bank_standardized, review_required) %>%
+    arrange(desc(review_required), bank_standardized, bank_raw)
+  stopifnot(!anyDuplicated(xw$bank_raw))
+  dir.create(XWALK_DIR, recursive = TRUE, showWarnings = FALSE)
+  readr::write_csv(xw, file.path(XWALK_DIR, paste0("xwalk_", dataset, ".csv")))
+  invisible(xw)
+}
+
+# ==============================================================================
 # Generic collector -- shared by 01_collect_direct.R and 01_collect_indirect.R
 # ==============================================================================
 

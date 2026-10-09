@@ -48,7 +48,7 @@
 # Outputs:
 #   data/processed/b2358_long.csv.gz          cell-level long table
 #   data/processed/b2358_branch_panel.csv.gz  the deliverable: branch x month
-#   data/processed/xwalk_bank_b2358.csv       raw printed name -> standardized
+#   data/processed/crosswalks/xwalk_b2358.csv raw printed name -> bank_standardized
 #   output/validation/parse_diagnostics_b2358.csv
 #   output/validation/b2358_month_total_reconciliation.csv
 #   output/validation/b2358_review_queue.csv
@@ -295,12 +295,12 @@ if (any(diagnostics$status != "ok")) {
 }
 stopifnot(nrow(panel_raw) > 0)
 
-# ---- entity standardization (shares the B-2343 / B-2322 crosswalk) -----------
+# ---- entity standardization (same bank map as B-2343 / B-2322) ---------------
 # B-2358 prints entity names TRUNCATED TO 20 CHARACTERS ("B B V A BANCO CONTIN",
 # "CREDITO", "BANCOM2"), unlike the other cuadros. The extra spellings live in
 # the same manual map; anything still unmatched lands in the review queue rather
 # than becoming a silent NA.
-manual   <- read_csv(file.path(DOC, "bank_map_manual.csv"), show_col_types = FALSE)
+manual   <- read_bank_map()
 bank_std <- standardize_banks(unique(panel_raw$bank_raw), "excel_B-2358", manual)
 
 panel_out <- panel_raw %>%
@@ -320,16 +320,17 @@ panel_out <- panel_raw %>%
 write_csv(panel_out, file.path(PROC, "b2358_long.csv.gz"))
 
 # ---- crosswalk: one row per printed spelling ---------------------------------
+# Minimal spoke written to disk (see 00_sbs_utils.R). Coverage per spelling
+# (first/last month, n) stays in memory for the review queue below.
+write_xwalk(bank_std, "b2358")
 xwalk <- panel_raw %>%
   group_by(bank_raw) %>%
   summarise(first_seen = min(report_date), last_seen = max(report_date),
             n_months = n_distinct(report_date), .groups = "drop") %>%
   left_join(bank_std, by = "bank_raw") %>%
-  transmute(bank_raw, bank_standardized, scope_note, bank_footnote,
-            source = "excel_B-2358", first_seen, last_seen, n_months,
-            mapping_method, mapping_confidence, review_required) %>%
+  transmute(bank_raw, bank_standardized, review_required,
+            first_seen, last_seen, n_months) %>%
   arrange(desc(review_required), bank_standardized, first_seen)
-write_csv(xwalk, file.path(PROC, "xwalk_bank_b2358.csv"))
 
 # ==============================================================================
 # The deliverable: branch panel

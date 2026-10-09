@@ -1,0 +1,52 @@
+bank_raw,bank_standardized,review_required
+TOTAL BANCA MÚLTIPLE,__SYSTEM__,FALSE
+Alfin Banco,alfin_banco,FALSE
+Alfin Banco 1/,alfin_banco,FALSE
+B. Azteca Perú,alfin_banco,FALSE
+Banco BCI Perú,banco_bci,FALSE
+Banco BCI Perú*,banco_bci,FALSE
+B. Cencosud,banco_cencosud,FALSE
+B. del Trabajo,banco_del_trabajo,FALSE
+B. Efectiva*,banco_efectiva,FALSE
+B. Falabella Perú,banco_falabella,FALSE
+Falabella Perú S.A.,banco_falabella,FALSE
+B. GNB,banco_gnb,FALSE
+B.GNB,banco_gnb,FALSE
+B. ICBC,banco_icbc,FALSE
+B. Financiero,banco_pichincha,FALSE
+B. Pichincha,banco_pichincha,FALSE
+B. Pichincha**,banco_pichincha,FALSE
+B. Ripley,banco_ripley,FALSE
+B. Sudamericano,banco_sudamericano,FALSE
+B. Sudamericano (con sucursales en el exterior),banco_sudamericano,FALSE
+B. de Comercio,bancom,FALSE
+BANCOM,bancom,FALSE
+Bank of China,bank_of_china,FALSE
+Bank of China**,bank_of_china,FALSE
+BankBoston,bankboston,FALSE
+B. BBVA Perú,bbva_peru,FALSE
+B. BBVA Perú**,bbva_peru,FALSE
+B. Continental,bbva_peru,FALSE
+B. de Crédito del Perú,bcp,FALSE
+B. de Crédito del Perú (con sucursales en el exterior),bcp,FALSE
+B. Interamericano de Finanzas,bif,FALSE
+BNP Paribas Andes,bnp_paribas,FALSE
+B. Santander Central Hispano,bsch_peru,FALSE
+Citibank,citibank,FALSE
+Compartamos Banco,compartamos_banco,FALSE
+Compartamos Banco*,compartamos_banco,FALSE
+Deutsche Bank Perú,deutsche_bank,FALSE
+HSBC Bank Perú,hsbc_peru,FALSE
+Interbank,interbank,FALSE
+Interbank (con sucursales en el exterior),interbank,FALSE
+Mibanco,mibanco,FALSE
+Santander Consumer Bank,santander_consumer,FALSE
+Santander Consumer Bank*,santander_consumer,FALSE
+B. Santander Perú,santander_peru,FALSE
+Santander Perú S.A.,santander_peru,FALSE
+Scotiabank Perú,scotiabank,FALSE
+Scotiabank Perú (con sucursales en el exterior),scotiabank,FALSE
+Scotiabank Perú *,scotiabank,FALSE
+Scotiabank Perú **,scotiabank,FALSE
+B. Standard Chartered,standard_chartered,FALSE
+B. Wiese Sudameris,wiese_sudameris,FALSE

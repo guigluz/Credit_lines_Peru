@@ -253,7 +253,7 @@ if (any(diagnostics$status != "ok")) {
 # their own column, never silently deleted: whether foreign branches are in
 # scope is a live candidate explanation for level differences against the
 # Series Estadisticas extract.
-manual_path <- file.path(DOC, "bank_map_manual.csv")
+manual_path <- BANK_MAP
 if (!file.exists(manual_path)) {
   # Documented successions and cross-source aliases. Every row is a deliberate,
   # sourced statement -- nothing here was inferred from name similarity alone.
@@ -315,7 +315,7 @@ if (!file.exists(manual_path)) {
   ) %>% write_csv(manual_path)
   cat(sprintf("\nSeeded manual bank map: %s\n", manual_path))
 }
-manual <- read_csv(manual_path, show_col_types = FALSE)
+manual <- read_bank_map(manual_path)
 
 bank_names <- panel_raw %>% distinct(bank_raw) %>% pull(bank_raw)
 bank_std   <- standardize_banks(bank_names, "excel_B-2343", manual)
@@ -326,26 +326,9 @@ panel <- panel_raw %>%
             by = "bank_raw") %>%
   mutate(bank_id = bank_standardized)   # project-scoped id; SBS publishes none
 
-# ---- crosswalk outputs -------------------------------------------------------
-xwalk_bank <- panel %>%
-  group_by(bank_raw) %>%
-  summarise(
-    bank_standardized = first(bank_standardized),
-    bank_id           = first(bank_id),
-    scope_note        = first(scope_note),
-    bank_footnote     = first(bank_footnote),
-    source            = "excel_B-2343",
-    first_seen        = min(report_date), last_seen = max(report_date),
-    n_months          = n_distinct(report_date),
-    mapping_method    = first(mapping_method),
-    mapping_confidence= first(mapping_confidence),
-    review_required   = first(review_required),
-    .groups = "drop"
-  ) %>%
-  left_join(manual %>% select(canon_excel, mapping_note = note) %>% distinct(),
-            by = c("bank_raw" = "canon_excel")) %>%
-  arrange(desc(review_required), bank_standardized, first_seen)
-write_csv(xwalk_bank, file.path(PROC, "xwalk_bank.csv"))
+# ---- crosswalk output --------------------------------------------------------
+# Minimal spoke: printed name -> bank_standardized (+ review flag). See 00_sbs_utils.R.
+xwalk_bank <- write_xwalk(bank_std, "b2343")
 
 
 # ---- panel outputs -----------------------------------------------------------

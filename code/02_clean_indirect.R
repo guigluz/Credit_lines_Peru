@@ -230,8 +230,8 @@ if (any(diagnostics$status != "ok")) {
         select(source_file, status, message)), row.names = FALSE)
 }
 
-# ---- entity standardization (shares the B-2343 crosswalk) --------------------
-manual <- read_csv(file.path(DOC, "bank_map_manual.csv"), show_col_types = FALSE)
+# ---- entity standardization (same bank map as B-2343; joins on bank_standardized) ----
+manual <- read_bank_map()
 bank_std <- standardize_banks(unique(panel_raw$bank_raw), "excel_B-2322", manual)
 
 panel <- panel_raw %>%
@@ -261,18 +261,14 @@ panel_out <- panel %>%
 
 write_csv(panel_out, file.path(PROC, "b2322_long.csv"))
 
-# ---- crosswalks --------------------------------------------------------------
-write_csv(
-  panel_out %>% group_by(bank_raw) %>%
-    summarise(bank_standardized = first(bank_standardized), bank_id = first(bank_id),
-              scope_note = first(scope_note), bank_footnote = first(bank_footnote),
-              source = "excel_B-2322", first_seen = min(report_date),
-              last_seen = max(report_date), n_months = n_distinct(report_date),
-              mapping_method = first(mapping_method),
-              mapping_confidence = first(mapping_confidence),
-              review_required = first(review_required), .groups = "drop") %>%
-    arrange(desc(review_required), bank_standardized, first_seen),
-  file.path(PROC, "xwalk_bank_b2322.csv"))
+# ---- crosswalk ---------------------------------------------------------------
+# Minimal spoke: printed name -> bank_standardized (+ review flag). See 00_sbs_utils.R.
+write_xwalk(bank_std, "b2322")
+# Coverage per printed name is no longer stored in the crosswalk; the review queue
+# below still reports it.
+xwalk_seen <- panel_out %>% group_by(bank_raw) %>%
+  summarise(first_seen = min(report_date), last_seen = max(report_date),
+            n_months = n_distinct(report_date), .groups = "drop")
 
 # ==============================================================================
 # The deliverable: bank panel of unused credit and its types
@@ -434,7 +430,9 @@ review <- bind_rows(
     transmute(item = "duplicate_workbook_content", key = basename(dest),
               detail = paste0("sha256 shared with another month: ", sha256),
               severity = "high"),
-  read_csv(file.path(PROC, "xwalk_bank_b2322.csv"), show_col_types = FALSE) %>%
+  bank_std %>% select(bank_raw, bank_standardized, review_required) %>%
+    left_join(xwalk_seen, by = "bank_raw") %>%
+    arrange(desc(review_required), bank_standardized, first_seen) %>%
     filter(review_required | is.na(bank_standardized)) %>%
     transmute(item = "bank_name_mapping", key = bank_raw,
               detail = paste0("std=", coalesce(bank_standardized, "<none>"), "; ",

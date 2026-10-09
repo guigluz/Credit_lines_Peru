@@ -99,7 +99,7 @@ summarise_level <- function(df, level_name) {
 # ---- Source A: parsed bulletin ----------------------------------------------
 panel  <- read_csv(file.path(PROC, "b2343_long.csv"), show_col_types = FALSE)
 totals <- read_csv(file.path(PROC, "b2343_total_credits.csv"), show_col_types = FALSE)
-manual <- read_csv("data/documentation/bank_map_manual.csv", show_col_types = FALSE)
+manual <- read_bank_map()
 
 # ---- Source B: Series Estadisticas extract ----------------------------------
 # UTF-32LE, no BOM. Columns are renamed BY POSITION: accented names are
@@ -122,6 +122,9 @@ srcB <- srcB_raw %>%
   filter(!is.na(report_date), !is.na(entity_raw), entity_raw != "")
 
 bstd <- standardize_banks(unique(srcB$entity_raw), "series_estadisticas", manual)
+# Minimal spoke for this dataset (this is the only script that standardizes the
+# Series Estadisticas names). Non-bank entities have their own slugs in the bank map.
+write_xwalk(bstd, "reporte")
 srcB <- srcB %>% left_join(bstd %>% select(entity_raw = bank_raw, bank_standardized,
                                            review_required),
                            by = "entity_raw")
@@ -130,11 +133,15 @@ cat("--- Source B (Series Estadisticas) ---\n")
 cat(sprintf("rows: %d | entities: %d | months: %d (%s .. %s)\n",
             nrow(srcB), n_distinct(srcB$entity_raw), n_distinct(srcB$report_date),
             min(srcB$report_date), max(srcB$report_date)))
-excluded <- srcB %>% filter(is.na(bank_standardized)) %>% count(entity_raw, name = "n_months")
+# Universe = slugs present in Source A (the parsed bulletin, banca multiple plus
+# __SYSTEM__). The test used to be is.na(bank_standardized); financieras, edpymes
+# and cajas rurales now carry slugs too, so membership in Source A is the test.
+in_universe <- srcB$bank_standardized %in% unique(na.omit(panel$bank_standardized))
+excluded <- srcB %>% filter(!in_universe) %>% count(entity_raw, name = "n_months")
 cat(sprintf("entities NOT in the banca multiple universe (excluded): %d\n", nrow(excluded)))
 write_csv(excluded, file.path(VALID, "seriesest_entities_excluded.csv"))
 
-srcB_bm <- srcB %>% filter(!is.na(bank_standardized))
+srcB_bm <- srcB %>% filter(in_universe)
 cat(sprintf("entities kept: %d\n\n", n_distinct(srcB_bm$bank_standardized)))
 
 # ---- overlap window ----------------------------------------------------------
@@ -383,7 +390,12 @@ if (length(mismatch_months)) {
 
 # ---- manual-review queue -----------------------------------------------------
 review_queue <- bind_rows(
-  read_csv(file.path(PROC, "xwalk_bank.csv"), show_col_types = FALSE) %>%
+  read_csv(file.path(XWALK_DIR, "xwalk_b2343.csv"), show_col_types = FALSE) %>%
+    left_join(panel %>% group_by(bank_raw) %>%
+                summarise(first_seen = min(report_date), last_seen = max(report_date),
+                          n_months = n_distinct(report_date), .groups = "drop"),
+              by = "bank_raw") %>%
+    arrange(desc(review_required), bank_standardized, first_seen) %>%
     filter(review_required | is.na(bank_standardized)) %>%
     transmute(item = "bank_name_mapping", key = bank_raw,
               detail = paste0("std=", coalesce(bank_standardized, "<none>"),

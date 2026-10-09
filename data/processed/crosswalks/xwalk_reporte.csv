@@ -1,0 +1,63 @@
+bank_raw,bank_standardized,review_required
+Empresas Financieras,__SYSTEM_FINANCIERAS__,FALSE
+Banca Múltiple,__SYSTEM__,FALSE
+Alfin Banco,alfin_banco,FALSE
+Azteca del Perú,alfin_banco,FALSE
+Amérika Financiera,amerika_financiera,FALSE
+Banco BCI,banco_bci,FALSE
+Banco Cencosud,banco_cencosud,FALSE
+Banco de Trabajo,banco_del_trabajo,FALSE
+Banco Falabella,banco_falabella,FALSE
+Banco GNB,banco_gnb,FALSE
+Banco ICBC,banco_icbc,FALSE
+Banco Financiero,banco_pichincha,FALSE
+Banco Pichincha,banco_pichincha,FALSE
+Banco Ripley,banco_ripley,FALSE
+Banco Sudamericano,banco_sudamericano,FALSE
+Banco de Comercio,bancom,FALSE
+Bank of China,bank_of_china,FALSE
+BankBoston,bankboston,FALSE
+Banco BBVA Perú,bbva_peru,FALSE
+Banco Continental,bbva_peru,FALSE
+Banco de Crédito,bcp,FALSE
+Banco Interamericano de Finanzas,bif,FALSE
+BNP Paribas,bnp_paribas,FALSE
+Banco Santander Central Hispano,bsch_peru,FALSE
+Citibank,citibank,FALSE
+Compartamos Financiera,compartamos_financiera,FALSE
+CRAC CAT,crac_cat,FALSE
+CRAC Cencosud Scotia,crac_cencosud_scotia,FALSE
+Crediscotia Financiera,crediscotia_financiera,FALSE
+Deutsche Bank,deutsche_bank,FALSE
+Edpyme Camco Piura,edpyme_camco_piura,FALSE
+Edpyme Confianza,edpyme_confianza,FALSE
+Edpyme Crear Arequipa,edpyme_crear_arequipa,FALSE
+Edpyme Edyficar,edpyme_edyficar,FALSE
+Edpyme Efectiva,edpyme_efectiva,FALSE
+Edpyme Nueva Visión,edpyme_nueva_vision,FALSE
+Edpyme Proempresa,edpyme_proempresa,FALSE
+Financiera CMR,financiera_cmr,FALSE
+Financiera Confianza,financiera_confianza,FALSE
+Financiera Cordillera,financiera_cordillera,FALSE
+Financiera Crear,financiera_crear,FALSE
+Financiera Credinka,financiera_credinka,FALSE
+Financiera Daewoo,financiera_daewoo,FALSE
+Financiera Edyficar,financiera_edyficar,FALSE
+Financiera Efectiva,financiera_efectiva,FALSE
+Financiera Nueva Visión,financiera_nueva_vision,FALSE
+Financiera Oh!,financiera_oh,FALSE
+Financiera Proempresa,financiera_proempresa,FALSE
+Financiera Qapaq,financiera_qapaq,FALSE
+Financiera TFC,financiera_tfc,FALSE
+Financiera Universal,financiera_universal,FALSE
+Financiera Uno,financiera_uno,FALSE
+Banco HSBC,hsbc_peru,FALSE
+Interbank,interbank,FALSE
+Mibanco,mibanco,FALSE
+Mitsui Auto Finance,mitsui_auto_finance,FALSE
+Banco Santander,santander_peru,FALSE
+Scotiabank,scotiabank,FALSE
+Solución Financiera de Crédito,solucion_financiera_de_credito,FALSE
+Standard Chartered,standard_chartered,FALSE
+Volvo Finance,volvo_finance,FALSE
+Wiese Sudameris,wiese_sudameris,FALSE
