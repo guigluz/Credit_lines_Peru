@@ -1,0 +1,284 @@
+circular,effective_date,currency,category,rate_type,tier,value,note
+010-96-EF/90,1996-04-01,MN,gen,min_legal,all,9,first observation in the BCRP online archive (earlier circulars 29-95/30-95 not published)
+12-97-EF/90,1997-04-01,MN,gen,min_legal,all,7,
+27-2000-EF/90,2000-09-01,MN,gen,min_legal,all,6,
+011-2008-BCRP,2008-02-01,MN,gen,min_legal,all,7,
+014-2008-BCRP,2008-04-01,MN,gen,min_legal,all,8,
+020-2008-BCRP,2008-05-01,MN,gen,min_legal,all,8.5,
+030-2008-BCRP,2008-08-01,MN,gen,min_legal,all,9,
+054-2008-BCRP,2009-01-01,MN,gen,min_legal,all,7.5,
+002-2009-BCRP,2009-02-01,MN,gen,min_legal,all,6.5,
+006-2009-BCRP,2009-04-01,MN,gen,min_legal,all,6,
+016-2010-BCRP,2010-07-01,MN,gen,min_legal,all,7,
+020-2010-BCRP,2010-08-01,MN,gen,min_legal,all,8,
+024-2010-BCRP,2010-09-01,MN,gen,min_legal,all,8.5,
+031-2010-BCRP,2010-10-01,MN,gen,min_legal,all,9,
+005-2015-BCRP,2015-02-01,MN,gen,min_legal,all,8.5,
+009-2015-BCRP,2015-03-01,MN,gen,min_legal,all,8,
+014-2015-BCRP,2015-04-01,MN,gen,min_legal,all,7.5,
+017-2015-BCRP,2015-05-01,MN,gen,min_legal,all,7,
+023-2015-BCRP,2015-06-01,MN,gen,min_legal,all,6.5,
+029-2016-BCRP,2017-01-01,MN,gen,min_legal,all,6,
+010-2017-BCRP,2017-04-01,MN,gen,min_legal,all,5,
+0010-2020-BCRP,2020-04-01,MN,gen,min_legal,all,4,
+0031-2021-BCRP,2021-11-01,MN,gen,min_legal,all,4.5,
+0031-2021-BCRP,2021-12-01,MN,gen,min_legal,all,4.75,
+0031-2021-BCRP,2022-01-01,MN,gen,min_legal,all,5,
+0003-2022-BCRP,2022-02-01,MN,gen,min_legal,all,5.25,
+0003-2022-BCRP,2022-03-01,MN,gen,min_legal,all,5.5,
+0003-2022-BCRP,2022-04-01,MN,gen,min_legal,all,5.75,
+0003-2022-BCRP,2022-05-01,MN,gen,min_legal,all,6,
+0008-2024-BCRP,2024-04-01,MN,gen,min_legal,all,5.5,
+011-96-EF/90,1996-04-01,ME,gen,min_legal,all,9,first observation in the BCRP online archive
+13-97-EF/90,1997-04-01,ME,gen,min_legal,all,7,
+28-2000-EF/90,2000-09-01,ME,gen,min_legal,all,6,
+010-2008-BCRP,2008-02-01,ME,gen,min_legal,all,7,
+015-2008-BCRP,2008-04-01,ME,gen,min_legal,all,8,
+021-2008-BCRP,2008-05-01,ME,gen,min_legal,all,8.5,
+031-2008-BCRP,2008-08-01,ME,gen,min_legal,all,9,
+055-2008-BCRP,2009-01-01,ME,gen,min_legal,all,7.5,
+003-2009-BCRP,2009-02-01,ME,gen,min_legal,all,6.5,
+007-2009-BCRP,2009-04-01,ME,gen,min_legal,all,6,
+017-2010-BCRP,2010-07-01,ME,gen,min_legal,all,7,
+021-2010-BCRP,2010-08-01,ME,gen,min_legal,all,8,
+025-2010-BCRP,2010-09-01,ME,gen,min_legal,all,8.5,
+032-2010-BCRP,2010-10-01,ME,gen,min_legal,all,9,
+003-2014-BCRP,2014-02-01,MN,gen,general,all,13,single rate applied to all general-regime obligations
+006-2014-BCRP,2014-03-01,MN,gen,general,all,12.5,
+009-2014-BCRP,2014-04-01,MN,gen,general,all,12,
+019-2014-BCRP,2014-07-01,MN,gen,general,all,11.5,
+029-2014-BCRP,2014-09-01,MN,gen,general,all,11,
+033-2014-BCRP,2014-10-01,MN,gen,general,all,10.5,
+036-2014-BCRP,2014-11-01,MN,gen,general,all,10,
+039-2014-BCRP,2014-12-01,MN,gen,general,all,9.5,
+044-2014-BCRP,2015-01-01,MN,gen,general,all,9,
+005-2015-BCRP,2015-02-01,MN,gen,general,all,8.5,
+009-2015-BCRP,2015-03-01,MN,gen,general,all,8,
+014-2015-BCRP,2015-04-01,MN,gen,general,all,7.5,
+017-2015-BCRP,2015-05-01,MN,gen,general,all,7,
+023-2015-BCRP,2015-06-01,MN,gen,general,all,6.5,
+029-2016-BCRP,2017-01-01,MN,gen,general,all,6,
+010-2017-BCRP,2017-04-01,MN,gen,general,all,5,
+0010-2020-BCRP,2020-04-01,MN,gen,general,all,4,
+0024-2021-BCRP,2021-09-01,MN,gen,general,all,NA,base/marginal regime: exigible reserve is entity-specific (see regime)
+0008-2024-BCRP,2024-04-01,MN,gen,general,all,5.5,
+011-2008-BCRP,2008-02-01,MN,gen,marginal,all,15,rate on obligations above the base-period level
+014-2008-BCRP,2008-04-01,MN,gen,marginal,all,20,
+020-2008-BCRP,2008-05-01,MN,gen,marginal,all,25,
+042-2008-BCRP,2008-11-01,MN,gen,marginal,all,NA,single reserve rate (marginal eliminated)
+020-2010-BCRP,2010-08-01,MN,gen,marginal,all,12,
+024-2010-BCRP,2010-09-01,MN,gen,marginal,all,15,
+031-2010-BCRP,2010-10-01,MN,gen,marginal,all,25,
+010-2012-BCRP,2012-05-01,MN,gen,marginal,all,30,
+027-2013-BCRP,2013-08-01,MN,gen,marginal,all,25,
+031-2013-BCRP,2013-09-01,MN,gen,marginal,all,20,
+037-2013-BCRP,2013-10-01,MN,gen,marginal,all,16,
+043-2013-BCRP,2013-12-01,MN,gen,marginal,all,15,
+046-2013-BCRP,2014-01-01,MN,gen,marginal,all,14,
+003-2014-BCRP,2014-02-01,MN,gen,marginal,all,NA,single reserve rate (marginal eliminated)
+0024-2021-BCRP,2021-09-01,MN,gen,marginal,all,25,over the July-2021 base
+0008-2024-BCRP,2024-04-01,MN,gen,marginal,all,NA,single reserve rate (marginal eliminated)
+011-96-EF/90,1996-04-01,ME,gen,marginal,all,45,
+14-98-EF/90,1998-07-01,ME,gen,marginal,all,35,
+28-98-EF/90,1998-12-01,ME,gen,marginal,all,20,
+19-2004-EF/90,2004-11-01,ME,gen,marginal,all,30,
+010-2008-BCRP,2008-02-01,ME,gen,marginal,all,40,
+021-2008-BCRP,2008-05-01,ME,gen,marginal,all,45,
+031-2008-BCRP,2008-08-01,ME,gen,marginal,all,49,
+043-2008-BCRP,2008-10-01,ME,gen,marginal,all,35,
+055-2008-BCRP,2009-01-01,ME,gen,marginal,all,30,
+017-2010-BCRP,2010-07-01,ME,gen,marginal,all,35,
+021-2010-BCRP,2010-08-01,ME,gen,marginal,all,45,
+025-2010-BCRP,2010-09-01,ME,gen,marginal,all,50,
+032-2010-BCRP,2010-10-01,ME,gen,marginal,all,55,
+028-2013-BCRP,2013-08-01,ME,gen,marginal,all,50,
+045-2014-BCRP,2015-01-01,ME,gen,marginal,all,60,
+010-2015-BCRP,2015-03-01,ME,gen,marginal,all,70,
+030-2016-BCRP,2017-01-01,ME,gen,marginal,all,48,
+006-2017-BCRP,2017-03-01,ME,gen,marginal,all,46,
+014-2017-BCRP,2017-05-01,ME,gen,marginal,all,44,
+020-2017-BCRP,2017-07-01,ME,gen,marginal,all,42,
+028-2017-BCRP,2017-09-01,ME,gen,marginal,all,41,
+030-2017-BCRP,2017-10-01,ME,gen,marginal,all,40,
+037-2017-BCRP,2018-01-01,ME,gen,marginal,all,39,
+004-2018-BCRP,2018-02-01,ME,gen,marginal,all,38,
+007-2018-BCRP,2018-03-01,ME,gen,marginal,all,37,
+011-2018-BCRP,2018-04-01,ME,gen,marginal,all,36,
+024-2018-BCRP,2018-07-01,ME,gen,marginal,all,35,
+020-2008-BCRP,2008-05-01,MN,gen,avg_cap,all,15,"encaje medio de 15 por ciento once base+marginal reserve reaches 15% of general-regime obligations"
+042-2008-BCRP,2008-11-01,MN,gen,avg_cap,all,NA,single reserve rate
+020-2013-BCRP,2013-06-01,MN,gen,avg_cap,all,20,
+027-2013-BCRP,2013-08-01,MN,gen,avg_cap,all,19,
+031-2013-BCRP,2013-09-01,MN,gen,avg_cap,all,17,
+037-2013-BCRP,2013-10-01,MN,gen,avg_cap,all,16,
+043-2013-BCRP,2013-12-01,MN,gen,avg_cap,all,15,
+046-2013-BCRP,2014-01-01,MN,gen,avg_cap,all,14,
+003-2014-BCRP,2014-02-01,MN,gen,avg_cap,all,NA,single reserve rate
+0031-2021-BCRP,2021-11-01,MN,gen,avg_cap,all,6,
+0008-2024-BCRP,2024-04-01,MN,gen,avg_cap,all,NA,single reserve rate
+021-2008-BCRP,2008-05-01,ME,gen,avg_cap,all,35,
+043-2008-BCRP,2008-10-01,ME,gen,avg_cap,all,NA,
+028-2013-BCRP,2013-08-01,ME,gen,avg_cap,all,45,Tasa Media RG limit
+045-2014-BCRP,2015-01-01,ME,gen,avg_cap,all,NA,limit not restated in the circular
+010-2015-BCRP,2015-03-01,ME,gen,avg_cap,all,60,
+030-2016-BCRP,2017-01-01,ME,gen,avg_cap,all,48,
+006-2017-BCRP,2017-03-01,ME,gen,avg_cap,all,46,
+014-2017-BCRP,2017-05-01,ME,gen,avg_cap,all,44,
+020-2017-BCRP,2017-07-01,ME,gen,avg_cap,all,42,
+028-2017-BCRP,2017-09-01,ME,gen,avg_cap,all,41,
+030-2017-BCRP,2017-10-01,ME,gen,avg_cap,all,40,
+037-2017-BCRP,2018-01-01,ME,gen,avg_cap,all,39,
+004-2018-BCRP,2018-02-01,ME,gen,avg_cap,all,38,
+007-2018-BCRP,2018-03-01,ME,gen,avg_cap,all,37,
+011-2018-BCRP,2018-04-01,ME,gen,avg_cap,all,36,
+024-2018-BCRP,2018-07-01,ME,gen,avg_cap,all,35,
+0024-2021-BCRP,2021-09-01,MN,gen,min_avg,all,4,
+0024-2021-BCRP,2021-10-01,MN,gen,min_avg,all,4.25,
+0024-2021-BCRP,2021-11-01,MN,gen,min_avg,all,4.5,
+0003-2022-BCRP,2022-02-01,MN,gen,min_avg,all,NA,replaced by the minimum-legal ramp
+000-REGIME,1996-04-01,MN,gen,regime,all,single,
+011-2008-BCRP,2008-02-01,MN,gen,regime,all,base_marginal,
+042-2008-BCRP,2008-11-01,MN,gen,regime,all,single,
+020-2010-BCRP,2010-08-01,MN,gen,regime,all,base_marginal,
+003-2014-BCRP,2014-02-01,MN,gen,regime,all,single,
+0024-2021-BCRP,2021-09-01,MN,gen,regime,all,base_marginal,
+0008-2024-BCRP,2024-04-01,MN,gen,regime,all,single,
+000-REGIME,1996-04-01,ME,gen,regime,all,base_marginal,
+27-2000-EF/90,2000-09-01,MN,res,deposit_min_pct,all,1,minimum current-account deposit at BCRP as % of reservable obligations (a second 0.7% floor applies to another entity group)
+011-2008-BCRP,2008-02-01,MN,res,deposit_min_pct,all,2,
+002-2009-BCRP,2009-02-01,MN,res,deposit_min_pct,all,1.5,
+006-2009-BCRP,2009-04-01,MN,res,deposit_min_pct,all,1,
+016-2010-BCRP,2010-07-01,MN,res,deposit_min_pct,all,2,
+020-2010-BCRP,2010-08-01,MN,res,deposit_min_pct,all,2.5,
+024-2010-BCRP,2010-09-01,MN,res,deposit_min_pct,all,3,
+039-2014-BCRP,2014-12-01,MN,res,deposit_min_pct,all,2.5,
+044-2014-BCRP,2015-01-01,MN,res,deposit_min_pct,all,2,
+005-2015-BCRP,2015-02-01,MN,res,deposit_min_pct,all,1.5,
+009-2015-BCRP,2015-03-01,MN,res,deposit_min_pct,all,1,
+014-2015-BCRP,2015-04-01,MN,res,deposit_min_pct,all,0.75,
+005-2016-BCRP,2016-03-01,MN,res,deposit_min_pct,all,1,
+0010-2020-BCRP,2020-04-01,MN,res,deposit_min_pct,all,0.75,
+0024-2021-BCRP,2021-10-01,MN,res,deposit_min_pct,all,1,0.75% in the September 2021 period
+28-2000-EF/90,2000-09-01,ME,res,deposit_min_pct,all,1,
+010-2008-BCRP,2008-02-01,ME,res,deposit_min_pct,all,2,
+003-2009-BCRP,2009-02-01,ME,res,deposit_min_pct,all,1.5,
+007-2009-BCRP,2009-04-01,ME,res,deposit_min_pct,all,1,
+017-2010-BCRP,2010-07-01,ME,res,deposit_min_pct,all,2,
+021-2010-BCRP,2010-08-01,ME,res,deposit_min_pct,all,2.5,
+025-2010-BCRP,2010-09-01,ME,res,deposit_min_pct,all,3,
+010-96-EF/90,1996-04-01,MN,idx,rate,all,45,FX-indexed obligations and deposits linked to forward FX purchases
+20-99-EF/90,1999-07-01,MN,idx,rate,all,20,
+15-2000-EF/90,2000-05-01,MN,idx,rate,all,40,text of 15-2000 states 40% though no circular between 20-99 and 15-2000 raises it; flag
+020-2008-BCRP,2008-05-01,MN,idx,rate,all,45,
+030-2008-BCRP,2008-08-01,MN,idx,rate,all,49,
+042-2008-BCRP,2008-11-01,MN,idx,rate,all,35,
+020-2010-BCRP,2010-08-01,MN,idx,rate,all,45,
+024-2010-BCRP,2010-09-01,MN,idx,rate,all,50,
+031-2010-BCRP,2010-10-01,MN,idx,rate,all,55,
+027-2013-BCRP,2013-08-01,MN,idx,rate,all,50,
+017-2015-BCRP,2015-05-01,MN,idx,rate,all,70,
+029-2016-BCRP,2017-01-01,MN,idx,rate,all,48,
+005-2017-BCRP,2017-03-01,MN,idx,rate,all,46,
+013-2017-BCRP,2017-05-01,MN,idx,rate,all,44,
+023-2018-BCRP,2018-07-01,MN,idx,rate,all,35,
+020-2012-BCRP,2012-07-01,ME,idx,rate,tier1,20,ME obligations indexed to FX/MN instruments from foreign entities; tier1 = up to May-2012 balance or 1% of effective equity
+038-2013-BCRP,2013-10-01,ME,idx,rate,tier1,16,
+047-2013-BCRP,2014-01-01,ME,idx,rate,tier1,14,
+004-2014-BCRP,2014-02-01,ME,idx,rate,tier1,NA,tier1 charged at the MN general-regime rate (13% falling to 9%)
+020-2012-BCRP,2012-07-01,ME,idx,rate,excess,120,
+040-2014-BCRP,2014-12-01,ME,idx,rate,excess,9.5,
+045-2014-BCRP,2015-01-01,ME,idx,rate,excess,9,single 9.0% from this date
+007-2010-BCRP,2010-04-01,MN,str,rate,upto_cap,6,"structured deposits with FX options, up to S/ 300m or 5% of effective equity"
+016-2010-BCRP,2010-07-01,MN,str,rate,upto_cap,7,
+020-2010-BCRP,2010-08-01,MN,str,rate,upto_cap,8,
+024-2010-BCRP,2010-09-01,MN,str,rate,upto_cap,8.5,
+031-2010-BCRP,2010-10-01,MN,str,rate,upto_cap,9,
+005-2015-BCRP,2015-02-01,MN,str,rate,upto_cap,8.5,
+029-2016-BCRP,2017-01-01,MN,str,rate,upto_cap,9,
+014-2008-BCRP,2008-04-01,MN,forfin,rate,all,40,deposits and other obligations from foreign financial sources
+020-2008-BCRP,2008-05-01,MN,forfin,rate,all,120,term obligations outstanding at 31-Mar-2008 keep 40% to maturity
+050-2008-BCRP,2008-12-01,MN,forfin,rate,all,35,
+016-2010-BCRP,2010-07-01,MN,forfin,rate,all,40,
+020-2010-BCRP,2010-08-01,MN,forfin,rate,all,50,
+024-2010-BCRP,2010-08-08,MN,forfin,rate,all,65,Article 8 in force from publication
+026-2010-BCRP,2010-09-01,MN,forfin,rate,tier1,65,up to the lower of Aug-2010 average and 26-Aug-2010 balances
+026-2010-BCRP,2010-09-01,MN,forfin,rate,excess,120,
+019-2012-BCRP,2012-07-01,MN,forfin,rate,tier1,20,up to May-2012 balance or 1% of effective equity
+037-2013-BCRP,2013-10-01,MN,forfin,rate,tier1,16,
+043-2013-BCRP,2013-12-01,MN,forfin,rate,tier1,15,
+046-2013-BCRP,2014-01-01,MN,forfin,rate,tier1,14,
+003-2014-BCRP,2014-02-01,MN,forfin,rate,tier1,NA,tier1 charged at the general-regime rate
+039-2014-BCRP,2014-12-01,MN,forfin,rate,excess,9.5,
+044-2014-BCRP,2015-01-01,MN,forfin,rate,excess,9,
+005-2015-BCRP,2015-02-01,MN,forfin,rate,tier1,NA,folded into the general regime
+005-2015-BCRP,2015-02-01,MN,forfin,rate,excess,NA,folded into the general regime
+021-2008-BCRP,2008-05-01,ME,forfin,rate,all,120,
+051-2008-BCRP,2008-12-01,ME,forfin,rate,all,35,
+017-2010-BCRP,2010-07-01,ME,forfin,rate,all,40,
+021-2010-BCRP,2010-08-01,ME,forfin,rate,all,50,
+025-2010-BCRP,2010-08-08,ME,forfin,rate,all,65,
+002-2010-BCRP,2010-02-01,MN,forcr,rate,all,35,credits < 2 years from foreign financial entities / intl organisations / governments contracted or renewed from this date (earlier vintages grandfathered)
+016-2010-BCRP,2010-07-01,MN,forcr,rate,all,40,
+020-2010-BCRP,2010-08-01,MN,forcr,rate,all,50,
+024-2010-BCRP,2010-08-08,MN,forcr,rate,all,65,
+029-2010-BCRP,2010-09-12,MN,forcr,rate,all,75,
+047-2010-BCRP,2011-01-01,MN,forcr,rate,all,60,
+027-2013-BCRP,2013-08-01,MN,forcr,rate,all,50,new obligations from 1-Aug-2013 (earlier vintages stay at 60%)
+044-2014-BCRP,2015-01-01,MN,forcr,rate,all,9,
+005-2015-BCRP,2015-02-01,MN,forcr,rate,all,NA,folded into the general regime
+003-2010-BCRP,2010-02-01,ME,forcr,rate,all,35,
+017-2010-BCRP,2010-07-01,ME,forcr,rate,all,40,
+021-2010-BCRP,2010-08-01,ME,forcr,rate,all,50,
+025-2010-BCRP,2010-08-08,ME,forcr,rate,all,65,
+029-2010-BCRP,2010-09-12,ME,forcr,rate,all,75,
+048-2010-BCRP,2011-01-01,ME,forcr,rate,all,60,
+028-2013-BCRP,2013-08-01,ME,forcr,rate,all,50,new obligations from 1-Aug-2013; band becomes <=3y then <=2y from Oct-2013
+0011-2020-BCRP,2020-04-01,ME,forcr,rate,all,9,obligations <=2y with foreign financial entities
+0011-2023-BCRP,2023-07-01,ME,forcr,rate,all,35,obligations contracted from 1-Jul-2023; older obligations keep 9% to maturity
+029-2010-BCRP,2010-09-12,MN,fordrv,rate,all,75,rights created over foreign credits (credit-linked securities)
+047-2010-BCRP,2011-01-01,MN,fordrv,rate,all,60,
+027-2013-BCRP,2013-08-01,MN,fordrv,rate,all,50,
+0010-2020-BCRP,2020-04-01,MN,fordrv,rate,all,9,
+047-2013-BCRP,2014-01-01,ME,trade,rate,tier1,14,external credit lines financing foreign trade: within the exempt-limit tier
+007-2014-BCRP,2014-03-01,ME,trade,rate,tier1,0,not subject to reserves up to 35% of effective equity
+047-2013-BCRP,2014-01-01,ME,trade,rate,excess,50,
+0011-2020-BCRP,2020-04-01,ME,trade,rate,excess,9,
+0011-2023-BCRP,2023-07-01,ME,trade,rate,excess,35,
+007-2014-BCRP,2014-03-01,ME,trade,exempt_limit_pct_pe,all,35,
+045-2014-BCRP,2015-01-01,ME,trade,exempt_limit_pct_pe,all,40,
+044-2014-BCRP,2015-01-01,MN,addl,fx_derivatives_active,all,1,additional MN reserve if FX-forward/swap sales exceed daily/weekly/balance limits
+045-2014-BCRP,2015-06-01,ME,addl,total_credit_active,all,1,additional ME reserve linked to total FX credit evolution (coefficient 0.30 on excess)
+045-2014-BCRP,2015-06-01,ME,addl,vehicle_mortgage_credit_active,all,1,additional ME reserve linked to vehicle+mortgage FX credit (coefficient 0.15 on excess)
+0011-2020-BCRP,2020-04-01,ME,addl,total_credit_active,all,0,suspended
+0011-2020-BCRP,2020-04-01,ME,addl,vehicle_mortgage_credit_active,all,0,suspended
+0034-2020-BCRP,2021-05-01,ME,addl,total_credit_active,all,1,suspension lifted (circular extends suspension through April 2021)
+0034-2020-BCRP,2021-05-01,ME,addl,vehicle_mortgage_credit_active,all,1,suspension lifted
+003-2011-BCRP,2011-02-01,MN,gen,base_addon_step_pp,all,0.25,"incremental add-on to the entity-specific implicit base rate (not a statutory level)"
+006-2011-BCRP,2011-03-01,MN,gen,base_addon_step_pp,all,0.25,
+008-2011-BCRP,2011-04-01,MN,gen,base_addon_step_pp,all,0.5,
+010-2012-BCRP,2012-05-01,MN,gen,base_addon_step_pp,all,0.5,
+027-2012-BCRP,2012-09-01,MN,gen,base_addon_step_pp,all,0.5,
+032-2012-BCRP,2012-10-01,MN,gen,base_addon_step_pp,all,0.5,"only entities whose base rate is below 20%"
+036-2012-BCRP,2012-11-01,MN,gen,base_addon_step_pp,all,0.75,"only entities whose base rate is below 20%"
+043-2012-BCRP,2013-01-01,MN,gen,base_addon_step_pp,all,0.25,"only entities whose base rate is below 20%"
+003-2011-BCRP,2011-02-01,ME,gen,base_addon_step_pp,all,0.25,
+006-2011-BCRP,2011-03-01,ME,gen,base_addon_step_pp,all,0.25,
+008-2011-BCRP,2011-04-01,ME,gen,base_addon_step_pp,all,0.5,
+011-2012-BCRP,2012-05-01,ME,gen,base_addon_step_pp,all,0.5,
+028-2012-BCRP,2012-09-01,ME,gen,base_addon_step_pp,all,0.5,
+033-2012-BCRP,2012-10-01,ME,gen,base_addon_step_pp,all,0.5,"only entities whose base rate is below 45%"
+037-2012-BCRP,2012-11-01,ME,gen,base_addon_step_pp,all,0.75,"only entities whose base rate is below 45%"
+044-2012-BCRP,2013-01-01,ME,gen,base_addon_step_pp,all,0.75,"only entities whose base rate is below 45%"
+005-2013-BCRP,2013-02-01,ME,gen,base_addon_step_pp,all,1.75,"only entities whose base rate is below 50% (two steps: 0.75 pp up to 45%, then 1.0 pp up to 50%)"
+010-2013-BCRP,2013-03-01,ME,gen,base_addon_step_pp,all,0.5,"only entities whose base rate is below 50%; plus credit-growth-linked increments"
+013-2013-BCRP,2013-04-01,ME,gen,base_addon_step_pp,all,0.25,"only entities whose base rate is below 50%"
+009-2013-BCRP,2013-03-01,MN,gen,base_cap,all,25,cap on the entity base rate
+020-2013-BCRP,2013-06-01,MN,gen,base_cap,all,NA,replaced by the cap on the average rate
+0020-2026-BCRP,2026-12-01,ME,addl,vehicle_mortgage_credit_active,all,0,FUTURE: replaced from the December-2026 reserve period
+0020-2026-BCRP,2026-12-01,ME,addl,consumer_mortgage_credit_active,all,1,FUTURE: additional ME reserve on mortgage and consumer credit (excl. credit cards); 95% of May-2026 balance or 7% of effective equity threshold
+026-2010-BCRP,2010-09-01,MN,forfin,rate,all,NA,replaced by tiers
+026-2010-BCRP,2010-09-01,ME,forfin,rate,all,NA,replaced by tiers
+026-2010-BCRP,2010-09-01,ME,forfin,rate,tier1,65,up to the lower of Aug-2010 average and 26-Aug-2010 balances
+026-2010-BCRP,2010-09-01,ME,forfin,rate,excess,120,
+020-2012-BCRP,2012-07-01,ME,forfin,rate,tier1,NA,item continues as the FX-indexed obligations item (category idx)
+020-2012-BCRP,2012-07-01,ME,forfin,rate,excess,NA,item continues as the FX-indexed obligations item (category idx)

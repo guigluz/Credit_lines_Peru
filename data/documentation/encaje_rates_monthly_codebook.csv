@@ -1,0 +1,34 @@
+series,category,funding_source,rate_type,tier,first_month
+me_addl_total_credit_active,Additional reserve regimes (flags),n/a,Additional ME reserve on total FX credit active (1/0),all,2015-06
+me_addl_vehicle_mortgage_credit_active,Additional reserve regimes (flags),n/a,Additional ME reserve on vehicle + mortgage FX credit active (1/0),all,2015-06
+me_forcr_rate,"Special regime, foreign source: credits < 2-3 years from foreign financial entities / international bodies (new contracts)",foreign,Rate,all,2010-02
+me_forfin_rate,"Special regime, foreign source: deposits and other obligations from foreign financial institutions",foreign,Rate,all,2008-05
+me_forfin_rate_excess,"Special regime, foreign source: deposits and other obligations from foreign financial institutions",foreign,Rate,excess over limit,2010-09
+me_forfin_rate_tier1,"Special regime, foreign source: deposits and other obligations from foreign financial institutions",foreign,Rate,within limit (tier 1),2010-09
+me_gen_avg_cap,General regime (all deposits and obligations),domestic (all depositors),Cap on the average rate,all,2008-05
+me_gen_marginal,General regime (all deposits and obligations),domestic (all depositors),Marginal rate (on obligations above the base level),all,1996-04
+me_gen_min_legal,General regime (all deposits and obligations),domestic (all depositors),Minimum legal reserve rate,all,1996-04
+me_gen_regime,General regime (all deposits and obligations),domestic (all depositors),Regime type (single rate vs base + marginal),all,1996-04
+me_idx_rate_excess,Special regime: obligations indexed to FX / MN instruments,any depositor (ME: foreign entities),Rate,excess over limit,2012-07
+me_idx_rate_tier1,Special regime: obligations indexed to FX / MN instruments,any depositor (ME: foreign entities),Rate,within limit (tier 1),2012-07
+me_res_deposit_min_pct,Reserve composition,domestic (all depositors),Minimum current-account deposit at BCRP (% of reservable obligations),all,2000-09
+me_trade_exempt_limit_pct_pe,"Special regime, foreign source: external trade-finance credit lines",foreign,Exempt limit (% of effective equity),all,2014-03
+me_trade_rate_excess,"Special regime, foreign source: external trade-finance credit lines",foreign,Rate,excess over limit,2014-01
+me_trade_rate_tier1,"Special regime, foreign source: external trade-finance credit lines",foreign,Rate,within limit (tier 1),2014-01
+mn_addl_fx_derivatives_active,Additional reserve regimes (flags),n/a,Additional MN reserve on FX forwards/swaps active (1/0),all,2015-01
+mn_forcr_rate,"Special regime, foreign source: credits < 2-3 years from foreign financial entities / international bodies (new contracts)",foreign,Rate,all,2010-02
+mn_fordrv_rate,"Special regime, foreign source: rights derived from foreign credits",foreign,Rate,all,2010-09
+mn_forfin_rate,"Special regime, foreign source: deposits and other obligations from foreign financial institutions",foreign,Rate,all,2008-04
+mn_forfin_rate_excess,"Special regime, foreign source: deposits and other obligations from foreign financial institutions",foreign,Rate,excess over limit,2010-09
+mn_forfin_rate_tier1,"Special regime, foreign source: deposits and other obligations from foreign financial institutions",foreign,Rate,within limit (tier 1),2010-09
+mn_gen_avg_cap,General regime (all deposits and obligations),domestic (all depositors),Cap on the average rate,all,2008-05
+mn_gen_base_cap,General regime (all deposits and obligations),domestic (all depositors),Cap on the entity base rate,all,2013-03
+mn_gen_general,General regime (all deposits and obligations),domestic (all depositors),Single rate on general-regime obligations,all,2014-02
+mn_gen_marginal,General regime (all deposits and obligations),domestic (all depositors),Marginal rate (on obligations above the base level),all,2008-02
+mn_gen_min_avg,General regime (all deposits and obligations),domestic (all depositors),Minimum average rate,all,2021-09
+mn_gen_min_legal,General regime (all deposits and obligations),domestic (all depositors),Minimum legal reserve rate,all,1996-04
+mn_gen_regime,General regime (all deposits and obligations),domestic (all depositors),Regime type (single rate vs base + marginal),all,2008-02
+mn_gen_single_rate,General regime (all deposits and obligations),domestic (all depositors),"DERIVED: rate applied to all general-regime obligations while the MN regime is a single rate (explicit rate if stated, else the minimum legal rate)",all,1996-04
+mn_idx_rate,Special regime: obligations indexed to FX / MN instruments,any depositor (ME: foreign entities),Rate,all,1996-04
+mn_res_deposit_min_pct,Reserve composition,domestic (all depositors),Minimum current-account deposit at BCRP (% of reservable obligations),all,2000-09
+mn_str_rate_upto_cap,Special regime: structured deposits with FX options,domestic,Rate,up to cap,2010-04
