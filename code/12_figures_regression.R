@@ -8,12 +8,22 @@
 #      panel each (the two rates are on different scales, so they are separate
 #      panels, not a second axis).
 #
+# Figure 2) fig_deposit_shares  Foreign-currency (ME) share of deposits over time for each
+#      institution with positive deposits in at least MIN_MONTHS months (five years); the
+#      big four banks are highlighted, all others are grey context lines. A dashed line marks
+#      the baseline date of the shares that enter the bank shocks.
+#
 # DATA ------------------------------------------------------------------------
 #   data/processed/encaje_rates_monthly.csv   BCRP reserve-requirement panel
 #       (from 09_encaje_series.R). Percent of reservable obligations; each month's
 #       value is the rate in force on the LAST day of the month.
 #   The MN marginal rate is NA (not applicable, NOT zero) while the MN regime is a
 #   single rate; the NA months are left blank, so the line simply breaks there.
+#   data/processed/bank_deposit_shares.csv    MN / ME deposit shares, every Reporte institution
+#       x month (from 10_reserve_shocks.R). `valid` = positive MN + ME deposits; months that
+#       are not valid are drawn as gaps, never as zero. ME deposits are valued in soles at the
+#       month-end exchange rate, so sol depreciation raises the ME share mechanically.
+#   data/processed/bank_encaje_shocks.csv     read only for `baseline_date`.
 #
 # Usage:  Rscript code/12_figures_regression.R      (output: output/figures/*.pdf)
 # ==============================================================================
@@ -21,6 +31,7 @@
 suppressPackageStartupMessages({
   library(data.table)
   library(ggplot2)
+  library(ggrepel)
 })
 
 ENCAJE_CSV <- "data/processed/encaje_rates_monthly.csv"
@@ -97,3 +108,76 @@ p_rates <- ggplot(lv, aes(date, rate, colour = currency, linetype = currency)) +
 
 save_fig("fig_encaje_rates.pdf", p_rates, height = 5.6)
 message("Wrote ", file.path(fig_dir, "fig_encaje_rates.pdf"))
+
+
+# ══ Figure 2: deposit currency shares by institution ═════════════════════════
+SHARES_CSV <- "data/processed/bank_deposit_shares.csv"
+SHOCKS_CSV <- "data/processed/bank_encaje_shocks.csv"
+MIN_MONTHS <- 60L          # months with positive deposits required: five years (total, not necessarily consecutive)
+# Big four by deposits (Sep 2022, S/ bn: BCP 122, BBVA 71, Interbank 45, Scotiabank 44; next is BanBif at 13)
+BIG4 <- c(bcp = "BCP", bbva_peru = "BBVA", interbank = "Interbank", scotiabank = "Scotiabank")
+# Highlight colours: slots 1, 2, 3 and 7 of the validated default palette (validate_palette.py
+# --pairs all: all checks pass; aqua is below 3:1 contrast, relieved by the visible direct labels).
+COL_BIG4 <- c(BCP = "#2a78d6", BBVA = "#eb6834", Interbank = "#1baf7a", Scotiabank = "#4a3aa7")
+
+stopifnot(file.exists(SHARES_CSV), file.exists(SHOCKS_CSV))
+sh <- fread(SHARES_CSV, encoding = "UTF-8")
+sh[, date := as.Date(date)]
+base_date <- as.Date(fread(SHOCKS_CSV, select = "baseline_date", nrows = 1L)$baseline_date)
+
+# Keep institutions with positive deposits (valid shares) in at least MIN_MONTHS months
+n_pos <- sh[valid == TRUE, .N, by = bank_standardized]
+keep  <- n_pos[N >= MIN_MONTHS, bank_standardized]
+stopifnot(all(names(BIG4) %in% keep))
+message(sprintf("Figure 2: %d of %d institutions have positive deposits in >= %d months; baseline date %s.",
+                length(keep), uniqueN(sh$bank_standardized), MIN_MONTHS, format(base_date)))
+
+# Full monthly grid: a month without valid shares is NA (a gap in the line), never a zero
+dates <- sort(unique(sh$date))
+grid <- merge(CJ(bank_standardized = keep, date = dates),
+              sh[valid == TRUE, .(bank_standardized, date, s_me)],
+              by = c("bank_standardized", "date"), all.x = TRUE)
+grid[, me_pct := 100 * s_me]
+OTHER <- sprintf("Other institutions (n = %d)", length(keep) - length(BIG4))
+grid[, big4 := bank_standardized %in% names(BIG4)]
+grid[, series := factor(fifelse(big4, unname(BIG4[bank_standardized]), OTHER), c(unname(BIG4), OTHER))]
+# lines are drawn in group order: grey context first, big four on top
+grid[, grp := factor(bank_standardized, c(setdiff(keep, names(BIG4)), names(BIG4)))]
+setorder(grid, grp, date)
+
+# Direct labels at each big-four line's last observation (neutral ink, not the series colour)
+lab <- grid[big4 == TRUE & !is.na(me_pct)][order(date), .SD[.N], by = bank_standardized]
+lab[, label := as.character(series)]
+
+p_shares <- ggplot(grid, aes(date, me_pct, group = grp, colour = series, linewidth = series)) +
+  geom_vline(xintercept = base_date, linetype = "22", colour = "grey40", linewidth = 0.4) +
+  annotate("label", x = base_date, y = 100, label = sprintf("Baseline shares (%s)", format(base_date, "%b %Y")),
+           hjust = -0.04, vjust = 1, size = 2.4, family = "serif", colour = "grey20",
+           fill = "white", label.size = 0, label.padding = unit(0.15, "lines")) +
+  geom_line(na.rm = TRUE) +
+  geom_text_repel(data = lab, aes(x = date, y = me_pct, label = label), inherit.aes = FALSE,
+                  direction = "y", hjust = 0, xlim = c(max(dates) + 90, NA), size = 2.6, family = "serif",
+                  colour = "grey20", segment.size = 0.2, segment.colour = "grey60",
+                  min.segment.length = 0, box.padding = 0.15, seed = 1) +
+  scale_colour_manual(values = c(COL_BIG4, setNames("grey75", OTHER))) +
+  scale_linewidth_manual(values = c(setNames(rep(0.8, length(BIG4)), BIG4), setNames(0.25, OTHER))) +
+  scale_x_date(breaks = seq(as.Date("2002-01-01"), max(dates), by = "2 years"), date_labels = "%Y",
+               expand = expansion(mult = c(0.01, 0.12))) +     # right padding holds the direct labels
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 20), labels = function(x) paste0(x, "%"),
+                     expand = expansion(mult = c(0.02, 0.03))) +
+  coord_cartesian(clip = "off") +
+  labs(y = "Foreign-currency share of deposits",
+       title = "Foreign-currency share of deposits by institution",
+       subtitle = sprintf("Monthly, %s to %s. %d of %d institutions shown (positive deposits in at least %d months); big four highlighted",
+                          format(min(dates), "%b %Y"), format(max(dates), "%b %Y"),
+                          length(keep), uniqueN(sh$bank_standardized), MIN_MONTHS),
+       caption = wrap_cap(
+         "Source: SBS Series Estadisticas (Banca Multiple and Empresas Financieras). Share = ME deposits / (MN + ME deposits), ",
+         "both in thousands of soles. ME deposits are valued in soles at the month-end exchange rate, so a sol depreciation ",
+         "raises the ME share mechanically. A month without positive deposits is left blank. Institutions with positive deposits ",
+         "in fewer than ", MIN_MONTHS, " months (edpymes, which take no deposits, and short-lived entrants and exits) are omitted. ",
+         "The dashed line marks the baseline date of the shares used in the bank shocks.")) +
+  base_theme
+
+save_fig("fig_deposit_shares.pdf", p_shares, height = 5.2)
+message("Wrote ", file.path(fig_dir, "fig_deposit_shares.pdf"))
