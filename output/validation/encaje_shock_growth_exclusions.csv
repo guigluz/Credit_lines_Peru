@@ -1,0 +1,4 @@
+credit_line,relationship_months,first_observation,reporting_gap,missing_balance,negative_balance,zero_balance,valid_growth
+credit_line,65185,995,1279,0,0,30861,32050
+non_credit_line,120267,2554,5050,0,0,23701,88962
+all,185452,3549,6329,0,0,54562,121012

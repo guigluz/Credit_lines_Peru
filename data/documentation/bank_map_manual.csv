@@ -97,3 +97,7 @@ FINANCIERA UNO,financiera_uno,"Series Estadisticas non-bank (financiera); Report
 MITSUI AUTO FINANCE,mitsui_auto_finance,Series Estadisticas non-bank (finance arm of a vehicle importer); Reporte 2010-12..2022-09,FALSE
 SOLUCION FINANCIERA DE CREDITO,solucion_financiera_de_credito,Series Estadisticas non-bank (financiera); Reporte 2001-01..2010-05,FALSE
 VOLVO FINANCE,volvo_finance,Series Estadisticas non-bank (finance arm of a vehicle importer); Reporte 2001-01..2006-03,FALSE
+BANCO INTERNACIONAL DEL PERU,interbank,RCC_empresas_supervisadas_2026 spelling of Interbank (RCC code 00002),FALSE
+MIBANCO BANCO DE LA MICRO EMPRESA,mibanco,RCC_empresas_supervisadas_2026 spelling of Mibanco (RCC code 00123),FALSE
+BANCO GNB PERU,banco_gnb,"RCC_empresas_supervisadas_2026 spelling of Banco GNB Peru (RCC code 00126). The RCC code is continuous across the 2013 HSBC -> GNB rename; hub keeps hsbc_peru separate, so the code has no pre-2013 deposit baseline",FALSE
+MITSUI AUTO FINANCE PERU,mitsui_auto_finance,RCC_empresas_supervisadas_2026 spelling of Mitsui Auto Finance Peru (RCC code 00185),FALSE

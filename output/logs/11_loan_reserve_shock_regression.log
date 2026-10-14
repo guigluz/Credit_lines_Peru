@@ -1,0 +1,404 @@
+
+==============================================================================
+1. Credit data, shocks and RCC crosswalk
+==============================================================================
+Credit file: 267,030 rows, 1,000 firms, 83 entidad codes, 160 dates.
+Credit calendar: 160 consecutive month-ends, 2010-09-30 to 2023-12-31.
+Shocks: 6,973 bank-months, 19 banks, 1996-04-30 to 2026-10-31; deposit shares fixed at 2009-12-31.
+  d_mn_gen_min_legal  months with data 160 | zero 143 | tighter  9 | looser  8 | NA   0
+  d_me_gen_min_legal  months with data 160 | zero 158 | tighter  2 | looser  0 | NA   0
+  d_mn_gen_marginal   months with data  68 | zero  60 | tighter  3 | looser  5 | NA  92
+  d_me_gen_marginal   months with data 160 | zero 144 | tighter  4 | looser 12 | NA   0
+Baseline 2009-12-31: 57 Reporte institutions, valid shares for 19 (all of them in the shock table); excluded: 33 no Reporte row at baseline date; 3 deposits missing (not deposit-taking); 2 non-positive denominator.
+RCC list: 152 codes (En liquidacion=4, En operacion=57, Liquidada=1, Venta de Cartera=90). Mapped to a hub bank_standardized: 24; unmapped: 128.
+Credit sample: 83 distinct entidad codes; 65 are in the RCC list, 18 are not (historic/removed entities): 100, 154, 157, 158, 162, 173, 179, 186, 191, 226, 232, 234, 235, 236, 239, 268, 339, 391
+Hub banks reached by more than one RCC code: none
+
+==============================================================================
+2. Product classification and merge
+==============================================================================
+Product classification (credit_line = TRUE for the six listed products):
+                            producto credit_line n_rows n_firms n_positive_rows
+                              <char>      <lgcl>  <int>   <int>           <int>
+ 1:                  tarjeta_credito        TRUE  62586     507           39932
+ 2:                 cuenta_corriente        TRUE   9188     110            3269
+ 3:                       multilinea        TRUE   6783      94               0
+ 4:                   avales_fianzas        TRUE   4134     100               0
+ 5:                   cartas_credito        TRUE   1978      53               0
+ 6:                     otras_lineas        TRUE   1432      45               0
+ 7:                        prestamos       FALSE  92159     689           71548
+ 8:       sobregiro_cuenta_corriente       FALSE  23945     830           16337
+ 9:         arrendamiento_financiero       FALSE  23862     188           21698
+10:                        factoring       FALSE  15043      55           14230
+11:                       descuentos       FALSE  11233     116            8296
+12:                comercio_exterior       FALSE   7593      70            7519
+13:                       lease_back       FALSE   1872      26            1778
+14: credito_otorgado_no_desembolsado       FALSE   1859      95               0
+15:                   otros_creditos       FALSE   1394      39            1134
+16:             credito_inmobiliario       FALSE    791      14             691
+17:           financiacion_proyectos       FALSE    505      14             505
+18:             credito_por_liquidar       FALSE    312      24              94
+19:     credito_entidad_consolidable       FALSE    154       3             148
+20:      otros_creditos_hipotecarios       FALSE    146       1               0
+21:        inmueble_generador_rentas       FALSE     61       2              61
+                            producto credit_line n_rows n_firms n_positive_rows
+    share_positive_rows
+                  <num>
+ 1:               0.638
+ 2:               0.356
+ 3:               0.000
+ 4:               0.000
+ 5:               0.000
+ 6:               0.000
+ 7:               0.776
+ 8:               0.682
+ 9:               0.909
+10:               0.946
+11:               0.739
+12:               0.990
+13:               0.950
+14:               0.000
+15:               0.813
+16:               0.874
+17:               1.000
+18:               0.301
+19:               0.961
+20:               0.000
+21:               1.000
+    share_positive_rows
+NOTE: credito_vigente is identically zero for multilinea, avales_fianzas, cartas_credito, otras_lineas; credit-line growth therefore rests on tarjeta_credito and cuenta_corriente.
+Rows: credit_line TRUE 86,101 | FALSE 180,929 | missing producto 0 (0 excluded from both regression samples).
+credito_vigente: missing 0 | negative 0 | zero 79,790 (29.9%) | positive 187,240
+Merge via entidad -> bank_standardized on (bank_standardized, fecha_reporte): 243,581 of 267,030 credit rows matched (91.2%), 23,449 unmatched.
+  Banks (entidad): 11 matched to a shock row, 72 unmatched.
+
+Entity coverage (credit sample), by status:
+                                                                                            status
+                                                                                            <char>
+1:                                                                       included: shock available
+2:                                   excluded: no hub id, not in Reporte or any bulletin crosswalk
+3:                excluded: no hub id, portfolio-sale / guarantee vehicle, not an operating lender
+4:                                   excluded: no valid baseline (no Reporte row at baseline date)
+5:                                                                  excluded: code not in RCC list
+6: excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)
+7:                                          excluded: no valid baseline (non-positive denominator)
+8:                                                    excluded: no valid baseline (not in Reporte)
+   entidades firms_obs_rows share_of_balance
+       <int>          <int>            <num>
+1:        11         243581           0.8082
+2:        10           2786           0.1131
+3:        20           8704           0.0750
+4:         6           2207           0.0032
+5:        18           1921           0.0002
+6:        15           7393           0.0002
+7:         1            265           0.0000
+8:         2            173           0.0000
+
+Banks with a shock (included):
+    entidad bank_standardized n_firms n_obs s_mn_0 s_me_0
+      <int>            <char>   <int> <int>  <num>  <num>
+ 1:       1               bcp     791 94622  0.405  0.595
+ 2:       4        scotiabank     387 48218  0.401  0.599
+ 3:       6         bbva_peru     415 51242  0.494  0.506
+ 4:       2         interbank     167 15795  0.438  0.562
+ 5:      52          citibank      36  4381  0.366  0.634
+ 6:     127    santander_peru      43  3456  0.353  0.647
+ 7:      55               bif     134 13863  0.406  0.594
+ 8:      82   banco_pichincha      79  5572  0.503  0.497
+ 9:     123           mibanco     132  5611  0.793  0.207
+10:      22            bancom      14   812  0.703  0.297
+11:     140       alfin_banco       2     9  0.952  0.048
+
+Largest excluded entities by balance:
+    entidad
+      <int>
+ 1:      61
+ 2:     365
+ 3:      99
+ 4:     137
+ 5:     126
+ 6:     230
+ 7:     138
+ 8:     146
+ 9:     179
+10:     100
+11:     154
+12:     112
+                                                                        bank_raw
+                                                                          <char>
+ 1:                                                           BANCO DE LA NACION
+ 2: PATRIMONIO FIDEICOMETIDO SCOTIABANK C C LA MARINA 2007 DS 093-2002-EF TIT XI
+ 3:                                    CORPORACION FINANCIERA DE DESARROLLO S.A.
+ 4:                                                               ICBC PERU BANK
+ 5:                                                          BANCO GNB PERU S.A.
+ 6:                                           FINANCIERA CREDINKA EN LIQUIDACION
+ 7:                                                    BANK OF CHINA (PERU) S.A.
+ 8:                                                           BANCO BCI PERU S A
+ 9:                                                                         <NA>
+10:                                                                         <NA>
+11:                                                                         <NA>
+12:                                  CAJA MUNICIPAL DE AHORRO Y CREDITO TRUJILLO
+                                                                                             status
+                                                                                             <char>
+ 1:                                   excluded: no hub id, not in Reporte or any bulletin crosswalk
+ 2:                excluded: no hub id, portfolio-sale / guarantee vehicle, not an operating lender
+ 3:                                   excluded: no hub id, not in Reporte or any bulletin crosswalk
+ 4:                                   excluded: no valid baseline (no Reporte row at baseline date)
+ 5:                                   excluded: no valid baseline (no Reporte row at baseline date)
+ 6:                                   excluded: no hub id, not in Reporte or any bulletin crosswalk
+ 7:                                   excluded: no valid baseline (no Reporte row at baseline date)
+ 8:                                   excluded: no valid baseline (no Reporte row at baseline date)
+ 9:                                                                  excluded: code not in RCC list
+10:                                                                  excluded: code not in RCC list
+11:                                                                  excluded: code not in RCC list
+12: excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)
+    n_firms  share
+      <int>  <num>
+ 1:      13 0.0798
+ 2:       2 0.0750
+ 3:       2 0.0331
+ 4:      11 0.0017
+ 5:      24 0.0012
+ 6:      11 0.0002
+ 7:       2 0.0002
+ 8:       4 0.0001
+ 9:       4 0.0001
+10:       9 0.0001
+11:       3 0.0000
+12:      40 0.0000
+
+Reporte institutions with a valid baseline but no RCC code (no credit rows to attach to): crediscotia_financiera, deutsche_bank, financiera_crear, financiera_edyficar, financiera_tfc, hsbc_peru
+
+Baseline robustness, 13 banks with an RCC code: MN share at 2009-12-31 vs 2010-09-30: corr 0.959, max |diff| 0.163
+    entidad bank_standardized s_mn_baseline s_mn_first_credit_month
+      <int>            <char>         <num>                   <num>
+ 1:       1               bcp         0.405                   0.519
+ 2:       2         interbank         0.438                   0.497
+ 3:       4        scotiabank         0.401                   0.410
+ 4:       6         bbva_peru         0.494                   0.547
+ 5:      22            bancom         0.703                   0.745
+ 6:      52          citibank         0.366                   0.529
+ 7:      55               bif         0.406                   0.393
+ 8:      73      banco_ripley         0.861                   0.951
+ 9:      82   banco_pichincha         0.503                   0.618
+10:     123           mibanco         0.793                   0.831
+11:     127    santander_peru         0.353                   0.270
+12:     140       alfin_banco         0.952                   0.954
+13:     142   banco_falabella         0.844                   0.872
+
+==============================================================================
+3. Currency valuation and aggregation
+==============================================================================
+   moneda_codigo     currency months  pairs share_exact_zero
+          <fctr>       <char>  <int>  <int>            <num>
+1:             1   MN (soles)    159 107287            0.154
+2:             2 ME (foreign)    159  60033            0.005
+   median_share_modal_nonzero
+                        <num>
+1:                      0.004
+2:                      0.185
+
+Valuation-basis verdict: ME balances are valued in soles at the month-end SBS exchange rate (a common-valuation basis, as the Manual de Contabilidad Cap. I C.6 prescribes): MN, ME and VAC balances can be summed.
+Currency-specific intermediate: 219,941 rows -> data/processed/credit_balances_by_currency.csv.gz
+Missing producto: 0 rows (0 firm-bank-months) excluded from both regression samples.
+Aggregated to 185,452 entidad x firm x credit_line x month rows (from 267,030 product-currency rows).
+  all-missing balance groups: 0 (left missing, never set to zero); negative: 0; zero: 53,887
+
+==============================================================================
+4. Loan growth
+==============================================================================
+     credit_line relationship_months first_observation reporting_gap
+     credit_line               65185               995          1279
+ non_credit_line              120267              2554          5050
+             all              185452              3549          6329
+ missing_balance negative_balance zero_balance valid_growth
+               0                0        30861        32050
+               0                0        23701        88962
+               0                0        54562       121012
+
+  zero-balance exclusions by endpoint:
+   credit_line       zero_detail     N
+        <lgcl>            <char> <int>
+1:       FALSE         zero at t  1934
+2:       FALSE zero at t and t-1 20948
+3:       FALSE       zero at t-1   819
+4:        TRUE         zero at t  1828
+5:        TRUE zero at t and t-1 27415
+6:        TRUE       zero at t-1  1618
+
+  reporting-gap length (scheduled months between consecutive observations):
+    gap_months     n
+         <int> <int>
+ 1:          2  2059
+ 2:          3   954
+ 3:          4   577
+ 4:          5   382
+ 5:          6   288
+ 6:          7   232
+ 7:          8   201
+ 8:          9   156
+ 9:         10   128
+10:         11   104
+11:         12  1248
+
+  relationships whose last observation is before the sample end (exits, not in the growth sample): 2,599 of 185,452
+  non-missing growth: min -21.441, median -0.0265, max 22.076 (no winsorizing or trimming)
+  NOTE: the log-growth sample covers CONTINUING positive-balance relationships; it does not measure loan entry or exit.
+  valid growth observations with a foreign-currency component: 40.2% (balance-weighted ME share 46.8%); ME growth embeds the exchange-rate revaluation.
+
+==============================================================================
+5. Regressions
+==============================================================================
+
+-- gen_min_legal, credit_line == TRUE --
+OLS estimation, Dep. Var.: loan_growth
+Observations: 9,230 
+Fixed-effects: identificador^fecha_reporte: 4,191
+Standard-errors: Clustered (entidad) 
+           Estimate Std. Error t value Pr(>|t|) 
+bank_shock -1.05492   0.769736 -1.3705  0.21286 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+RMSE: 0.985854     Adj. R2: 0.051241
+                 Within R2: 4.56e-5 
+
+-- gen_min_legal, credit_line == FALSE --
+OLS estimation, Dep. Var.: loan_growth
+Observations: 52,029 
+Fixed-effects: identificador^fecha_reporte: 17,760
+Standard-errors: Clustered (entidad) 
+           Estimate Std. Error  t value Pr(>|t|) 
+bank_shock 0.082428   0.138018 0.597227  0.56363 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+RMSE: 0.609635     Adj. R2: 0.016109
+                 Within R2: 2.231e-6
+
+-- gen_marginal, credit_line == TRUE --
+OLS estimation, Dep. Var.: loan_growth
+Observations: 3,686 
+Fixed-effects: identificador^fecha_reporte: 1,693
+Standard-errors: Clustered (entidad) 
+            Estimate Std. Error  t value Pr(>|t|) 
+bank_shock -0.120245   0.113477 -1.05964   0.3245 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+RMSE: 0.976324     Adj. R2: 0.066494
+                 Within R2: 4.163e-5
+
+-- gen_marginal, credit_line == FALSE --
+OLS estimation, Dep. Var.: loan_growth
+Observations: 20,921 
+Fixed-effects: identificador^fecha_reporte: 7,187
+Standard-errors: Clustered (entidad) 
+           Estimate Std. Error  t value Pr(>|t|) 
+bank_shock 0.047975   0.055661 0.861906  0.40893 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+RMSE: 0.631341     Adj. R2: 0.03764 
+                 Within R2: 5.226e-5
+
+Regression summary:
+         measure credit_line     coef      se   p_t p_wild n_obs n_banks
+          <char>      <lgcl>    <num>   <num> <num>  <num> <int>   <int>
+1: gen_min_legal        TRUE -1.05500 0.76970 0.213  0.557  9230       8
+2: gen_min_legal       FALSE  0.08243 0.13800 0.564  0.399 52029      11
+3:  gen_marginal        TRUE -0.12020 0.11350 0.324  0.250  3686       8
+4:  gen_marginal       FALSE  0.04797 0.05566 0.409  0.550 20921      11
+   n_firms cells cells_no_var
+     <int> <int>        <int>
+1:     130  4191         3817
+2:     394 17760        15990
+3:      95  1693         1485
+4:     312  7187         6485
+
+Sample construction per regression:
+         measure credit_line n_before_multibank_filter
+          <char>      <lgcl>                     <int>
+1: gen_min_legal        TRUE                     31974
+2: gen_min_legal       FALSE                     79133
+3:  gen_marginal        TRUE                     12334
+4:  gen_marginal       FALSE                     31113
+   n_dropped_by_multibank_filter n_dropped_by_fixest n_obs
+                           <int>               <int> <int>
+1:                         22744                   0  9230
+2:                         27104                   0 52029
+3:                          8648                   0  3686
+4:                         10192                   0 20921
+
+Banks (= clusters) in each estimation sample, with observations:
+Key: <bank_standardized>
+    bank_standardized gen_marginal_FALSE gen_marginal_TRUE gen_min_legal_FALSE
+               <char>              <int>             <int>               <int>
+ 1:       alfin_banco                  3                 0                   3
+ 2:   banco_pichincha                728                32                2149
+ 3:            bancom                126                 3                 209
+ 4:         bbva_peru               4336              1206               10793
+ 5:               bcp               5474              1457               13184
+ 6:               bif               1277               167                3009
+ 7:          citibank                693               105                1628
+ 8:         interbank               2122               317                5572
+ 9:           mibanco                805                 0                2007
+10:    santander_peru                743                 0                1820
+11:        scotiabank               4614               399               11655
+    gen_min_legal_TRUE
+                 <int>
+ 1:                  0
+ 2:                 70
+ 3:                  3
+ 4:               3105
+ 5:               3585
+ 6:                532
+ 7:                275
+ 8:                736
+ 9:                  0
+10:                  0
+11:                924
+
+fixest small-sample factor on the clustered SE (relative to CR0): 1.45, 1.29, 1.45, 1.29
+
+LIMITED-CLUSTER FLAG: 4 of 4 regressions have fewer than 30 bank clusters (range 8-11); conventional clustered inference is unreliable, so wild-cluster-bootstrap p-values (Webb six-point weights, B = 9999) are reported next to the t(G-1) p-values.
+
+==============================================================================
+6. LaTeX table
+==============================================================================
+Wrote output/tables/tab_encaje_loan_growth.tex
+
+==============================================================================
+Session
+==============================================================================
+R version 4.3.2 (2023-10-31)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS 26.5.2
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] C/en_US.UTF-8/C/C/C/C
+
+time zone: America/Los_Angeles
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] purrr_1.0.2       tibble_3.2.1      stringr_1.5.1     dplyr_1.1.4      
+[5] fixest_0.11.2     arrow_20.0.0      data.table_1.17.0
+
+loaded via a namespace (and not attached):
+ [1] bit_4.0.5           crayon_1.5.2        compiler_4.3.2     
+ [4] tidyselect_1.2.0    Rcpp_1.1.0          parallel_4.3.2     
+ [7] assertthat_0.2.1    lattice_0.21-9      readr_2.1.5        
+[10] R6_2.5.1            generics_0.1.3      Formula_1.2-5      
+[13] openssl_2.1.1       pillar_1.9.0        tzdb_0.4.0         
+[16] rlang_1.1.6         utf8_1.2.4          stringi_1.8.3      
+[19] bit64_4.0.5         cli_3.6.2           withr_3.0.2        
+[22] magrittr_2.0.3      grid_4.3.2          vroom_1.6.5        
+[25] hms_1.1.3           askpass_1.2.0       sandwich_3.1-0     
+[28] lifecycle_1.0.4     nlme_3.1-163        vctrs_0.6.5        
+[31] glue_1.7.0          numDeriv_2016.8-1.1 zoo_1.8-12         
+[34] fansi_1.0.6         dreamerr_1.4.0      tools_4.3.2        
+[37] pkgconfig_2.0.3    

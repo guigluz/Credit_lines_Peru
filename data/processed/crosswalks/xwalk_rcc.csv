@@ -1,0 +1,153 @@
+entidad,bank_raw,tipo,estado,bank_standardized,review_required,unmapped_note,in_credit_sample
+1,BANCO DE CREDITO DEL PERÚ,Banco,En operacion,bcp,FALSE,"",TRUE
+2,BANCO INTERNACIONAL DEL PERÚ,Banco,En operacion,interbank,FALSE,"",TRUE
+4,SCOTIABANK PERU S A A,Banco,En operacion,scotiabank,FALSE,"",TRUE
+6,BANCO BBVA PERÚ,Banco,En operacion,bbva_peru,FALSE,"",TRUE
+22,BANCO DE COMERCIO,Banco,En operacion,bancom,FALSE,"",TRUE
+52,CITIBANK DEL PERU S A,Banco,En operacion,citibank,FALSE,"",TRUE
+55,BANCO INTERAMERICANO DE FINANZAS,Banco,En operacion,bif,FALSE,"",TRUE
+61,BANCO DE LA NACION,Banco,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,TRUE
+72,SANTANDER CONSUMER BANK S.A.,Banco,En operacion,santander_consumer,FALSE,"",FALSE
+73,BANCO RIPLEY PERU S A,Banco,En operacion,banco_ripley,FALSE,"",FALSE
+76,SOLUCIÓN EMPRESA ADMINISTRADORA HIPOTECARIA,Administradora Hipotecaria,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,FALSE
+82,BANCO PICHINCHA,Banco,En operacion,banco_pichincha,FALSE,"",TRUE
+99,CORPORACION FINANCIERA DE DESARROLLO S.A.,Banco,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,TRUE
+101,CAJA MUNICIPAL DE AHORRO Y CREDITO DE SULLANA EN LIQUIDACION,Caja Municipal de Ahorro y Crédito,En liquidacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+102,CAJA MUNICIPAL DE CREDITO POPULAR DE LIMA,Caja Municipal de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+103,CAJA MUNICIPAL DE AHORRO Y CREDITO PIURA,Caja Municipal de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+104,CAJA MUNICIPAL DE AHORRO Y CREDITO DE AREQUIPA,Caja Municipal de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+106,CAJA MUNICIPAL DE AHORRO Y CREDITO CUSCO S A,Caja Municipal de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+107,CAJA MUNICIPAL DE AHORRO Y CREDITO HUANCAYO,Caja Municipal de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+108,CAJA MUNICIPAL DE AHORRO Y CREDITO ICA,Caja Municipal de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+109,CAJA MUNICIPAL DE AHORRO Y CREDITO MAYNAS,Caja Municipal de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+110,CAJA MUNICIPAL DE AHORRO Y CREDITO PAITA,Caja Municipal de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+111,CAJA MUNICIPAL DE AHORRO Y CREDITO DEL SANTA,Caja Municipal de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+112,CAJA MUNICIPAL DE AHORRO Y CREDITO TRUJILLO,Caja Municipal de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+114,CAJA MUNICIPAL DE AHORRO Y CREDITO TACNA,Caja Municipal de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+123,MIBANCO BANCO DE LA MICRO EMPRESA S A,Banco,En operacion,mibanco,FALSE,"",TRUE
+125,BANCO AGROPECUARIO,Banco,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,TRUE
+126,BANCO GNB PERU S.A.,Banco,En operacion,banco_gnb,FALSE,"",TRUE
+127,BANCO SANTANDER PERU S A,Banco,En operacion,santander_peru,FALSE,"",TRUE
+129,CAJA RURAL DE AHORRO Y CREDITO CENCOSUD SCOTIA PERU S.A.,Caja Rural de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),FALSE
+131,CAJA DE PENSIONES MILITAR POLICIAL,Fondo,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,TRUE
+132,DERRAMA MAGISTERIAL,Derrama y Caja de Beneficios,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,FALSE
+135,SERVICIO SOCIAL DEL DIRECTOR Y SUPERVISOR,Derrama y Caja de Beneficios,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,FALSE
+137,ICBC PERU BANK,Banco,En operacion,banco_icbc,FALSE,"",TRUE
+138,BANK OF CHINA (PERU) S.A.,Banco,En operacion,bank_of_china,FALSE,"",TRUE
+140,ALFIN BANCO S.A.,Banco,En operacion,alfin_banco,FALSE,"",TRUE
+142,BANCO FALABELLA PERÚ S A,Banco,En operacion,banco_falabella,FALSE,"",FALSE
+143,FINANCIERA TFC S A EN LIQUIDACION,Financiera,En liquidacion,,TRUE,not in Reporte or any bulletin crosswalk,TRUE
+144,FINANCIERA QAPAQ S.A.,Financiera,En operacion,financiera_qapaq,FALSE,"",FALSE
+145,INFINANCE XP S.A.,Financiera,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,FALSE
+146,BANCO BCI PERU S A,Banco,En operacion,banco_bci,FALSE,"",TRUE
+148,SANTANDER FINANCIAMIENTOS SA,Financiera,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,FALSE
+156,CRAC Raíz en Liquidación,Caja Rural de Ahorro y Crédito,En liquidacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+159,CAJA RURAL DE AHORRO Y CREDITO SEÑOR DE LUREN EN LIQUIDACION,Caja Rural de Ahorro y Crédito,En liquidacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+169,CAJA RURAL DE AHORRO Y CREDITO LOS ANDES S A,Caja Rural de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),FALSE
+170,CAJA RURAL PRYMERA,Caja Rural de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),TRUE
+171,CRAC INCASUR S.A.,Caja Rural de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),FALSE
+172,CAJA RURAL DE AHORRO Y CRÉDITO DEL CENTRO S.A.,Caja Rural de Ahorro y Crédito,En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),FALSE
+184,TOTAL SERVICIOS FINANCIEROS EMPRESA DE CREDITOS,Empresa de Créditos,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,TRUE
+185,MITSUI AUTO FINANCE PERÚ S A,Financiera,En operacion,mitsui_auto_finance,FALSE,"",TRUE
+195,CONTINENTAL - MEF,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+215,COOPAC CREDICOOP LUZ Y FUERZA,Cooperativa de Ahorro y Crédito (supervisión directa SBS),En operacion,,TRUE,type outside Reporte coverage (Banca Multiple + Empresas Financieras only),FALSE
+216,FONDO MIVIVIENDA S.A.,Fondo,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,FALSE
+220,FUNDACION FONDO DE GARANTIA PARA PRESTAMOS A LA PEQUEÑA INDUSTRIA,Afianzadora y de Garantías,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,TRUE
+224,EMPRESA DE CRÉDITOS SANTANDER CONSUMO PERÚ S.A,Empresa de Créditos,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,TRUE
+227,FINANCIERA PROEMPRESA S A,Financiera,En operacion,financiera_proempresa,FALSE,"",TRUE
+228,COMPARTAMOS BANCO S.A.,Banco,En operacion,compartamos_banco,FALSE,"",TRUE
+230,FINANCIERA CREDINKA EN LIQUIDACION,Financiera,Liquidada,,TRUE,not in Reporte or any bulletin crosswalk,TRUE
+231,FINANCIERA CONFIANZA S.A.A.,Financiera,En operacion,financiera_confianza,FALSE,"",TRUE
+237,BANCO EFECTIVA S A,Banco,En operacion,banco_efectiva,FALSE,"",TRUE
+238,EMPRESA DE CRÉDITO ALTERNATIVA,Empresa de Créditos,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,FALSE
+240,EMPRESA DE CREDITO VIVELA S.A.,Empresa de Créditos,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,TRUE
+273,BANCO DE COMERCIO RES 1114 99 TRANS DE CARTERA A INVERSIONES BCO DE COMERCIO,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+278,SCOTIABANK PERU VENTA DE CARTERA,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+301,BANCO INTERNACIONAL DEL PERU VENTA DE CARTERA,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+316,BANCO FINANCIERO CARTERA EN FIDEICOMISO 1 NBK,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+330,BANCO DE CREDITO DEL PERU TITULIZACION SANTANDER OFICIO 6914 2000,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+342,BANCO CONTINENTAL VENTA DE CARTERA A INMUEBLES Y RECUPERACIONES CONTINENTAL S A,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+348,CMAC HUANCAYO CARTERA ADMINISTRADA DE CRAC SELVA CENTRAL,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+353,PATRIMONIO EN FIDEICOMISO BANCO WIESE LTDO 1999-01,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+354,PATRIMONIO EN FIDEICOMISO BANCO WIESE SUDAMERIS 1999-02,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+355,PATRIMONIO EN FIDEICOMISO BWS 2002-04,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+356,ADMINISTRADORA DEL COMERCIO SA,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+358,CAJA RURAL LOS ANDES CARTERA EN FIDEICOMISO,Caja Rural de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+359,CMAC ICA TRANSFERENCIA DE CARTERA AL FOCMAC,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+365,PATRIMONIO FIDEICOMETIDO SCOTIABANK C C LA MARINA 2007 DS 093-2002-EF TIT XI,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+366,CAJA DE PENSIONES MILITAR POLICIAL VENTA DE CARTERA A ADMINISTRADORA DE COMERCIO,Fondo,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+368,BWS TITULIZADORA 2 TRANSFERENCIA A SCI,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+369,BWS FIDEICOMISO EN GARANTIA BANCO SUDAMERICANO TRANSFERENCIA A SCI,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+373,AGROBANCO AGRO FONDOS AGROPERU,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+376,CREDISCOTIA VTA DE CARTERA CASTIGADA A SCI,Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+380,BANCO DE CREDITO FIDEICOMISO DE TITULIZACION HIPOTECARIA,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+381,BANCO FINANCIERO CARTERA CREDITICIA A RECAUDO COBRANZA Y RECUPERACIONES S A C,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+382,CREDINKA VENTA DE CARTERA CASTIGADA A PUKARAY S A,Caja Rural de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+389,CAJA METROPOLITANA TITULIZACIÓN DE CARTERA CAJAGAS,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+394,CRAC LIBERTADORES DE AYACUCHO VENTA DE CARTERA A LATINA HOLDING S A,Caja Rural de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+395,EDPYME SOLIDARIDAD Y DESARROLLO EMPRESARIAL VENTA DE CARTERA CARITAS,Empresa de Créditos,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+396,CAJA MUNICIPAL DE AHORRO Y CREDITO DE PIURA VENTA DE CARTERA AL FOCMAC,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+397,CMAC TACNA VENTA DE CARTERA FOCMAC,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+399,CMAC MAYNAS VENTA DE CARTERA FOCMAC,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+418,BANCO GNB PERÚ SA VENTA DE CARTERA BANCO GNB SUDAMERIS SA,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+419,BANCO GNB PERU SA VENTA DE CARTERA COLDEN INVESTMENTS SA,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+468,CRAC PRYMERA OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Caja Rural de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+469,MIBANCO OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19(REACTIVA PERU FAE),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+470,BANCO BBVA PERU- OM 24700-2020 HON.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+471,BANCO BBVA PERU- OM 24700-2020 HON.GAR.PRO.EME.SAN.COVID19 (FONDO CRECER),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+472,COMPARTAMOS FINANC.OM 24700-2020 HON.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+477,FINANCIERA CREDINKA OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19(REACTIVA PERU FAE),Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+478,FINANCIERA CONFIANZA OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19(REACTIVA PERU FAE),Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+480,BCP VC CORESAC  COBRANZAS Y RECUPEROS S.A.C.,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+484,CMAC SANTA VENTA DE CARTERA FOCMAC,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+485,CREDIJET VENTA DE CARTERA A LEONOR AGUILAR REYES Y PATRICIO GRADOS CASTILLO,Empresa de Créditos,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+486,CMAC PAITA VENTA DE CARTERA FOCMAC,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+487,CMAC HUANCAYO VENTA DE CARTERA FOCMAC,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+488,CMAC TRUJILLO VENTA DE CARTERA FOCMAC,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+496,CMAC CUSCO VENTA DE CARTERA FOCMAC,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+497,BANCO SCOTIABANK OM 24700-2020 HON.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+498,BANCO SCOTIABANK OM 24700-2020 HON.GAR.PRO.EME.SAN.COVID19 (FONDO CRECER),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+499,CREDISCOTIA FINANC OM 24700-2020 HON.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+500,CRAC RAIZ OM 24700-2020 HON.GAR.PRO.EME.SAN.COVID19 (FONDO CRECER),Caja Rural de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+508,BANCO INTERBANK OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+509,BANCO INTERBANK OM 24700-2020 HON.GAR.PRO.EME.SAN.COVID19 (FONDO CRECER),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+510,CMAC HUANCAYO OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+512,BANCO PICHINCHA OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+513,FINANCIERA QAPAQ OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+514,CMAC CUSCO S.A. OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+516,BANCO DE COMERCIO OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+517,BANBIF OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (FONDO CRECER),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+518,BANBIF OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+519,S.FINAN. T.EDPYME OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (FONDO CRECER),Empresa de Créditos,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+521,FINANCIERA EFECTIVA OM 24700-2020 HON.GAR.PRO.EME.SAN.COVID19 (FONDO CRECER),Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+522,BANCO PICHINCHA -Venta Cartera  PAGUE YA,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+523,Corporación Financiera de Desarrollo -COFIDE. OM 24700-2020 (REACTIVA PERU FAE),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+525,ALFIN BANCO SA.-OM 24700-2020 PRO.EME. REACTIVA -PROGRAMA IMPULSO-MYPERU,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+526,CMAC AREQUIPA- Adquisición bloque patrimonial FINANCIERA CREDINKA,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+527,Santander Financiamientos-SURGIR.- PRO.EME. REACTIVA -PROGRAMA IMPULSO-MYPERU,Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+528,CORPO.FINANCIERA DE DESARROLLO- Fideicomiso cartera crediticia con Fiduciaria SA,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+529,CMAC AREQUIPA -CARTERA NO MIGRADA DE FIN.CREDINKA- PROG. REACTIVA E IMPULSO,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+540,BANCO PICHINCHA -Venta Cartera  DINERS CLUB PERU SA,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+560,CRAC DEL CENTRO OM 24700-20/ 10238-21-SBS. (REACTIVA PERU FAE- IMPULSO MYPERU),Caja Rural de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+561,FINANCIERA CREDINKA SA Liq.-Cesión créditos del FMV- Programa con Cofide,Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+580,EDPYME ALTERNATIVA OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Empresa de Créditos,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+581,CMAC TRUJILLO OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+582,FINANCIERA EFECTIVA OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19(REACTIVA PERU FAE),Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+583,CMAC MAYNAS OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+586,FINANCIERA EFECTIVA VENTA DE CARTERA XPERTO EN COBRANZA SAC,Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+587,CRAC RAIZ S.A.A. OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Caja Rural de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+589,BCP PERÚ S.A.- OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",TRUE
+590,VOLVO FINANCIAL SERVICES EMPRESA DE CREDITOS S.A.,Empresa de Créditos,En operacion,,TRUE,not in Reporte or any bulletin crosswalk,FALSE
+592,CMAC TACNA- OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+593,CMAC AREQUIPA OM 24700-2020 HON.GAR.PRO.EME.SAN.COVID19 (FONDO CRECER),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+594,CMAC SULLANA OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19(REACTIVA PERU FAE),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+596,CMAC AREQUIPA OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19(REACTIVA PERU FAE),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+597,CMAC PIURA OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+598,CRAC LOS ANDES OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19(REACTIVA PERU FAE),Caja Rural de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+599,CMCP LIMA OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+600,CMAC ICA OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+801,FINANCIERA PROEMPRESA OM24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Financiera,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+817,ALFIN BANCO SA.- Fideicomiso Titulización Créditos de Cartera,Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+818,CMAC PAITA S.A. OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Caja Municipal de Ahorro y Crédito,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+819,BANCO DE COMERCIO OM 24700-2020 H.GAR.PRO.EME.SAN.COVID19 (FONDO CRECER),Banco,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE
+820,BBVA CONSUMER FINANCE EDPYME-LIQ. Vta.Cartera  FORUM DISTRIBUIDORA DEL PERÚ S.A.,Empresa de Créditos,Venta de Cartera,,TRUE,"portfolio-sale / guarantee vehicle, not an operating lender",FALSE

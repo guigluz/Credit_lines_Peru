@@ -1,6 +1,6 @@
 # ==============================================================================
-# 11_figures_regression.R -- figures that visualize the inputs to the reserve requirement shock
-# loan-growth regressions (code/10_encaje_shock_loan_growth.R).
+# 12_figures_regression.R -- figures that visualize the inputs to the reserve requirement shock
+# loan-growth regressions (code/11_loan_reserve_shock_regression.R).
 #
 # Figure 1) fig_encaje_rates   The monthly statutory reserve-requirement rates that
 #      drive the bank shocks, full available history: minimum legal rate and
@@ -15,7 +15,7 @@
 #   The MN marginal rate is NA (not applicable, NOT zero) while the MN regime is a
 #   single rate; the NA months are left blank, so the line simply breaks there.
 #
-# Usage:  Rscript code/11_figures_regression.R      (output: output/figures/*.pdf)
+# Usage:  Rscript code/12_figures_regression.R      (output: output/figures/*.pdf)
 # ==============================================================================
 
 suppressPackageStartupMessages({
