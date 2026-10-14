@@ -9,13 +9,12 @@ Shocks: 6,973 bank-months, 19 banks, 1996-04-30 to 2026-10-31; deposit shares fi
   d_me_gen_min_legal  months with data 160 | zero 158 | tighter  2 | looser  0 | NA   0
   d_mn_gen_marginal   months with data  68 | zero  60 | tighter  3 | looser  5 | NA  92
   d_me_gen_marginal   months with data 160 | zero 144 | tighter  4 | looser 12 | NA   0
-Baseline 2009-12-31: 57 Reporte institutions, valid shares for 19 (all of them in the shock table); excluded: 33 no Reporte row at baseline date; 3 deposits missing (not deposit-taking); 2 non-positive denominator.
 RCC list: 152 codes (En liquidacion=4, En operacion=57, Liquidada=1, Venta de Cartera=90). Mapped to a hub bank_standardized: 24; unmapped: 128.
 Credit sample: 83 distinct entidad codes; 65 are in the RCC list, 18 are not (historic/removed entities): 100, 154, 157, 158, 162, 173, 179, 186, 191, 226, 232, 234, 235, 236, 239, 268, 339, 391
 Hub banks reached by more than one RCC code: none
 
 ==============================================================================
-2. Product classification and merge
+2. Product classification
 ==============================================================================
 Product classification (credit_line = TRUE for the six listed products):
                             producto credit_line n_rows n_firms n_positive_rows
@@ -69,41 +68,43 @@ Product classification (credit_line = TRUE for the six listed products):
 NOTE: credito_vigente is identically zero for multilinea, avales_fianzas, cartas_credito, otras_lineas; credit-line growth therefore rests on tarjeta_credito and cuenta_corriente.
 Rows: credit_line TRUE 86,101 | FALSE 180,929 | missing producto 0 (0 excluded from both regression samples).
 credito_vigente: missing 0 | negative 0 | zero 79,790 (29.9%) | positive 187,240
-Merge via entidad -> bank_standardized on (bank_standardized, fecha_reporte): 243,581 of 267,030 credit rows matched (91.2%), 23,449 unmatched.
-  Banks (entidad): 11 matched to a shock row, 72 unmatched.
+
+==============================================================================
+3. Currency, aggregation and merge with shocks
+==============================================================================
+   moneda_codigo     currency months  pairs share_exact_zero
+          <fctr>       <char>  <int>  <int>            <num>
+1:             1   MN (soles)    159 107287            0.154
+2:             2 ME (foreign)    159  60033            0.005
+   median_share_modal_nonzero
+                        <num>
+1:                      0.004
+2:                      0.185
+
+Valuation-basis verdict: ME balances are valued in soles at the month-end SBS exchange rate (a common-valuation basis, as the Manual de Contabilidad Cap. I C.6 prescribes): MN, ME and VAC balances can be summed.
+Currency-specific intermediate: 219,941 rows -> data/processed/credit_balances_by_currency.csv.gz
+Missing producto: 0 rows (0 firm-bank-months) excluded from both regression samples.
+Aggregated to 185,452 entidad x firm x credit_line x month rows (from 267,030 product-currency rows).
+  all-missing balance groups: 0 (left missing, never set to zero); negative: 0; zero: 53,887
 
 Entity coverage (credit sample), by status:
-                                                                                            status
-                                                                                            <char>
-1:                                                                       included: shock available
-2:                                   excluded: no hub id, not in Reporte or any bulletin crosswalk
-3:                excluded: no hub id, portfolio-sale / guarantee vehicle, not an operating lender
-4:                                   excluded: no valid baseline (no Reporte row at baseline date)
-5:                                                                  excluded: code not in RCC list
-6: excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)
-7:                                          excluded: no valid baseline (non-positive denominator)
-8:                                                    excluded: no valid baseline (not in Reporte)
-   entidades firms_obs_rows share_of_balance
-       <int>          <int>            <num>
-1:        11         243581           0.8082
-2:        10           2786           0.1131
-3:        20           8704           0.0750
-4:         6           2207           0.0032
-5:        18           1921           0.0002
-6:        15           7393           0.0002
-7:         1            265           0.0000
-8:         2            173           0.0000
-
-Banks with a shock (included):
-    entidad bank_standardized n_firms n_obs s_mn_0 s_me_0
-      <int>            <char>   <int> <int>  <num>  <num>
- 1:       1               bcp     791 94622  0.405  0.595
- 2:       4        scotiabank     387 48218  0.401  0.599
- 3:       6         bbva_peru     415 51242  0.494  0.506
- 4:       2         interbank     167 15795  0.438  0.562
- 5:      52          citibank      36  4381  0.366  0.634
- 6:     127    santander_peru      43  3456  0.353  0.647
- 7:      55               bif     134 13863  0.406  0.594
+                                                                          
+==============================================================================
+3. Currency, aggregation and merge with shocks
+==============================================================================
+   fecha_reporte                        identificador entidad moneda_codigo                         producto credito_vigente credit_line
+          <Date>                               <char>   <int>        <fctr>                           <char>           <num>      <lgcl>
+1:    2010-09-30 EMP_01527077CF618099704074840B83BB93      55             1       sobregiro_cuenta_corriente            0.00       FALSE
+2:    2010-09-30 EMP_0198EC3A4F312D0D06E8F7A03E33E21C       6             1                  tarjeta_credito         2178.07        TRUE
+3:    2010-09-30 EMP_03ACF3953FE900D5580DB0C0E4E27F77     123             2                        prestamos        44729.21       FALSE
+4:    2010-09-30 EMP_040D9487189E8F44F5986E2AFA17EF80       1             1                  tarjeta_credito            0.00        TRUE
+5:    2010-09-30 EMP_040D9487189E8F44F5986E2AFA17EF80       4             2 credito_otorgado_no_desembolsado            0.00       FALSE
+6:    2010-09-30 EMP_04297B5909BA6F0D79DD2352B68E9F6A       1             1                  tarjeta_credito        41476.16        TRUE
+Missing producto: 0 rows (0 firm-bank-months) excluded from both regression samples.
+[1] 0
+Aggregated to 185,452 entidad x firm x credit_line x month rows (from 267,030 product-currency rows).
+  all-missing balance groups: 0 (left missing, never set to zero); negative: 0; zero: 53,887
+            bif     134 13863  0.406  0.594
  8:      82   banco_pichincha      79  5572  0.503  0.497
  9:     123           mibanco     132  5611  0.793  0.207
 10:      22            bancom      14   812  0.703  0.297
@@ -143,11 +144,11 @@ Largest excluded entities by balance:
  1:                                   excluded: no hub id, not in Reporte or any bulletin crosswalk
  2:                excluded: no hub id, portfolio-sale / guarantee vehicle, not an operating lender
  3:                                   excluded: no hub id, not in Reporte or any bulletin crosswalk
- 4:                                   excluded: no valid baseline (no Reporte row at baseline date)
- 5:                                   excluded: no valid baseline (no Reporte row at baseline date)
+ 4:                                excluded: mapped to a bank without valid baseline deposit shares
+ 5:                                excluded: mapped to a bank without valid baseline deposit shares
  6:                                   excluded: no hub id, not in Reporte or any bulletin crosswalk
- 7:                                   excluded: no valid baseline (no Reporte row at baseline date)
- 8:                                   excluded: no valid baseline (no Reporte row at baseline date)
+ 7:                                excluded: mapped to a bank without valid baseline deposit shares
+ 8:                                excluded: mapped to a bank without valid baseline deposit shares
  9:                                                                  excluded: code not in RCC list
 10:                                                                  excluded: code not in RCC list
 11:                                                                  excluded: code not in RCC list
@@ -166,43 +167,6 @@ Largest excluded entities by balance:
 10:       9 0.0001
 11:       3 0.0000
 12:      40 0.0000
-
-Reporte institutions with a valid baseline but no RCC code (no credit rows to attach to): crediscotia_financiera, deutsche_bank, financiera_crear, financiera_edyficar, financiera_tfc, hsbc_peru
-
-Baseline robustness, 13 banks with an RCC code: MN share at 2009-12-31 vs 2010-09-30: corr 0.959, max |diff| 0.163
-    entidad bank_standardized s_mn_baseline s_mn_first_credit_month
-      <int>            <char>         <num>                   <num>
- 1:       1               bcp         0.405                   0.519
- 2:       2         interbank         0.438                   0.497
- 3:       4        scotiabank         0.401                   0.410
- 4:       6         bbva_peru         0.494                   0.547
- 5:      22            bancom         0.703                   0.745
- 6:      52          citibank         0.366                   0.529
- 7:      55               bif         0.406                   0.393
- 8:      73      banco_ripley         0.861                   0.951
- 9:      82   banco_pichincha         0.503                   0.618
-10:     123           mibanco         0.793                   0.831
-11:     127    santander_peru         0.353                   0.270
-12:     140       alfin_banco         0.952                   0.954
-13:     142   banco_falabella         0.844                   0.872
-
-==============================================================================
-3. Currency valuation and aggregation
-==============================================================================
-   moneda_codigo     currency months  pairs share_exact_zero
-          <fctr>       <char>  <int>  <int>            <num>
-1:             1   MN (soles)    159 107287            0.154
-2:             2 ME (foreign)    159  60033            0.005
-   median_share_modal_nonzero
-                        <num>
-1:                      0.004
-2:                      0.185
-
-Valuation-basis verdict: ME balances are valued in soles at the month-end SBS exchange rate (a common-valuation basis, as the Manual de Contabilidad Cap. I C.6 prescribes): MN, ME and VAC balances can be summed.
-Currency-specific intermediate: 219,941 rows -> data/processed/credit_balances_by_currency.csv.gz
-Missing producto: 0 rows (0 firm-bank-months) excluded from both regression samples.
-Aggregated to 185,452 entidad x firm x credit_line x month rows (from 267,030 product-currency rows).
-  all-missing balance groups: 0 (left missing, never set to zero); negative: 0; zero: 53,887
 
 ==============================================================================
 4. Loan growth

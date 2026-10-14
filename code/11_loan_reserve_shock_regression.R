@@ -14,13 +14,13 @@
 #
 #   The shocks are keyed by bank_standardized (the project's hub key); the credit
 #   file identifies banks by the RCC entity code (`entidad`). This script builds
-#   the entidad -> bank_standardized crosswalk and merges credit rows to shocks
-#   through it: credit row -> entidad -> bank_standardized -> shock.
+#   the entidad -> bank_standardized crosswalk, aggregates credit to firm x bank x
+#   credit-line status x month, and then merges that panel to the shocks through it:
+#   panel row -> entidad -> bank_standardized -> shock.
 #
 # INPUTS (never modified)
 #   data/raw/muestra_anonima_base2015.parquet        credit, firm x bank x product x currency x month
 #   data/processed/bank_encaje_shocks.csv            bank shocks, unique by bank_standardized x fecha_reporte (10_reserve_shocks.R)
-#   data/processed/bank_deposit_shares.csv           deposit shares, every institution x month (10_reserve_shocks.R)
 #   data/documentation/RCC_empresas_supervisadas_2026.xls   RCC entity code -> name (tab-delimited text
 #                                                    saved with an .xls extension, ISO-8859-1)
 #   data/documentation/bank_map_manual.csv           curated name -> bank_standardized hub map
@@ -44,7 +44,6 @@ source("code/00_sbs_utils.R")   # canon_bank(), standardize_banks(), read_bank_m
 # ---- parameters ---------------------------------------------------------------
 CREDIT_PQ  <- "data/raw/muestra_anonima_base2015.parquet"
 SHOCKS_CSV <- "data/processed/bank_encaje_shocks.csv"
-SHARES_CSV <- "data/processed/bank_deposit_shares.csv"
 RCC_LIST   <- "data/documentation/RCC_empresas_supervisadas_2026.xls"
 PROC  <- "data/processed"
 VALID <- "output/validation"
@@ -106,21 +105,6 @@ for (j in MEASURES) for (cur in c("mn", "me")) {
               sum(v < 0, na.rm = TRUE), sum(is.na(v))))
 }
 
-# ---- baseline coverage by institution, rebuilt from the all-months share panel ----
-shares <- fread(SHARES_CSV, encoding = "UTF-8")
-shares[, date := as.Date(date)]
-sh <- merge(shares[, .(bank_standardized = unique(bank_standardized))],
-            shares[date == BASELINE_DATE, .(bank_standardized, s_mn_0 = s_mn, s_me_0 = s_me, row_reason = reason)],
-            by = "bank_standardized", all.x = TRUE)
-sh[, reason := fifelse(is.na(row_reason), "no Reporte row at baseline date", row_reason)]
-sh[, valid := reason == "valid"]
-chk <- merge(unique(shocks[, .(bank_standardized, s_mn_0)]), sh[valid == TRUE, .(bank_standardized, s_mn_chk = s_mn_0)],
-             by = "bank_standardized", all = TRUE)
-stopifnot(!anyNA(chk), max(abs(chk$s_mn_0 - chk$s_mn_chk)) < 1e-9)   # the shock table used exactly these baseline shares
-cat(sprintf("Baseline %s: %d Reporte institutions, valid shares for %d (all of them in the shock table); excluded: %s.\n",
-            format(BASELINE_DATE), nrow(sh), sum(sh$valid),
-            paste(sprintf("%d %s", sh[valid == FALSE, .N, by = reason]$N, sh[valid == FALSE, .N, by = reason]$reason), collapse = "; ")))
-
 # ---- RCC entity code -> bank_standardized (the project hub) --------------------
 rcc <- fread(RCC_LIST, sep = "\t", encoding = "Latin-1", colClasses = "character")
 stopifnot(identical(names(rcc), c("Codigo", "Tipo", "Estado", "Nombre")))
@@ -159,9 +143,9 @@ cat(sprintf("Hub banks reached by more than one RCC code: %s\n",
             if (nrow(dupb)) paste(dupb$bank_standardized, collapse = ", ") else "none"))
 
 # ==============================================================================
-# 2. Product classification, merge with shocks
+# 2. Product classification
 # ==============================================================================
-hdr("2. Product classification and merge")
+hdr("2. Product classification")
 # Normalize whitespace and case only; product meanings unchanged.
 cr[, producto := { p <- tolower(trimws(gsub("\\s+", " ", as.character(producto)))); p[p == ""] <- NA_character_; p }]
 unknown <- setdiff(CREDIT_LINE_PRODUCTS, unique(cr$producto))
@@ -191,57 +175,10 @@ ent_stats <- cr[, .(n_firms = uniqueN(identificador), n_obs = .N,
                     first_date = min(fecha_reporte), last_date = max(fecha_reporte),
                     sum_credito_vigente = sum(credito_vigente, na.rm = TRUE)), by = entidad]
 
-# ---- merge shocks: credit row -> entidad -> bank_standardized -> shock -------------
-# Both steps are many-to-one: the crosswalk is unique by entidad and the shock table is unique by
-# (bank_standardized, fecha_reporte) (both asserted), so no credit row can be multiplied or lost.
-n0 <- nrow(cr)
-cr <- merge(cr, rcc[, .(entidad, bank_standardized)], by = "entidad", all.x = TRUE, sort = FALSE)
-stopifnot(nrow(cr) == n0)
-cr <- merge(cr, shocks, by = c("bank_standardized", "fecha_reporte"), all.x = TRUE, sort = FALSE)
-stopifnot(nrow(cr) == n0)
-cr[, matched := !is.na(s_mn_0)]               # a shock row exists: mapped to a bank AND valid baseline shares
-cat(sprintf("Merge via entidad -> bank_standardized on (bank_standardized, fecha_reporte): %s of %s credit rows matched (%.1f%%), %s unmatched.\n",
-            fmt(sum(cr$matched)), fmt(n0), 100 * mean(cr$matched), fmt(sum(!cr$matched))))
-bk <- cr[, .(n_obs = .N, matched = any(matched)), by = entidad]
-cat(sprintf("  Banks (entidad): %d matched to a shock row, %d unmatched.\n", sum(bk$matched), sum(!bk$matched)))
-
-# Entity coverage and the reason each unmatched code is excluded
-cov <- merge(ent_stats, rcc[, .(entidad, bank_raw, tipo, estado, bank_standardized, unmapped_note)], by = "entidad", all.x = TRUE)
-cov <- merge(cov, sh[, .(bank_standardized, baseline_reason = reason, s_mn_0, s_me_0)], by = "bank_standardized", all.x = TRUE)
-cov[, status := fcase(
-  !entidad %in% rcc$entidad,           "excluded: code not in RCC list",
-  is.na(bank_standardized),            paste0("excluded: no hub id, ", unmapped_note),
-  baseline_reason != "valid" | is.na(baseline_reason),
-                                       paste0("excluded: no valid baseline (", fifelse(is.na(baseline_reason), "not in Reporte", baseline_reason), ")"),
-  default =                            "included: shock available")]
-setorder(cov, -sum_credito_vigente)
-write_val(cov[, .(entidad, bank_raw, tipo, estado, bank_standardized, n_firms, n_obs, first_date, last_date,
-                  sum_credito_vigente, s_mn_0, s_me_0, status)], "entity_coverage")
-stopifnot(setequal(cov[status == "included: shock available", entidad], bk[matched == TRUE, entidad]))   # coverage agrees with the merge
-cat("\nEntity coverage (credit sample), by status:\n")
-print(cov[, .(entidades = .N, firms_obs_rows = sum(n_obs), share_of_balance = round(sum(sum_credito_vigente) / sum(cov$sum_credito_vigente), 4)), by = status])
-cat("\nBanks with a shock (included):\n")
-print(cov[status == "included: shock available", .(entidad, bank_standardized, n_firms, n_obs, s_mn_0 = round(s_mn_0, 3), s_me_0 = round(s_me_0, 3))])
-cat("\nLargest excluded entities by balance:\n")
-print(head(cov[status != "included: shock available", .(entidad, bank_raw, status, n_firms, share = round(sum_credito_vigente / sum(cov$sum_credito_vigente), 4))], 12))
-hb <- setdiff(sh[valid == TRUE, bank_standardized], rcc[, bank_standardized])
-cat(sprintf("\nReporte institutions with a valid baseline but no RCC code (no credit rows to attach to): %s\n",
-            paste(hb, collapse = ", ")))
-
-# Sensitivity of the baseline choice: MN share at the baseline vs at the first credit month (diagnostic only)
-alt <- shares[date == min(cr_dates) & valid == TRUE, .(bank_standardized, s_mn_first_credit_month = s_mn)]
-cmp <- merge(sh[valid == TRUE, .(bank_standardized, s_mn_0)], alt, by = "bank_standardized")
-cmp <- merge(cmp, rcc[!is.na(bank_standardized), .(entidad = entidad[1L]), by = bank_standardized], by = "bank_standardized")
-cat(sprintf("\nBaseline robustness, %d banks with an RCC code: MN share at %s vs %s: corr %.3f, max |diff| %.3f\n",
-            nrow(cmp), format(BASELINE_DATE), format(min(cr_dates)), cor(cmp$s_mn_0, cmp$s_mn_first_credit_month),
-            max(abs(cmp$s_mn_0 - cmp$s_mn_first_credit_month))))
-print(cmp[order(entidad), .(entidad, bank_standardized, s_mn_baseline = round(s_mn_0, 3),
-                            s_mn_first_credit_month = round(s_mn_first_credit_month, 3))])
-
 # ==============================================================================
-# 3. Currency: valuation basis, then aggregation
+# 3. Currency, aggregation and merge with shocks
 # ==============================================================================
-hdr("3. Currency valuation and aggregation")
+hdr("3. Currency, aggregation and merge with shocks")
 # Test whether foreign-currency (ME) balances are reported in original currency or already
 # valued in soles at the month-end exchange rate. In soles, a constant-dollar loan changes by
 # the exchange-rate return each month, so many ME relationships share ONE identical non-zero
@@ -288,18 +225,46 @@ if (!ME_IN_SOLES) {
 excl_na <- cr[is.na(credit_line)]
 cat(sprintf("Missing producto: %s rows (%s firm-bank-months) excluded from both regression samples.\n",
             fmt(nrow(excl_na)), fmt(uniqueN(excl_na[, .(entidad, identificador, fecha_reporte)]))))
-shock_cols <- paste0("bank_shock_", MEASURES)
-agg <- cr[!is.na(credit_line), c(list(
+agg <- cr[!is.na(credit_line), .(
   balance = if (all(is.na(credito_vigente))) NA_real_ else sum(credito_vigente, na.rm = TRUE),   # all-missing stays missing
   n_products = uniqueN(producto), n_raw_rows = .N,
   bal_me = sum(credito_vigente[moneda_codigo == "2"], na.rm = TRUE)),
-  lapply(.SD, function(v) { stopifnot(uniqueN(v, na.rm = FALSE) == 1L); v[1L] })),
-  by = .(entidad, identificador, credit_line, fecha_reporte), .SDcols = c("bank_standardized", shock_cols)]
+  by = .(entidad, identificador, credit_line, fecha_reporte)]
 agg[, me_balance_share := fifelse(!is.na(balance) & balance > 0, bal_me / balance, NA_real_)]
 cat(sprintf("Aggregated to %s entidad x firm x credit_line x month rows (from %s product-currency rows).\n",
             fmt(nrow(agg)), fmt(sum(agg$n_raw_rows))))
 cat(sprintf("  all-missing balance groups: %d (left missing, never set to zero); negative: %d; zero: %s\n",
             sum(is.na(agg$balance)), sum(agg$balance < 0, na.rm = TRUE), fmt(sum(agg$balance == 0, na.rm = TRUE))))
+
+# ---- merge shocks: panel row -> entidad -> bank_standardized -> shock --------------
+# Both steps are many-to-one: the crosswalk is unique by entidad and the shock table is unique by
+# (bank_standardized, fecha_reporte) (both asserted), so no panel row can be multiplied or lost.
+shock_cols <- paste0("bank_shock_", MEASURES)
+n_agg <- nrow(agg)
+agg <- merge(agg, rcc[, .(entidad, bank_standardized)], by = "entidad", all.x = TRUE, sort = FALSE)
+stopifnot(nrow(agg) == n_agg)
+agg <- merge(agg, shocks[, c("bank_standardized", "fecha_reporte", "s_mn_0", shock_cols), with = FALSE],
+             by = c("bank_standardized", "fecha_reporte"), all.x = TRUE, sort = FALSE)
+stopifnot(nrow(agg) == n_agg)
+
+# Entity coverage and the reason each unmatched code is excluded
+cov <- merge(ent_stats, rcc[, .(entidad, bank_raw, tipo, estado, bank_standardized, unmapped_note)], by = "entidad", all.x = TRUE)
+cov <- merge(cov, unique(shocks[, .(bank_standardized, s_mn_0, s_me_0)]), by = "bank_standardized", all.x = TRUE)
+cov[, status := fcase(
+  !entidad %in% rcc$entidad,           "excluded: code not in RCC list",
+  is.na(bank_standardized),            paste0("excluded: no hub id, ", unmapped_note),
+  is.na(s_mn_0),                       "excluded: mapped to a bank without valid baseline deposit shares",
+  default =                            "included: shock available")]
+setorder(cov, -sum_credito_vigente)
+write_val(cov[, .(entidad, bank_raw, tipo, estado, bank_standardized, n_firms, n_obs, first_date, last_date,
+                  sum_credito_vigente, s_mn_0, s_me_0, status)], "entity_coverage")
+stopifnot(setequal(cov[status == "included: shock available", entidad], agg[!is.na(s_mn_0), unique(entidad)]))   # coverage agrees with the merge
+cat("\nEntity coverage (credit sample), by status:\n")
+print(cov[, .(entidades = .N, firms_obs_rows = sum(n_obs), share_of_balance = round(sum(sum_credito_vigente) / sum(cov$sum_credito_vigente), 4)), by = status])
+cat("\nBanks with a shock (included):\n")
+print(cov[status == "included: shock available", .(entidad, bank_standardized, n_firms, n_obs, s_mn_0 = round(s_mn_0, 3), s_me_0 = round(s_me_0, 3))])
+cat("\nLargest excluded entities by balance:\n")
+print(head(cov[status != "included: shock available", .(entidad, bank_raw, status, n_firms, share = round(sum_credito_vigente / sum(cov$sum_credito_vigente), 4))], 12))
 
 # ==============================================================================
 # 4. Loan growth

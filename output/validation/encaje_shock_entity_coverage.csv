@@ -9,13 +9,13 @@ entidad,bank_raw,tipo,estado,bank_standardized,n_firms,n_obs,first_date,last_dat
 52,CITIBANK DEL PERU S A,Banco,En operacion,citibank,36,4381,2010-09-30,2023-12-31,84827108951.0002,0.366127753905335,0.633872246094665,included: shock available
 127,BANCO SANTANDER PERU S A,Banco,En operacion,santander_peru,43,3456,2010-09-30,2023-12-31,50355181622.53,0.352766104551298,0.647233895448702,included: shock available
 55,BANCO INTERAMERICANO DE FINANZAS,Banco,En operacion,bif,134,13863,2010-09-30,2023-12-31,39882114399.66,0.405964144839035,0.594035855160965,included: shock available
-137,ICBC PERU BANK,Banco,En operacion,banco_icbc,11,367,2014-04-30,2023-12-31,6922302617.73,,,excluded: no valid baseline (no Reporte row at baseline date)
+137,ICBC PERU BANK,Banco,En operacion,banco_icbc,11,367,2014-04-30,2023-12-31,6922302617.73,,,excluded: mapped to a bank without valid baseline deposit shares
 82,BANCO PICHINCHA,Banco,En operacion,banco_pichincha,79,5572,2010-09-30,2023-12-31,6358969991.23998,0.503190436718441,0.496809563281559,included: shock available
-126,BANCO GNB PERU S.A.,Banco,En operacion,banco_gnb,24,852,2010-09-30,2023-12-31,4990577076.97,,,excluded: no valid baseline (no Reporte row at baseline date)
+126,BANCO GNB PERU S.A.,Banco,En operacion,banco_gnb,24,852,2010-09-30,2023-12-31,4990577076.97,,,excluded: mapped to a bank without valid baseline deposit shares
 230,FINANCIERA CREDINKA EN LIQUIDACION,Financiera,Liquidada,,11,240,2011-10-31,2023-02-28,991842551.98,,,"excluded: no hub id, not in Reporte or any bulletin crosswalk"
-138,BANK OF CHINA (PERU) S.A.,Banco,En operacion,bank_of_china,2,31,2022-02-28,2023-12-31,6.41e+08,,,excluded: no valid baseline (no Reporte row at baseline date)
+138,BANK OF CHINA (PERU) S.A.,Banco,En operacion,bank_of_china,2,31,2022-02-28,2023-12-31,6.41e+08,,,excluded: mapped to a bank without valid baseline deposit shares
 123,MIBANCO BANCO DE LA MICRO EMPRESA S A,Banco,En operacion,mibanco,132,5611,2010-09-30,2023-12-31,609752630.77,0.793070759833129,0.206929240166871,included: shock available
-146,BANCO BCI PERU S A,Banco,En operacion,banco_bci,4,40,2023-05-31,2023-12-31,583250000,,,excluded: no valid baseline (no Reporte row at baseline date)
+146,BANCO BCI PERU S A,Banco,En operacion,banco_bci,4,40,2023-05-31,2023-12-31,583250000,,,excluded: mapped to a bank without valid baseline deposit shares
 179,,,,,4,196,2010-11-30,2017-06-30,443824156.65,,,excluded: code not in RCC list
 100,,,,,9,194,2010-09-30,2013-02-28,353310203.52,,,excluded: code not in RCC list
 154,,,,,3,92,2011-08-31,2015-08-31,177332397.47,,,excluded: code not in RCC list
@@ -26,18 +26,18 @@ entidad,bank_raw,tipo,estado,bank_standardized,n_firms,n_obs,first_date,last_dat
 107,CAJA MUNICIPAL DE AHORRO Y CREDITO HUANCAYO,Caja Municipal de Ahorro y Crédito,En operacion,,17,656,2010-09-30,2023-12-31,118092842.65,,,"excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)"
 108,CAJA MUNICIPAL DE AHORRO Y CREDITO ICA,Caja Municipal de Ahorro y Crédito,En operacion,,9,346,2010-09-30,2022-02-28,91444959.1999999,,,"excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)"
 106,CAJA MUNICIPAL DE AHORRO Y CREDITO CUSCO S A,Caja Municipal de Ahorro y Crédito,En operacion,,11,478,2010-09-30,2023-12-31,86982548.7199999,,,"excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)"
-185,MITSUI AUTO FINANCE PERÚ S A,Financiera,En operacion,mitsui_auto_finance,23,781,2010-09-30,2022-12-31,47069616.86,,,excluded: no valid baseline (no Reporte row at baseline date)
+185,MITSUI AUTO FINANCE PERÚ S A,Financiera,En operacion,mitsui_auto_finance,23,781,2010-09-30,2022-12-31,47069616.86,,,excluded: mapped to a bank without valid baseline deposit shares
 240,EMPRESA DE CREDITO VIVELA S.A.,Empresa de Créditos,En operacion,,1,19,2018-07-31,2020-01-31,31280197.4,,,"excluded: no hub id, not in Reporte or any bulletin crosswalk"
 184,TOTAL SERVICIOS FINANCIEROS EMPRESA DE CREDITOS,Empresa de Créditos,En operacion,,7,184,2010-09-30,2023-12-31,31091173.12,,,"excluded: no hub id, not in Reporte or any bulletin crosswalk"
 104,CAJA MUNICIPAL DE AHORRO Y CREDITO DE AREQUIPA,Caja Municipal de Ahorro y Crédito,En operacion,,24,861,2010-09-30,2023-12-31,28697334.57,,,"excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)"
 101,CAJA MUNICIPAL DE AHORRO Y CREDITO DE SULLANA EN LIQUIDACION,Caja Municipal de Ahorro y Crédito,En liquidacion,,17,602,2010-09-30,2023-12-31,23181309.11,,,"excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)"
 143,FINANCIERA TFC S A EN LIQUIDACION,Financiera,En liquidacion,,2,176,2015-05-31,2023-12-31,22132928.2,,,"excluded: no hub id, not in Reporte or any bulletin crosswalk"
 224,EMPRESA DE CRÉDITOS SANTANDER CONSUMO PERÚ S.A,Empresa de Créditos,En operacion,,7,174,2015-12-31,2023-12-31,11397927.11,,,"excluded: no hub id, not in Reporte or any bulletin crosswalk"
-231,FINANCIERA CONFIANZA S.A.A.,Financiera,En operacion,financiera_confianza,9,265,2011-04-30,2018-06-30,10019068.09,,,excluded: no valid baseline (non-positive denominator)
+231,FINANCIERA CONFIANZA S.A.A.,Financiera,En operacion,financiera_confianza,9,265,2011-04-30,2018-06-30,10019068.09,,,excluded: mapped to a bank without valid baseline deposit shares
 114,CAJA MUNICIPAL DE AHORRO Y CREDITO TACNA,Caja Municipal de Ahorro y Crédito,En operacion,,13,238,2010-09-30,2023-12-31,7183799.88,,,"excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)"
 268,,,,,7,100,2014-10-31,2021-01-31,6707029.69,,,excluded: code not in RCC list
 226,,,,,13,178,2010-09-30,2015-02-28,6295518.49,,,excluded: code not in RCC list
-227,FINANCIERA PROEMPRESA S A,Financiera,En operacion,financiera_proempresa,3,136,2011-07-31,2023-07-31,6031660.47,,,excluded: no valid baseline (no Reporte row at baseline date)
+227,FINANCIERA PROEMPRESA S A,Financiera,En operacion,financiera_proempresa,3,136,2011-07-31,2023-07-31,6031660.47,,,excluded: mapped to a bank without valid baseline deposit shares
 156,CRAC Raíz en Liquidación,Caja Rural de Ahorro y Crédito,En liquidacion,,5,108,2012-02-29,2023-12-31,5321760.58,,,"excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)"
 111,CAJA MUNICIPAL DE AHORRO Y CREDITO DEL SANTA,Caja Municipal de Ahorro y Crédito,En operacion,,6,300,2010-09-30,2023-10-31,5293832.26,,,"excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)"
 173,,,,,7,238,2014-06-30,2019-09-30,4896647.76,,,excluded: code not in RCC list
@@ -48,14 +48,14 @@ entidad,bank_raw,tipo,estado,bank_standardized,n_firms,n_obs,first_date,last_dat
 159,CAJA RURAL DE AHORRO Y CREDITO SEÑOR DE LUREN EN LIQUIDACION,Caja Rural de Ahorro y Crédito,En liquidacion,,4,64,2011-04-30,2014-08-31,2383216.38,,,"excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)"
 170,CAJA RURAL PRYMERA,Caja Rural de Ahorro y Crédito,En operacion,,3,32,2013-04-30,2016-09-30,1677955.83,,,"excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)"
 157,,,,,1,34,2012-12-31,2015-09-30,1588060.15,,,excluded: code not in RCC list
-228,COMPARTAMOS BANCO S.A.,Banco,En operacion,compartamos_banco,5,67,2016-12-31,2023-12-31,1397155.63,,,excluded: no valid baseline (not in Reporte)
+228,COMPARTAMOS BANCO S.A.,Banco,En operacion,compartamos_banco,5,67,2016-12-31,2023-12-31,1397155.63,,,excluded: mapped to a bank without valid baseline deposit shares
 110,CAJA MUNICIPAL DE AHORRO Y CREDITO PAITA,Caja Municipal de Ahorro y Crédito,En operacion,,2,99,2010-09-30,2017-05-31,1179092.03,,,"excluded: no hub id, type outside Reporte coverage (Banca Multiple + Empresas Financieras only)"
 235,,,,,1,61,2011-04-30,2017-05-31,855323.74,,,excluded: code not in RCC list
 236,,,,,1,26,2017-12-31,2020-01-31,669822.92,,,excluded: code not in RCC list
 232,,,,,2,18,2014-07-31,2016-04-30,345835.45,,,excluded: code not in RCC list
 234,,,,,1,24,2013-03-31,2015-02-28,275739.08,,,excluded: code not in RCC list
 162,,,,,1,21,2013-11-30,2015-07-31,204939.68,,,excluded: code not in RCC list
-237,BANCO EFECTIVA S A,Banco,En operacion,banco_efectiva,5,106,2010-09-30,2015-12-31,152081.09,,,excluded: no valid baseline (not in Reporte)
+237,BANCO EFECTIVA S A,Banco,En operacion,banco_efectiva,5,106,2010-09-30,2015-12-31,152081.09,,,excluded: mapped to a bank without valid baseline deposit shares
 497,BANCO SCOTIABANK OM 24700-2020 HON.GAR.PRO.EME.SAN.COVID19 (REACTIVA PERU FAE),Banco,Venta de Cartera,,5,82,2021-12-31,2023-12-31,122160.4,,,"excluded: no hub id, portfolio-sale / guarantee vehicle, not an operating lender"
 220,FUNDACION FONDO DE GARANTIA PARA PRESTAMOS A LA PEQUEÑA INDUSTRIA,Afianzadora y de Garantías,En operacion,,2,137,2011-11-30,2021-05-31,63983.23,,,"excluded: no hub id, not in Reporte or any bulletin crosswalk"
 484,CMAC SANTA VENTA DE CARTERA FOCMAC,Caja Municipal de Ahorro y Crédito,Venta de Cartera,,2,2,2016-10-31,2016-10-31,32500.8,,,"excluded: no hub id, portfolio-sale / guarantee vehicle, not an operating lender"
