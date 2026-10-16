@@ -1,0 +1,26 @@
+producto,revolvencia,balance,unused,is_credit_line,notes
+sobregiro_cuenta_corriente,no_identificable,0.09404834239884942,0,no,
+prestamos,no_identificable,30.67662495979928,62.39807366427106,unidentified,"Revolving status cannot be read from the account code: includes legacy analytic 06.09 (name deleted from Cap. IV; recoded to 06.02 in Jan-2021, so probably non-revolving but inferred), analytic 00 (no revolving split for multilateral banks, sovereigns, financial system) and rows that join several loan codes with '|' (balance cannot be split between revolving and non-revolving). Needs the unused-line evidence (72.03 account this month or in any month for the firm-bank-currency cell) to decide."
+prestamos,no_revolvente,19.729817179427855,1.129294135583497e-4,no,
+prestamos,revolvente,0.799024910418155,0.042051582351349884,yes,
+descuentos,no_identificable,1.4005144307947055,0.46609249416993415,unidentified,"Discounting buys specific instruments (pagares, letras), so the drawn balance is transaction-based and term by default; it only belongs to a line if the firm-bank cell has a 72.02 discount line. The group mixes undrawn-line records (unused > 0, which are lines) with drawn-only discounts; needs a row-level rule (unused > 0 or 72.02 in the cell)."
+descuentos,revolvente,0,0.006345033018848261,yes,
+factoring,no_identificable,3.0792324475837547,0,unidentified,"Factoring buys receivables with transfer of credit risk and has no undrawn-line account of its own (7205 has no factoring line type). Term by default, but a factoring line would be booked under 'otras lineas' (7205.08) and cannot be linked back to these balances."
+tarjeta_credito,no_identificable,0.26236821515043324,1.760277244110226,yes,
+arrendamiento_financiero,no_identificable,14.971011565408338,0,no,
+cuenta_corriente,no_identificable,0.8641687223532812,11.440652930718876,yes,
+cuenta_corriente,revolvente,0,6.398259451984949e-4,yes,
+comercio_exterior,no_identificable,10.907546433229143,0,unidentified,"Trade finance is transaction-specific and term by default, but may be drawn under a trade line. 7205 has no trade-finance line type, so any such line would sit under 'otras lineas' (7205.08) and cannot be linked to these balances. No 72xx record ever appears for this product in the sample."
+credito_otorgado_no_desembolsado,no_identificable,0,0,no,
+cartas_credito,no_identificable,0,3.3746980986543806,yes,
+lease_back,no_identificable,2.674267518578696,0,no,
+otros_creditos,no_identificable,10.209015549832367,0,unidentified,"Residual category (1401.xx.99 otros creditos); Cap. IV gives no product definition and no revolving split, and it never carries an undrawn-line account in the sample."
+credito_por_liquidar,no_identificable,0.002074069106124455,0,no,
+credito_inmobiliario,no_identificable,0.1908558655827687,0,no,
+avales_fianzas,no_identificable,0,13.389530983373007,yes,
+avales_fianzas,revolvente,0,0.13203938076050148,yes,
+financiacion_proyectos,no_identificable,2.3286056475307215,0,no,
+otros_creditos_hipotecarios,no_identificable,0,0,no,
+credito_entidad_consolidable,no_identificable,1.7930801880888665,0,unidentified,"Credits to entities the bank must consolidate (1401.xx.18, subordinated / non-subordinated); Cap. IV says nothing on facility structure or revolving, and no undrawn-line account appears for it in the sample."
+inmueble_generador_rentas,no_identificable,0.0177439547166547,0,no,
+multilinea,no_identificable,0,6.989485833213068,yes,
