@@ -77,7 +77,8 @@ cr <- as.data.table(read_parquet(CREDIT_PQ, col_select = c("fecha_reporte", "ide
                                                            "moneda_codigo", "producto", "credito_vigente")))
 cat(sprintf("Credit file: %s rows, %s firms, %d entidad codes, %d dates.\n", fmt(nrow(cr)),
             fmt(uniqueN(cr$identificador)), uniqueN(cr$entidad), uniqueN(cr$fecha_reporte)))
-stopifnot(inherits(cr$fecha_reporte, "Date"), is.numeric(cr$credito_vigente))
+stopifnot(inherits(cr$fecha_reporte, "Date"), is.numeric(cr$credito_vigente),
+          !anyNA(cr))     # the extract is complete in every column used (no missing product, firm, bank, currency, date or balance)
 cr_dates <- sort(unique(cr$fecha_reporte))
 stopifnot(all(as.integer(format(cr_dates + 1, "%d")) == 1L), all(diff(cr_dates) %in% 28:31))   # consecutive month-ends
 cat(sprintf("Credit calendar: %d consecutive month-ends, %s to %s.\n", length(cr_dates),
@@ -147,33 +148,30 @@ cat(sprintf("Hub banks reached by more than one RCC code: %s\n",
 # ==============================================================================
 hdr("2. Product classification")
 # Normalize whitespace and case only; product meanings unchanged.
-cr[, producto := { p <- tolower(trimws(gsub("\\s+", " ", as.character(producto)))); p[p == ""] <- NA_character_; p }]
+cr[, producto := tolower(trimws(gsub("\\s+", " ", as.character(producto))))]
+stopifnot(all(cr$producto != ""))
 unknown <- setdiff(CREDIT_LINE_PRODUCTS, unique(cr$producto))
 if (length(unknown)) stop("credit-line products absent from the data: ", paste(unknown, collapse = ", "))
-cr[, credit_line := fifelse(is.na(producto), NA, producto %in% CREDIT_LINE_PRODUCTS)]
+cr[, credit_line := producto %in% CREDIT_LINE_PRODUCTS]
 
-pc <- cr[, .(n_rows = .N, n_firms = uniqueN(identificador), sum_credito_vigente = sum(credito_vigente, na.rm = TRUE),
-             n_positive_rows = sum(credito_vigente > 0, na.rm = TRUE),
-             share_positive_rows = mean(credito_vigente > 0, na.rm = TRUE)), by = .(producto, credit_line)][order(-credit_line, -n_rows)]
+pc <- cr[, .(n_rows = .N, n_firms = uniqueN(identificador), sum_credito_vigente = sum(credito_vigente),
+             n_positive_rows = sum(credito_vigente > 0),
+             share_positive_rows = mean(credito_vigente > 0)), by = .(producto, credit_line)][order(-credit_line, -n_rows)]
 write_val(pc, "product_classification")
 cat("Product classification (credit_line = TRUE for the six listed products):\n")
 print(pc[, .(producto, credit_line, n_rows, n_firms, n_positive_rows, share_positive_rows = round(share_positive_rows, 3))], nrows = 50)
 cat(sprintf("NOTE: credito_vigente is identically zero for %s; credit-line growth therefore rests on %s.\n",
             paste(pc[credit_line == TRUE & n_positive_rows == 0, producto], collapse = ", "),
             paste(pc[credit_line == TRUE & n_positive_rows > 0, producto], collapse = " and ")))
-cat(sprintf("Rows: credit_line TRUE %s | FALSE %s | missing producto %s (%s excluded from both regression samples).\n",
-            fmt(sum(cr$credit_line, na.rm = TRUE)), fmt(sum(!cr$credit_line, na.rm = TRUE)),
-            fmt(sum(is.na(cr$credit_line))), fmt(sum(is.na(cr$credit_line)))))
-
-cat(sprintf("credito_vigente: missing %s | negative %s | zero %s (%.1f%%) | positive %s\n",
-            fmt(sum(is.na(cr$credito_vigente))), fmt(sum(cr$credito_vigente < 0, na.rm = TRUE)),
-            fmt(sum(cr$credito_vigente == 0, na.rm = TRUE)), 100 * mean(cr$credito_vigente == 0, na.rm = TRUE),
-            fmt(sum(cr$credito_vigente > 0, na.rm = TRUE))))
+cat(sprintf("Rows: credit_line TRUE %s | FALSE %s.\n", fmt(sum(cr$credit_line)), fmt(sum(!cr$credit_line))))
+cat(sprintf("credito_vigente: negative %s | zero %s (%.1f%%) | positive %s\n",
+            fmt(sum(cr$credito_vigente < 0)), fmt(sum(cr$credito_vigente == 0)),
+            100 * mean(cr$credito_vigente == 0), fmt(sum(cr$credito_vigente > 0))))
 
 # Entity statistics (computed before the merge, on the raw credit rows)
 ent_stats <- cr[, .(n_firms = uniqueN(identificador), n_obs = .N,
                     first_date = min(fecha_reporte), last_date = max(fecha_reporte),
-                    sum_credito_vigente = sum(credito_vigente, na.rm = TRUE)), by = entidad]
+                    sum_credito_vigente = sum(credito_vigente)), by = entidad]
 
 # ==============================================================================
 # 3. Currency, aggregation and merge with shocks
@@ -185,7 +183,7 @@ hdr("3. Currency, aggregation and merge with shocks")
 # log change and almost none are exactly unchanged; soles loans show the opposite (a mass
 # at exactly zero, no common non-zero value). Sol-denominated and ME relationships are
 # followed at the product level over consecutive months with positive balances.
-rel <- cr[credito_vigente > 0 & !is.na(producto), .(bal = sum(credito_vigente)),
+rel <- cr[credito_vigente > 0, .(bal = sum(credito_vigente)),
           by = .(identificador, entidad, producto, moneda_codigo, fecha_reporte)]
 rel[, idx := match(fecha_reporte, cr_dates)]
 setorder(rel, identificador, entidad, producto, moneda_codigo, idx)
@@ -210,8 +208,7 @@ cat(sprintf("\nValuation-basis verdict: ME balances %s.\n",
             else "are NOT shown to be in soles"))
 
 # Currency-specific intermediate dataset (kept regardless of the verdict)
-cur_agg <- cr[!is.na(credit_line), .(balance = if (all(is.na(credito_vigente))) NA_real_ else sum(credito_vigente, na.rm = TRUE),
-                                      n_rows = .N),
+cur_agg <- cr[, .(balance = sum(credito_vigente), n_rows = .N),
               by = .(entidad, identificador, credit_line, moneda_codigo, fecha_reporte)]
 setorder(cur_agg, entidad, identificador, credit_line, moneda_codigo, fecha_reporte)
 fwrite(cur_agg, file.path(PROC, "credit_balances_by_currency.csv.gz"))
@@ -222,19 +219,14 @@ if (!ME_IN_SOLES) {
 }
 
 # ---- aggregate: entidad x firm x credit_line x month (products and currencies summed) ----
-excl_na <- cr[is.na(credit_line)]
-cat(sprintf("Missing producto: %s rows (%s firm-bank-months) excluded from both regression samples.\n",
-            fmt(nrow(excl_na)), fmt(uniqueN(excl_na[, .(entidad, identificador, fecha_reporte)]))))
-agg <- cr[!is.na(credit_line), .(
-  balance = if (all(is.na(credito_vigente))) NA_real_ else sum(credito_vigente, na.rm = TRUE),   # all-missing stays missing
-  n_products = uniqueN(producto), n_raw_rows = .N,
-  bal_me = sum(credito_vigente[moneda_codigo == "2"], na.rm = TRUE)),
+agg <- cr[, .(
+  balance = sum(credito_vigente), n_products = uniqueN(producto), n_raw_rows = .N,
+  bal_me = sum(credito_vigente[moneda_codigo == "2"])),
   by = .(entidad, identificador, credit_line, fecha_reporte)]
-agg[, me_balance_share := fifelse(!is.na(balance) & balance > 0, bal_me / balance, NA_real_)]
+agg[, me_balance_share := fifelse(balance > 0, bal_me / balance, NA_real_)]   # undefined (NA) when the balance is zero
 cat(sprintf("Aggregated to %s entidad x firm x credit_line x month rows (from %s product-currency rows).\n",
             fmt(nrow(agg)), fmt(sum(agg$n_raw_rows))))
-cat(sprintf("  all-missing balance groups: %d (left missing, never set to zero); negative: %d; zero: %s\n",
-            sum(is.na(agg$balance)), sum(agg$balance < 0, na.rm = TRUE), fmt(sum(agg$balance == 0, na.rm = TRUE))))
+cat(sprintf("  negative balances: %d; zero balances: %s\n", sum(agg$balance < 0), fmt(sum(agg$balance == 0))))
 
 # ---- merge shocks: panel row -> entidad -> bank_standardized -> shock --------------
 # Both steps are many-to-one: the crosswalk is unique by entidad and the shock table is unique by
