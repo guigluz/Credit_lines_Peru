@@ -62,4 +62,10 @@ new_sample[identificador == "EMP_004D06CEF2C3A57B15DCD5F396066B5D" & producto=="
   labs(y="$ (millions)", x=NULL, fill="Used_Revolver") +
   theme_bw()
 
+# Results from the product-based classification
+CREDIT_LINE_PRODUCTS <- c("tarjeta_credito", "cuenta_corriente", "cartas_credito",
+                          "avales_fianzas", "multilinea", "otras_lineas")
+new_sample[, credit_line := producto %in% CREDIT_LINE_PRODUCTS]
+new_sample[fecha_reporte==ymd("2015-12-31"), .(balance = sum(credito_vigente), unused = sum(linea_no_utilizada)), by = .(credit_line)] 
+
 

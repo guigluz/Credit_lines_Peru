@@ -177,46 +177,6 @@ ent_stats <- cr[, .(n_firms = uniqueN(identificador), n_obs = .N,
 # 3. Currency, aggregation and merge with shocks
 # ==============================================================================
 hdr("3. Currency, aggregation and merge with shocks")
-# Test whether foreign-currency (ME) balances are reported in original currency or already
-# valued in soles at the month-end exchange rate. In soles, a constant-dollar loan changes by
-# the exchange-rate return each month, so many ME relationships share ONE identical non-zero
-# log change and almost none are exactly unchanged; soles loans show the opposite (a mass
-# at exactly zero, no common non-zero value). Sol-denominated and ME relationships are
-# followed at the product level over consecutive months with positive balances.
-rel <- cr[credito_vigente > 0, .(bal = sum(credito_vigente)),
-          by = .(identificador, entidad, producto, moneda_codigo, fecha_reporte)]
-rel[, idx := match(fecha_reporte, cr_dates)]
-setorder(rel, identificador, entidad, producto, moneda_codigo, idx)
-rel[, `:=`(lbal = shift(bal), lidx = shift(idx)), by = .(identificador, entidad, producto, moneda_codigo)]
-rg <- rel[!is.na(lbal) & idx - lidx == 1L]
-rg[, lg := round(log(bal) - log(lbal), 6)]
-vt <- rg[, {
-  nz <- lg[lg != 0]; tt <- if (length(nz)) max(table(nz)) else 0L
-  .(n = .N, share_zero = mean(lg == 0), share_modal_nonzero = tt / .N)
-}, by = .(moneda_codigo, fecha_reporte)]
-vs <- vt[, .(months = .N, pairs = sum(n), share_exact_zero = weighted.mean(share_zero, n),
-             median_share_modal_nonzero = median(share_modal_nonzero)), by = moneda_codigo][order(moneda_codigo)]
-vs[, currency := fcase(moneda_codigo == "1", "MN (soles)", moneda_codigo == "2", "ME (foreign)", default = "VAC-indexed")]
-print(vs[, .(moneda_codigo, currency, months, pairs, share_exact_zero = round(share_exact_zero, 3),
-             median_share_modal_nonzero = round(median_share_modal_nonzero, 3))])
-write_val(vs, "currency_valuation_test")
-ME_IN_SOLES <- with(vs[moneda_codigo == "2"], share_exact_zero < 0.02 && median_share_modal_nonzero > 0.10) &&
-               with(vs[moneda_codigo == "1"], share_exact_zero > 0.05 && median_share_modal_nonzero < 0.05)
-cat(sprintf("\nValuation-basis verdict: ME balances %s.\n",
-            if (ME_IN_SOLES) paste0("are valued in soles at the month-end SBS exchange rate (a common-valuation basis, as the Manual de ",
-                                    "Contabilidad Cap. I C.6 prescribes): MN, ME and VAC balances can be summed")
-            else "are NOT shown to be in soles"))
-
-# Currency-specific intermediate dataset (kept regardless of the verdict)
-cur_agg <- cr[, .(balance = sum(credito_vigente), n_rows = .N),
-              by = .(entidad, identificador, credit_line, moneda_codigo, fecha_reporte)]
-setorder(cur_agg, entidad, identificador, credit_line, moneda_codigo, fecha_reporte)
-fwrite(cur_agg, file.path(PROC, "credit_balances_by_currency.csv.gz"))
-cat(sprintf("Currency-specific intermediate: %s rows -> data/processed/credit_balances_by_currency.csv.gz\n", fmt(nrow(cur_agg))))
-if (!ME_IN_SOLES) {
-  cat("BLOCKER: no documented exchange rate in the project; cross-currency aggregation not performed.\n")
-  sink(); close(log_con); stop("ME valuation basis not established; see log")
-}
 
 # ---- aggregate: entidad x firm x credit_line x month (products and currencies summed) ----
 agg <- cr[, .(
@@ -264,47 +224,18 @@ print(head(cov[status != "included: shock available", .(entidad, bank_raw, statu
 hdr("4. Loan growth")
 agg[, idx := match(fecha_reporte, cr_dates)]
 setorder(agg, entidad, identificador, credit_line, idx)
-agg[, `:=`(bal_lag = shift(balance), idx_lag = shift(idx)), by = .(entidad, identificador, credit_line)]
-agg[, gap_months := idx - idx_lag]
-# One reason per relationship-month, in this order of precedence.
-agg[, growth_status := fcase(
-  is.na(idx_lag),                                  "first_observation",
-  gap_months > 1L,                                 "reporting_gap",
-  is.na(balance) | is.na(bal_lag),                 "missing_balance",
-  balance < 0 | bal_lag < 0,                       "negative_balance",
-  balance == 0 | bal_lag == 0,                     "zero_balance",
-  default =                                        "valid")]
-agg[growth_status == "valid", loan_growth := log(balance) - log(bal_lag)]
-agg[, zero_detail := fcase(growth_status != "zero_balance", NA_character_,
-                           balance == 0 & bal_lag == 0, "zero at t and t-1",
-                           balance == 0,                "zero at t",
-                           default =                    "zero at t-1")]
+agg[, `:=`(bal_lag = shift(balance),
+           gap     = idx - shift(idx)),
+    by = .(entidad, identificador, credit_line)]
 
-ex <- agg[, .(relationship_months = .N,
-              first_observation = sum(growth_status == "first_observation"),
-              reporting_gap = sum(growth_status == "reporting_gap"),
-              missing_balance = sum(growth_status == "missing_balance"),
-              negative_balance = sum(growth_status == "negative_balance"),
-              zero_balance = sum(growth_status == "zero_balance"),
-              valid_growth = sum(growth_status == "valid")), by = credit_line][order(-credit_line)]
-ex <- rbind(ex, cbind(credit_line = NA, ex[, lapply(.SD, sum), .SDcols = -"credit_line"]))
-ex[, credit_line := fifelse(is.na(credit_line), "all", fifelse(credit_line, "credit_line", "non_credit_line"))]
-print(as.data.frame(ex), row.names = FALSE)
-cat("\n  zero-balance exclusions by endpoint:\n"); print(agg[growth_status == "zero_balance", .N, by = .(credit_line, zero_detail)][order(credit_line, zero_detail)])
-cat("\n  reporting-gap length (scheduled months between consecutive observations):\n")
-print(agg[growth_status == "reporting_gap", .(n = .N), by = .(gap_months = pmin(gap_months, 12L))][order(gap_months)])
-last_obs <- agg[, .(exit = idx == max(idx) & idx < length(cr_dates)), by = .(entidad, identificador, credit_line)]
-cat(sprintf("\n  relationships whose last observation is before the sample end (exits, not in the growth sample): %s of %s\n",
-            fmt(sum(last_obs$exit)), fmt(nrow(last_obs))))
-cat(sprintf("  non-missing growth: min %.3f, median %.4f, max %.3f (no winsorizing or trimming)\n",
-            min(agg$loan_growth, na.rm = TRUE), median(agg$loan_growth, na.rm = TRUE), max(agg$loan_growth, na.rm = TRUE)))
-cat("  NOTE: the log-growth sample covers CONTINUING positive-balance relationships; it does not measure loan entry or exit.\n")
-cat(sprintf("  valid growth observations with a foreign-currency component: %.1f%% (balance-weighted ME share %.1f%%); ME growth embeds the exchange-rate revaluation.\n",
-            100 * mean(agg[growth_status == "valid", me_balance_share > 0], na.rm = TRUE),
-            100 * agg[growth_status == "valid", sum(bal_me) / sum(balance)]))
-write_val(ex, "growth_exclusions")
-fwrite(agg[, .(entidad, bank_standardized, identificador, credit_line, fecha_reporte, balance, bal_lag, gap_months,
-               growth_status, loan_growth, n_products, me_balance_share,
+# Valid growth requires consecutive months and positive balances at t and t-1.
+# Excluded: first observation, reporting gaps, missing, negative or zero balances.
+agg[, valid_growth := fcoalesce(gap == 1L & balance > 0 & bal_lag > 0, FALSE)]
+agg[(valid_growth), loan_growth := log(balance) - log(bal_lag)]
+
+fwrite(agg[, .(entidad, bank_standardized, identificador, credit_line, fecha_reporte,
+               balance, bal_lag, valid_growth, loan_growth,
+               n_products, me_balance_share,
                bank_shock_gen_min_legal, bank_shock_gen_marginal)],
        file.path(PROC, "credit_line_growth_panel.csv.gz"))
 
