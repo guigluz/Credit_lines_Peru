@@ -38,6 +38,7 @@ suppressPackageStartupMessages({
   library(data.table)
   library(arrow)
   library(fixest)
+  library(fwildclusterboot)
 })
 source("code/00_sbs_utils.R")   # canon_bank(), standardize_banks(), read_bank_map(); loads dplyr/stringr, hardens the locale
 
@@ -243,68 +244,30 @@ fwrite(agg[, .(entidad, bank_standardized, identificador, credit_line, fecha_rep
 # 5. Regressions
 # ==============================================================================
 hdr("5. Regressions")
-# Wild cluster bootstrap-t, null imposed (WCR; Cameron, Gelbach & Miller 2008, with Webb 2014
-# six-point weights when there are fewer than 12 clusters, Rademacher otherwise). Implemented
-# directly because fwildclusterboot/boottest are not installed. With one regressor and a single
-# absorbed firm-by-date effect, Frisch-Waugh makes the bootstrap exact: demean y and x within
-# firm-date cells, impose beta = 0 (restricted residuals = demeaned y), rebuild y* = w_g * e,
-# re-demean, and recompute beta* and its cluster-robust t.
-wcr_boot <- function(y, x, cell, cl, B, seed) {
-  set.seed(seed)
-  K <- max(cell); nk <- tabulate(cell, K); G <- max(cl)
-  dm <- function(v) v - (as.numeric(rowsum(v, cell, reorder = TRUE)) / nk)[cell]
-  xd <- dm(x); yd <- dm(y); sxx <- sum(xd^2)
-  tstat <- function(yy_d) {
-    b <- sum(xd * yy_d) / sxx
-    sc <- as.numeric(rowsum(xd * (yy_d - b * xd), cl, reorder = TRUE))
-    c(b, b / (sqrt(sum(sc^2)) / sxx))
-  }
-  obs <- tstat(yd)
-  webb <- G < 12L
-  wv <- c(-sqrt(3/2), -1, -sqrt(1/2), sqrt(1/2), 1, sqrt(3/2))
-  ts <- numeric(B)
-  for (b in seq_len(B)) {
-    w <- if (webb) sample(wv, G, replace = TRUE) else sample(c(-1, 1), G, replace = TRUE)
-    ts[b] <- tstat(dm(w[cl] * yd))[2]
-  }
-  list(t_cr0 = obs[2], p = mean(abs(ts) >= abs(obs[2]) - 1e-12), weights = if (webb) "Webb six-point" else "Rademacher", G = G)
-}
-
+# Using Wild cluster bootstrap for small number of clusters (Cameron, Gelbach and Miller, 2008; Roodman et al., 2019)
 fit_one <- function(measure, cl_flag) {
   v <- paste0("bank_shock_", measure)
-  d <- agg[credit_line == cl_flag & !is.na(loan_growth) & !is.na(get(v)),
+  fit_dat <- agg[credit_line == cl_flag & !is.na(loan_growth) & !is.na(get(v)),
            .(entidad, identificador, fecha_reporte, loan_growth, bank_shock = get(v))]
-  n_start <- nrow(d)
-  d[, n_banks_cell := uniqueN(entidad), by = .(identificador, fecha_reporte)]
-  d <- d[n_banks_cell >= 2L]
-  m <- feols(loan_growth ~ bank_shock | identificador^fecha_reporte, data = d, cluster = ~entidad, notes = FALSE)
-  n_used <- nobs(m)
-  # estimation sample as fixest used it
-  keep <- if (!is.null(m$obs_selection$obsRemoved)) setdiff(seq_len(nrow(d)), abs(m$obs_selection$obsRemoved)) else seq_len(nrow(d))
-  e <- d[keep]
-  stopifnot(nrow(e) == n_used)
-  e[, cell := .GRP, by = .(identificador, fecha_reporte)]
-  e[, clid := match(entidad, sort(unique(entidad)))]
-  wb <- wcr_boot(e$loan_growth, e$bank_shock, e$cell, e$clid, N_BOOT, SEED)
-  se_fx <- se(m)[["bank_shock"]]
-  # sanity: the t-statistic used inside the bootstrap equals fixest's unadjusted CR0 t-statistic
-  se_cr0 <- se(m, ssc = ssc(adj = FALSE, cluster.adj = FALSE))[["bank_shock"]]
-  stopifnot(abs(abs(coef(m)[["bank_shock"]] / wb$t_cr0) / se_cr0 - 1) < 1e-6)
-  bank_tab <- merge(e[, .(n_obs = .N, n_firms = uniqueN(identificador)), by = entidad],
-                    unique(agg[, .(entidad, bank_standardized)]), by = "entidad")[order(-n_obs)]
-  bank_tab[, `:=`(measure = measure, credit_line = cl_flag)]
-  list(model = m, boot = wb, sample = e, banks = bank_tab,
-       stats = data.table(
-         measure = measure, credit_line = cl_flag,
-         coef = coef(m)[["bank_shock"]], se_cluster = se_fx, se_cluster_cr0 = se_cr0,
-         p_cluster_t_G1 = pvalue(m)[["bank_shock"]], p_wild_cluster_boot = wb$p,
-         n_obs = n_used, n_before_multibank_filter = n_start,
-         n_dropped_by_multibank_filter = n_start - nrow(d), n_dropped_by_fixest = nrow(d) - n_used,
-         n_banks = uniqueN(e$entidad), n_clusters = wb$G, n_firms = uniqueN(e$identificador),
-         n_firm_date_cells = uniqueN(e$cell), n_cells_zero_shock_variation = {
-           z <- e[, .(r = max(bank_shock) - min(bank_shock)), by = cell]; sum(z$r == 0) },
-         r2 = r2(m, "r2"), r2_within = r2(m, "wr2"), mean_y = mean(e$loan_growth), sd_shock = sd(e$bank_shock),
-         boot_weights = wb$weights))
+  # keep firm-date cells with at least two lending banks
+  fit_dat <- fit_dat[, if (uniqueN(entidad) >= 2L) .SD, by = .(identificador, fecha_reporte)]
+  fit_dat[, cell := .GRP, by = .(identificador, fecha_reporte)]
+  # boottest() re-evaluates the model's `data` argument in the global environment
+  assign("fit_dat", fit_dat, envir = globalenv())
+
+  m <- feols(loan_growth ~ bank_shock | cell, data = fit_dat, cluster = ~entidad, notes = FALSE)
+  
+  G <- fitstat(m, "g")[[1]]
+  set.seed(SEED); dqrng::dqset.seed(SEED)
+  bt <- boottest(m, param = "bank_shock", clustid = "entidad", fe = "cell", B = N_BOOT, type = if (G < 12L) "webb" else "rademacher")
+
+  list(model = m,
+       stats = data.table(measure = measure, credit_line = cl_flag,
+                          coef = coef(m)[["bank_shock"]], se_cluster = se(m)[["bank_shock"]],
+                          p_cluster_t_G1 = pvalue(m)[["bank_shock"]], p_wild_cluster_boot = bt$p_val,
+                          n_obs = nobs(m), n_banks = G, n_clusters = G, n_firms = uniqueN(fit_dat$identificador),
+                          n_firm_date_cells = uniqueN(fit_dat$cell), r2_within = r2(m, "wr2"),
+                          mean_y = mean(fitted(m) + resid(m))))
 }
 
 fits <- list()
@@ -315,23 +278,12 @@ for (j in MEASURES) for (cl_flag in c(TRUE, FALSE)) {
   print(summary(fits[[key]]$model))
 }
 reg <- rbindlist(lapply(fits, `[[`, "stats"))
-write_val(reg, "regression_summary")
 cat("\nRegression summary:\n")
 print(reg[, .(measure, credit_line, coef = signif(coef, 4), se = signif(se_cluster, 4), p_t = round(p_cluster_t_G1, 3),
-              p_wild = round(p_wild_cluster_boot, 3), n_obs, n_banks, n_firms, cells = n_firm_date_cells,
-              cells_no_var = n_cells_zero_shock_variation)])
-cat("\nSample construction per regression:\n")
-print(reg[, .(measure, credit_line, n_before_multibank_filter, n_dropped_by_multibank_filter, n_dropped_by_fixest, n_obs)])
-reg_banks <- rbindlist(lapply(fits, `[[`, "banks"))
-write_val(reg_banks, "regression_banks")
-cat("\nBanks (= clusters) in each estimation sample, with observations:\n")
-print(dcast(reg_banks, bank_standardized ~ measure + credit_line, value.var = "n_obs", fill = 0L))
-cat(sprintf("\nfixest small-sample factor on the clustered SE (relative to CR0): %s\n",
-            paste(sprintf("%.2f", reg$se_cluster / reg$se_cluster_cr0), collapse = ", ")))
+              p_wild = round(p_wild_cluster_boot, 3), n_obs, n_banks, n_firms)])
 few <- reg[n_clusters < FEW_CLUSTERS]
-if (nrow(few)) cat(sprintf("\nLIMITED-CLUSTER FLAG: %d of %d regressions have fewer than %d bank clusters (range %d-%d); conventional clustered inference is unreliable, so wild-cluster-bootstrap p-values (%s weights, B = %d) are reported next to the t(G-1) p-values.\n",
-                           nrow(few), nrow(reg), FEW_CLUSTERS, min(reg$n_clusters), max(reg$n_clusters),
-                           paste(unique(reg$boot_weights), collapse = "/"), N_BOOT))
+if (nrow(few)) cat(sprintf("\nLIMITED-CLUSTER FLAG: %d of %d regressions have fewer than %d bank clusters; wild-cluster-bootstrap p-values are reported next to the t(G-1) p-values.\n",
+                           nrow(few), nrow(reg), FEW_CLUSTERS))
 
 # ==============================================================================
 # 6. LaTeX table
@@ -350,7 +302,7 @@ extra <- list(
   "^Mean of loan growth"             = formatC(rg$mean_y, format = "f", digits = 3)
 )
 dict <- c(bank_shock = "Bank shock", loan_growth = "Loan growth",
-          "identificador^fecha_reporte" = "Firm $\\times$ date")
+          cell = "Firm $\\times$ date")
 notes <- paste0(
   "\\textit{Notes:} The dependent variable is the log change in a firm's credit balance (\\textit{cr\\'edito vigente}) at a bank between ",
   "consecutive month-ends, $\\log B_{bit}-\\log B_{bi,t-1}$, so it measures growth among continuing relationships with strictly positive balances at ",
@@ -364,7 +316,7 @@ notes <- paste0(
   "The marginal-rate shock is undefined when the domestic regime is a single rate, which shortens columns (3)--(4). ",
   "Each regression keeps firm-by-date cells with at least two banks and absorbs firm-by-date fixed effects. ",
   "Standard errors, in parentheses, are clustered by bank; with few clusters the $p$-value from a wild cluster bootstrap ",
-  "(null imposed, ", paste(unique(reg$boot_weights), collapse = " / "), " weights, ", format(N_BOOT, big.mark = ","), " draws) is reported. ",
+  "(null imposed, ", format(N_BOOT, big.mark = ","), " draws) is reported. ",
   "* $p<0.10$, ** $p<0.05$, *** $p<0.01$ from the conventional clustered $t(G-1)$ test.")
 tex_file <- file.path(TABS, "tab_encaje_loan_growth.tex")
 etable(mods, tex = TRUE, file = tex_file, replace = TRUE, dict = dict, tpt = TRUE, notes = notes,
