@@ -150,11 +150,12 @@ lab <- grid[big4 == TRUE & !is.na(me_pct)][order(date), .SD[.N], by = bank_stand
 lab[, label := as.character(series)]
 
 p_shares <- ggplot(grid, aes(date, me_pct, group = grp, colour = series, linewidth = series)) +
-  geom_vline(xintercept = base_date, linetype = "22", colour = "grey40", linewidth = 0.4) +
+  #geom_vline(xintercept = base_date, linetype = "22", colour = "grey40", linewidth = 0.4) +
+  geom_line(na.rm = TRUE) +
+  geom_vline(xintercept = base_date, linetype = "22", colour = "black", linewidth = 1) +
   annotate("label", x = base_date, y = 100, label = sprintf("Baseline shares (%s)", format(base_date, "%b %Y")),
            hjust = -0.04, vjust = 1, size = 2.4, family = "serif", colour = "grey20",
            fill = "white", label.size = 0, label.padding = unit(0.15, "lines")) +
-  geom_line(na.rm = TRUE) +
   geom_text_repel(data = lab, aes(x = date, y = me_pct, label = label), inherit.aes = FALSE,
                   direction = "y", hjust = 0, xlim = c(max(dates) + 90, NA), size = 2.6, family = "serif",
                   colour = "grey20", segment.size = 0.2, segment.colour = "grey60",
