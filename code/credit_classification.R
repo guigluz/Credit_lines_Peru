@@ -6,6 +6,10 @@ library(data.table)
 library(arrow)
 library(fixest)
 
+LOGF  <- "output/logs/credit_classification.log"
+
+log_con <- file(LOGF, open = "wt"); sink(log_con, split = TRUE)
+
 new_sample = read_parquet('data/raw/muestra_anonima_base2015_v2.parquet')
 
 setDT(new_sample)
@@ -68,4 +72,4 @@ CREDIT_LINE_PRODUCTS <- c("tarjeta_credito", "cuenta_corriente", "cartas_credito
 new_sample[, credit_line := producto %in% CREDIT_LINE_PRODUCTS]
 new_sample[fecha_reporte==ymd("2015-12-31"), .(balance = sum(credito_vigente), unused = sum(linea_no_utilizada)), by = .(credit_line)] 
 
-
+sink(); close(log_con)

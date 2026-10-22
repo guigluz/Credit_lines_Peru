@@ -1,0 +1,95 @@
+
+> new_sample = read_parquet('data/raw/muestra_anonima_base2015_v2.parquet')
+
+> setDT(new_sample)
+
+> # Reporting break in 2018-06-30
+> new_sample[, before_2018:=ifelse(fecha_reporte<ymd("2018-06-30"), 1, 0)]
+
+> # Used vs unused credit
+> new_sample[fecha_reporte == ymd("2015-12-31"), .(balance = sum(credito_vigente), unused = sum(linea_no_utilizada))] /10^6
+    balance   unused
+      <num>    <num>
+1: 41375.79 9770.484
+
+> # Big Four - Time series of unused credit 
+> new_sample[entidad<10, .(unused = sum(linea_no_utilizada)), by = .(fecha_reporte, entidad)] %>% 
++ ggpl .... [TRUNCATED] 
+
+>   # "Otras lineas" was introduced in 2018-06-30
+> new_sample[entidad==1, .(unused = sum(linea_no_utilizada)), by = .(fecha_reporte, producto)] %>% 
+ .... [TRUNCATED] 
+
+> # What are the relevant products?
+> new_sample[fecha_reporte==ymd("2015-12-31"), .(balance = sum(credito_vigente), unused = sum(linea_no_utilizada)) .... [TRUNCATED] 
+                            producto balance unused
+                              <fctr>   <num>  <num>
+ 1:                        prestamos   51.21  62.44
+ 2:         arrendamiento_financiero   14.97   0.00
+ 3:                comercio_exterior   10.91   0.00
+ 4:                   otros_creditos   10.21   0.00
+ 5:                        factoring    3.08   0.00
+ 6:                       lease_back    2.67   0.00
+ 7:           financiacion_proyectos    2.33   0.00
+ 8:     credito_entidad_consolidable    1.79   0.00
+ 9:                       descuentos    1.40   0.47
+10:                 cuenta_corriente    0.86  11.44
+11:                  tarjeta_credito    0.26   1.76
+12:             credito_inmobiliario    0.19   0.00
+13:       sobregiro_cuenta_corriente    0.09   0.00
+14:        inmueble_generador_rentas    0.02   0.00
+15:                   avales_fianzas    0.00  13.52
+16:             credito_por_liquidar    0.00   0.00
+17:                   cartas_credito    0.00   3.37
+18:                       multilinea    0.00   6.99
+19: credito_otorgado_no_desembolsado    0.00   0.00
+20:      otros_creditos_hipotecarios    0.00   0.00
+                            producto balance unused
+
+> # Can we separate the products into revolving and non-revolving?
+> new_sample[fecha_reporte==ymd("2015-12-31"), .(balance = sum(credito_vigente), un .... [TRUNCATED] 
+[1mwrote[0m [32m389.00B[0m in [36m 0s[0m, [32m24.35MB/s[0m                                                                                                                                                                                                                  [1mwrote[0m [32m1.00TB[0m in [36m 0s[0m, [32m7.46PB/s[0m                                                                                                                                                                                                                  
+> # Which products ever have unused lines?
+> new_sample[, .(unused = sum(linea_no_utilizada)), by = .(producto)] %>% 
++   filter(unused > 0) 
+           producto       unused
+             <fctr>        <num>
+1:  tarjeta_credito  27716149469
+2:        prestamos 721983007102
+3:       descuentos  37153745059
+4: cuenta_corriente 224104220370
+5:   avales_fianzas 177915951985
+6:   cartas_credito 103523237381
+7:       multilinea 910019915927
+8:     otras_lineas  96098145914
+
+>   # Growth right arround the reporting break
+> new_sample[fecha_reporte %in% ymd(c("2018-05-31", "2018-06-30")) , .(unused = sum(linea_no_utilizada) .... [TRUNCATED] 
+# A tibble: 8 × 3
+  producto         before_2018_1 before_2018_0
+  <fct>                    <dbl>         <dbl>
+1 prestamos             5056849.      6484804.
+2 descuentos              39468.       831210.
+3 tarjeta_credito        280323.       272682.
+4 cartas_credito         578644.      1012480.
+5 avales_fianzas         305611.      1539283.
+6 multilinea             452040.      7556234.
+7 cuenta_corriente      1366009.      1217369.
+8 otras_lineas              883.      1188416.
+
+> # See the evolution of prestamos for a single firm-bank 
+> new_sample[identificador == "EMP_004D06CEF2C3A57B15DCD5F396066B5D" & producto=="prestamos ..." ... [TRUNCATED] 
+
+> # Results from the product-based classification
+> CREDIT_LINE_PRODUCTS <- c("tarjeta_credito", "cuenta_corriente", "cartas_credito",
++               .... [TRUNCATED] 
+
+> new_sample[, credit_line := producto %in% CREDIT_LINE_PRODUCTS]
+
+> new_sample[fecha_reporte==ymd("2015-12-31"), .(balance = sum(credito_vigente), unused = sum(linea_no_utilizada)), by = .(credit_line)] 
+   credit_line     balance     unused
+        <lgcl>       <num>      <num>
+1:        TRUE   466113608 3623610993
+2:       FALSE 40909680838 6146872756
+
+> sink(); close(log_con)
