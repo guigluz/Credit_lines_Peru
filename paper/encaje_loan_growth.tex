@@ -1,0 +1,877 @@
+% ==============================================================================
+% encaje_loan_growth.tex
+% Reference note: data and specification behind Table "tab:encaje_loan_growth"
+% (output/tables/tab_encaje_loan_growth.tex, produced by
+%  code/11_loan_reserve_shock_regression.R).
+%
+% Self-contained: paste into Overleaf and compile with pdfLaTeX.
+% The main table (Section 5) is a verbatim copy of the file produced by R.
+% If the regressions are re-run, replace that block with the new file
+% (or swap it for \input{../output/tables/tab_encaje_loan_growth.tex}).
+% ==============================================================================
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+\renewcommand{\arraystretch}{1.1}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\let\origunderscore\_
+\renewcommand{\_}{\origunderscore\hspace{0pt}}  % allow line breaks after underscores in file names
+\newcommand{\MN}{\mathrm{mn}}
+\newcommand{\ME}{\mathrm{me}}
+
+\title{Reserve-Requirement Shocks and Loan Growth:\\ Data and Main Specification\\[0.3em]\large Reference note for Table~\ref{tab:encaje_loan_growth}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ==============================================================================
+\section{What the table does}
+% ==============================================================================
+
+Table~\ref{tab:encaje_loan_growth} is the main result.
+It reports four regressions.
+Each one asks the same question.
+When the central bank raises reserve requirements, do the banks that are more exposed to the change cut lending more than less-exposed banks that lend to the same firm in the same month?
+
+The regressions differ in two ways.
+First, they use two loan types: credit lines (columns 1 and 3) and all other credit (columns 2 and 4).
+Second, they use two measures of the reserve-requirement change: the minimum legal rate (columns 1 and 2) and the marginal rate (columns 3 and 4).
+
+The outcome is the monthly log growth of a firm's balance at a bank.
+The variable of interest is a bank-level shock.
+It is the change in the reserve rate, weighted by the bank's fixed 2009 deposit mix across domestic and foreign currency.
+Every regression absorbs firm-by-date fixed effects.
+So the coefficient compares two banks lending to the same firm in the same month.
+
+The result is a null.
+The credit-line estimates are negative and the other-credit estimates are small and positive.
+No coefficient is statistically distinguishable from zero.
+Section~\ref{sec:results} explains why power is low.
+
+% ==============================================================================
+\section{Institutional background}
+% ==============================================================================
+
+The Peruvian central bank (BCRP) requires banks to hold reserves (\textit{encaje}) against their deposits and other obligations.
+The requirement is a percentage of reservable obligations.
+The BCRP sets it for all banks at once, through circulars.
+
+Three features matter here.
+
+\textit{Currency.}
+Rates are set separately for domestic-currency obligations (MN, soles) and foreign-currency obligations (ME).
+Deposits in Peru are heavily dollarized, so the two rates matter for most banks.
+
+\textit{Two rate parameters.}
+The minimum legal rate is the statutory rate on reservable obligations.
+The marginal rate applies to obligations above a base level.
+It exists only while the regime is ``base plus marginal''.
+The MN regime was base plus marginal until January 2014, single-rate from February 2014 to August 2021, and base plus marginal again from September 2021.
+The ME regime was base plus marginal throughout the sample.
+When the MN regime is a single rate, there is no MN marginal rate.
+
+\textit{No variation by deposit type.}
+The circulars apply one rate to all reservable deposits.
+Rates do not differ by deposit type (demand, savings, time) or by bank.
+So a bank's exposure to a rate change depends on how its obligations split across currencies.
+This is the source of cross-bank variation in the shock.
+
+% ==============================================================================
+\section{Data}
+\label{sec:data}
+% ==============================================================================
+
+\subsection{Sources}
+
+The analysis combines four datasets.
+Table~\ref{tab:sources} lists them.
+
+\begin{table}[!h]
+\centering
+\small
+\caption{Datasets used in the main regression}
+\label{tab:sources}
+\begin{tabularx}{\textwidth}{@{}p{2.6cm}p{3.5cm}X@{}}
+\toprule
+Dataset & File & Content \\
+\midrule
+Firm credit & \code{muestra\_anonima\_base2015.parquet} & Pseudonymised extract of the SBS credit register (RCC). One row per firm, lender, currency, segment, product, month. Sep 2010 to Dec 2023. 267,030 rows, 1,000 firms, 83 lenders. \\
+Classification extract & \code{muestra\_anonima\_base2015\_v2.parquet} & A different extract of the same register, with a revolving-status field. Used only for the product-classification evidence in Table~\ref{tab:products}, not in the regressions. \\
+Bank deposits & \code{Reporte(01-2001 - 09-2022).csv} & SBS statistical series. Deposits by institution and currency, in thousands of soles, monthly. Used only for the December 2009 deposit shares. \\
+Reserve rates & \code{bcrp\_encaje/} $\rightarrow$ \code{encaje\_rates\_monthly.csv} & Reserve-requirement rates rebuilt by hand from 186 BCRP circulars. Monthly panel, one column per rate. \\
+Lender names & \code{RCC\_empresas\_supervisadas\_2026.xls}, \code{bank\_map\_manual.csv} & RCC entity code to institution name, and a hand-curated map from names to a common bank key (\code{bank\_standardized}). \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Credit data}
+
+The credit data come from the SBS credit register (Reporte Crediticio Consolidado, RCC).
+The register records, each month, the balance that each supervised lender holds on each debtor.
+The extract is pseudonymised: firm identifiers are anonymous codes.
+
+\textit{Structure.}
+The raw file has one row per firm $\times$ lender $\times$ currency $\times$ credit segment $\times$ product $\times$ month.
+Dates are month-ends.
+There are 160 consecutive month-ends, from September 2010 to December 2023.
+(2010 has only September to December.)
+Lenders are identified by the RCC entity code (\code{entidad}).
+
+\textit{Variables used.}
+The regression uses six columns: the report date, the firm identifier, the lender code, the currency code, the product, and \code{credito\_vigente}.
+\code{credito\_vigente} is the outstanding balance of performing credit (SBS account 14x1).
+It is a drawn balance.
+The file also holds restructured, refinanced, past-due and judicial-collection balances, and undrawn commitments.
+None of these enters the main table.
+
+\textit{Firms.}
+The extract has 1,000 firms.
+About 97.5\% of rows have the firm type ``other / private''.
+The rest are foreign firms, state enterprises and ministries.
+Segments run from corporate to micro-enterprise.
+The sampling rule for the 1,000 firms is not documented in the project files.
+
+\textit{Zeros.}
+About 30\% of rows have a zero performing balance.
+These are rows that carry only undrawn lines or non-performing balances.
+
+\textit{Currency and units.}
+The balance column has no currency field.
+The data dictionary lists the currency basis as an open question.
+The table notes assume that foreign-currency balances are reported in soles at the month-end exchange rate.
+An earlier diagnostic supports this reading (\code{encaje\_shock\_currency\_valuation\_test.csv}).
+Among pairs of consecutive positive balances, 15.4\% of MN pairs show exactly no change.
+For ME the share is 0.5\%.
+This is what revaluation by a moving exchange rate would produce.
+The diagnostic is no longer produced by the current script.
+
+\subsection{Credit lines versus other credit}
+\label{sec:classification}
+
+The credit register has no flag for credit lines.
+Two pieces of information are available.
+Drawn balances sit in accounts 14xx (\code{credito\_vigente}).
+Undrawn limits sit in accounts 72xx (\code{linea\_no\_utilizada}).
+Both are tied to a product.
+The classification is therefore based on the product.
+
+Six products are treated as credit lines: credit cards, current-account advances, letters of credit, guarantees, multi-line facilities and other lines.
+Everything else is ``other credit''.
+This includes loans, leasing, factoring, discounting, trade finance and overdrafts.
+
+Table~\ref{tab:products} and the classification log (\code{credit\_classification.log}) support this choice.
+They use the December 2015 cross-section of a different extract from the regression sample (\code{muestra\_anonima\_base2015\_v2.parquet}).
+The v2 extract adds a revolving-status field.
+So the shares are evidence on the classification, not statistics of the regression sample.
+
+\begin{table}[!h]
+\centering
+\small
+\caption{Product classification: drawn balances and undrawn lines, December 2015}
+\label{tab:products}
+\begin{tabular}{@{}llcrr@{}}
+\toprule
+Product & Class & Revolving status & Drawn balance (\%) & Unused lines (\%) \\
+\midrule
+Credit cards & Line & not identifiable & 0.26 & 1.76 \\
+Current-account advances & Line & revolving & 0.00 & 0.00 \\
+ &  & not identifiable & 0.86 & 11.44 \\
+Guarantees & Line & revolving & 0.00 & 0.13 \\
+ &  & not identifiable & 0.00 & 13.39 \\
+Letters of credit & Line & not identifiable & 0.00 & 3.37 \\
+Multi-line facilities & Line & not identifiable & 0.00 & 6.99 \\
+\midrule
+\textit{Subtotal, credit-line products} & & & 1.12 & 37.08 \\
+\midrule
+Loans & Other & revolving & 0.80 & 0.04 \\
+ &  & non-revolving & 19.73 & 0.00 \\
+ &  & not identifiable & 30.68 & 62.40 \\
+Discounting & Other & revolving & 0.00 & 0.01 \\
+ &  & not identifiable & 1.40 & 0.47 \\
+Factoring & Other & not identifiable & 3.08 & 0.00 \\
+Financial leasing & Other & not identifiable & 14.97 & 0.00 \\
+Foreign trade finance & Other & not identifiable & 10.91 & 0.00 \\
+Lease-back & Other & not identifiable & 2.67 & 0.00 \\
+Other credits & Other & not identifiable & 10.21 & 0.00 \\
+Project finance & Other & not identifiable & 2.33 & 0.00 \\
+Credit to consolidable entities & Other & not identifiable & 1.79 & 0.00 \\
+Real-estate credit & Other & not identifiable & 0.19 & 0.00 \\
+Current-account overdrafts & Other & not identifiable & 0.09 & 0.00 \\
+Income-generating property & Other & not identifiable & 0.02 & 0.00 \\
+Credits to be settled & Other & not identifiable & 0.00 & 0.00 \\
+Credit granted, not disbursed & Other & not identifiable & 0.00 & 0.00 \\
+Other mortgage credit & Other & not identifiable & 0.00 & 0.00 \\
+\midrule
+\textit{Subtotal, other credit} & & & 98.87 & 62.92 \\
+\midrule
+Total & & & 99.99 & 100.00 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{0.95\textwidth}\footnotesize
+\textit{Notes:} Source: \code{output/tables/product\_table.csv}, produced by \code{code/credit\_classification.R} on the v2 extract. Entries are shares of the extract's total drawn balance (\code{credito\_vigente}) and total unused lines (\code{linea\_no\_utilizada}) at 31 December 2015. Revolving status is the extract's revolving field; ``not identifiable'' means the account code does not reveal it. The class column is the product-based classification used in the regressions. ``Other lines'' does not appear because that product was introduced in June 2018. Subtotals are sums of the rounded entries.
+\end{minipage}
+\end{table}
+
+Four findings come out of the table and the log.
+
+\textit{Credit-line products hold little drawn credit and a lot of undrawn credit.}
+Under the product-based classification, the credit-line products hold 1.1\% of drawn balances at the end of 2015.
+They hold 37.1\% of unused lines.
+In the file's units, drawn balances are 466 million for credit-line products and 40,910 million for other products.
+Unused lines are 3,624 million and 6,147 million.
+Total drawn credit is 41,376 million and total unused lines are 9,770 million.
+
+\textit{Only eight products ever carry undrawn lines.}
+Over the whole extract, the products with positive unused amounts are the six credit-line products plus loans and discounting.
+Discounting holds under 0.5\% of unused lines at the end of 2015, so it is left in other credit.
+
+\textit{Loans are the problem case.}
+Loans hold 51.2\% of drawn balances and 62.4\% of unused lines.
+The revolving field does not separate them.
+Of the 62.4\% of unused lines, almost all sit in loans whose revolving status is not identifiable.
+Loans flagged as revolving are only 0.8\% of drawn balances and 0.04\% of unused lines.
+Loans flagged as non-revolving are 19.7\% of drawn balances and carry no unused lines.
+The project therefore keeps loans in other credit.
+That group then contains some line-type commitments (Section~\ref{sec:limitations}).
+
+\textit{A reporting break in June 2018.}
+The extract has a break at 30 June 2018.
+Unused amounts jump between May and June 2018 for multi-line facilities (about 17-fold), guarantees (about 5-fold), discounting (about 21-fold) and letters of credit (about 1.75-fold).
+Other lines appear for the first time.
+Loans also rise, by about 28\%.
+Unused amounts on credit cards and current-account advances are roughly flat across the break (about $-3$\% and $-11$\%).
+The break matters for any measure built on undrawn lines.
+It does not touch the two products that carry drawn balances in the credit-line sample, although drawn balances were not checked around the break.
+
+One feature of the regression data shapes the credit-line sample.
+Letters of credit, guarantees, multi-lines and other lines have a zero performing balance in every record.
+They are contingent or undrawn exposures, not drawn credit.
+So the credit-line regressions rest on \textbf{credit cards and current-account advances only}.
+Together these two products are about 1\% of drawn balances in the 2015 cross-section.
+In the aggregated data, zero balances are dropped when growth is computed (Section~\ref{sec:growth}).
+
+\subsection{Reserve-requirement rates}
+
+The BCRP does not publish a rate series.
+The rates were rebuilt from the text of its encaje circulars.
+Each circular was read and each rate change coded by hand: effective date, currency, rate type, new value.
+The result is a monthly panel.
+Each monthly value is the rate in force on the last day of the month.
+A change effective on any day of a month therefore appears in that month's value.
+
+Rates are in percent of reservable obligations.
+Differences between months are in percentage points.
+A positive difference is a tightening.
+A month with no circular is a month of no change.
+It is coded as zero, not as missing.
+
+Two rate parameters enter the shocks, each for MN and for ME:
+\begin{equation*}
+r^{\MN}_{t,\text{min}},\; r^{\ME}_{t,\text{min}} \quad \text{(minimum legal rate)}, \qquad
+r^{\MN}_{t,\text{mar}},\; r^{\ME}_{t,\text{mar}} \quad \text{(marginal rate)}.
+\end{equation*}
+The marginal rate is missing, not zero, while the regime is a single rate.
+A change cannot be computed with a missing endpoint.
+So the MN marginal change is undefined in 92 of the 160 credit months.
+
+Table~\ref{tab:ratechanges} in the appendix lists every month with a non-zero change inside the regression window.
+Within the window, the MN minimum legal rate rises in 8 months and falls in 8.
+The ME minimum legal rate rises in one month and never falls.
+The MN marginal rate rises in 2 months and falls in 5.
+The ME marginal rate rises in 3 months and falls in 12.
+
+\subsection{Deposit shares}
+
+The exposure weights come from the SBS series on deposits by institution and currency.
+The series covers mainly banks and finance companies, monthly, from January 2001 to September 2022.
+Both deposit columns are in thousands of soles.
+ME deposits are therefore already valued in soles, and MN and ME can be added directly.
+The two columns sum to the published total up to rounding (maximum gap: 1 thousand soles).
+So there is no third deposit category.
+
+For each institution and month, the MN share is $s^{\MN} = \text{MN deposits}/(\text{MN}+\text{ME deposits})$.
+The ME share is $s^{\ME}=1-s^{\MN}$.
+A share is valid only if both deposit figures exist and the total is positive.
+Missing deposits (for non-deposit-taking institutions) are never treated as zero.
+
+The regression uses \textbf{December 2009} shares, held fixed.
+Section~\ref{sec:spec} explains why.
+At December 2009, 19 institutions have valid shares.
+The ME share ranges from 0 to 100\%.
+Among the large banks it is about 50--65\%.
+Table~\ref{tab:banks} in the appendix gives the shares for the banks that enter the regressions.
+
+\subsection{Linking lenders across datasets}
+
+The credit file identifies lenders by RCC entity code.
+The deposit and rate data use institution names.
+The link runs through a common key, \code{bank\_standardized}:
+\begin{equation*}
+\text{credit row} \;\rightarrow\; \code{entidad} \;\rightarrow\; \code{bank\_standardized} \;\rightarrow\; \text{bank shock}.
+\end{equation*}
+The first step uses the RCC entity list.
+The second uses the hand-curated bank map.
+Both steps are many-to-one, and a script check confirms that no credit row is duplicated or lost in the merge.
+
+Not every lender has a shock.
+Table~\ref{tab:coverage} sorts the 83 lender codes in the credit file by the reason they are included or excluded.
+Eleven lenders have a shock.
+They hold 80.8\% of the summed performing balance in the file.
+The largest excluded lender is Banco de la Naci\'on (about 8\% of the balance), which has no match in the project crosswalks.
+Most of the rest is portfolio-sale and trust vehicles.
+
+\begin{table}[!h]
+\centering
+\small
+\caption{Lender coverage in the credit file}
+\label{tab:coverage}
+\begin{tabularx}{\textwidth}{@{}Xrrr@{}}
+\toprule
+Status & Lender codes & Rows & Share of balance \\
+\midrule
+Included: valid bank shock & 11 & 243,581 & 80.8\% \\
+Excluded: not matched to any bank in the project crosswalks (includes Banco de la Naci\'on) & 10 & 2,786 & 11.3\% \\
+Excluded: portfolio-sale or trust vehicle (RCC status ``Venta de Cartera'') & 20 & 8,704 & 7.5\% \\
+Excluded: bank without valid December 2009 deposit shares & 9 & 2,645 & 0.3\% \\
+Excluded: entity code absent from the RCC entity list & 18 & 1,921 & 0.0\% \\
+Excluded: cooperative or municipal / rural savings bank (outside the Reporte) & 15 & 7,393 & 0.0\% \\
+\bottomrule
+\end{tabularx}
+\par\smallskip
+\begin{minipage}{0.95\textwidth}\footnotesize
+\textit{Notes:} Share of balance is the lender's share of the sum of \code{credito\_vigente} over all rows of the raw credit file. The 11 included lenders are the banks listed in Table~\ref{tab:banks}. Eight further institutions have valid December 2009 shares but no matching lender in the credit file.
+\end{minipage}
+\end{table}
+
+\subsection{The bank shock}
+
+The shock for bank $b$ in month $t$ and rate parameter $j$ is
+\begin{equation}
+Z^{j}_{bt} \;=\; s^{\MN}_{b,0}\,\Delta r^{\MN,j}_{t} \;+\; s^{\ME}_{b,0}\,\Delta r^{\ME,j}_{t},
+\label{eq:shock}
+\end{equation}
+where $j\in\{\text{min},\text{mar}\}$.
+Here $\Delta r^{c,j}_t = r^{c,j}_t - r^{c,j}_{t-1}$ is the month-end change in the rate on currency $c$, in percentage points.
+The shares $s^{c}_{b,0}$ are the bank's deposit shares at the baseline date, December 2009.
+The weights do not change over time.
+
+A shock of $+1$ means that the bank's deposit-weighted reserve rate rises by one percentage point.
+A positive shock is a tightening.
+If either rate change is undefined, the shock is undefined.
+The shock is never set to zero by default.
+
+Equation~\eqref{eq:shock} is an exposure proxy.
+It assumes that a rate change applies to the bank's deposits in proportion to the deposit currency mix.
+For the minimum legal rate this is close to the actual mechanism.
+For the marginal rate it is rougher.
+The marginal rate applies only to increases above a base level, and the shock ignores each bank's base and deposit growth.
+
+\subsection{Loan growth}
+\label{sec:growth}
+
+The unit of observation is a relationship: bank $b$, firm $i$, credit type $k\in\{\text{line},\text{other}\}$, month $t$.
+The balance $B_{bikt}$ sums \code{credito\_vigente} over all products and currencies within the relationship.
+The outcome is
+\begin{equation}
+y_{bikt} \;=\; \log B_{bikt} - \log B_{bik,t-1}.
+\label{eq:growth}
+\end{equation}
+
+Growth is computed only when three conditions hold.
+The two dates are consecutive month-ends.
+The balance at $t$ is strictly positive.
+The balance at $t-1$ is strictly positive.
+So the outcome measures growth in \textit{continuing} relationships.
+It does not capture new relationships or relationships that end.
+Foreign-currency balances are in soles, so growth in the ME part includes exchange-rate revaluation.
+
+Table~\ref{tab:flow} shows how the regression samples arise from the raw file.
+
+\begin{table}[!h]
+\centering
+\small
+\caption{From the raw credit file to the regression samples (number of rows)}
+\label{tab:flow}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+ & Credit lines & Other credit \\
+\midrule
+Raw rows (firm $\times$ bank $\times$ currency $\times$ segment $\times$ product $\times$ month) & 86,101 & 180,929 \\
+Aggregated rows (bank $\times$ firm $\times$ credit type $\times$ month) & 65,185 & 120,267 \\
+\quad less: first observation of a relationship & 995 & 2,554 \\
+\quad less: reporting gap (previous month missing) & 1,279 & 5,050 \\
+\quad less: zero balance at $t$ or $t-1$ & 30,861 & 23,701 \\
+Rows with valid growth & 32,050 & 88,962 \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Minimum legal rate (columns 1 and 2)}} \\
+\quad with a defined shock & 31,974 & 79,133 \\
+\quad in firm-by-date cells with at least two banks & 9,230 & 52,029 \\
+\multicolumn{3}{@{}l}{\textit{Marginal rate (columns 3 and 4)}} \\
+\quad with a defined shock & 12,334 & 31,113 \\
+\quad in firm-by-date cells with at least two banks & 3,686 & 20,921 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two steps shrink the sample sharply.
+The first is the cell restriction.
+A firm-by-date cell must contain growth observations from at least two banks.
+Without a second bank there is nothing to compare.
+Most relationship-months drop out here.
+The second is the marginal shock.
+It exists only when the MN regime is base plus marginal.
+That is 67 of the 159 months in which growth can be computed: October 2010 to January 2014 and October 2021 to December 2023.
+(September 2021 is lost because the change in the MN marginal rate has no starting value.)
+A side effect: the large ME marginal-rate changes of 2015 to 2018 do not enter columns (3) and (4).
+The MN marginal change is undefined in those months, so the shock is too.
+
+\subsection{Estimation samples}
+
+Table~\ref{tab:variation} describes the four estimation samples.
+The rows on the shock matter most for interpretation.
+
+\begin{table}[!h]
+\centering
+\small
+\caption{Estimation samples: outcome and shock variation}
+\label{tab:variation}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Shock measure & \multicolumn{2}{c}{Minimum legal rate} & \multicolumn{2}{c}{Marginal rate} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Credit type & Lines & Other & Lines & Other \\
+ & (1) & (2) & (3) & (4) \\
+\midrule
+Observations & 9,230 & 52,029 & 3,686 & 20,921 \\
+Months in sample & 159 & 159 & 67 & 67 \\
+Mean banks per firm-by-date cell & 2.20 & 2.93 & 2.18 & 2.91 \\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Loan growth}} \\
+Loan growth, mean & $-$0.015 & $-$0.019 & $-$0.009 & $-$0.017 \\
+Loan growth, std.\ dev. & 1.370 & 0.757 & 1.375 & 0.794 \\
+Loan growth, 1st percentile & $-$5.010 & $-$1.624 & $-$4.907 & $-$1.486 \\
+Loan growth, median & $-$0.030 & $-$0.018 & $-$0.015 & $-$0.024 \\
+Loan growth, 99th percentile & 4.700 & 1.869 & 4.562 & 1.887 \\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Bank shock}} \\
+Months with a non-zero shock & 16 & 16 & 7 & 7 \\
+Share of observations with non-zero shock & 9.4\% & 10.1\% & 14.7\% & 11.6\% \\
+Share of firm-by-date cells with shock variation across banks & 8.9\% & 9.6\% & 12.2\% & 9.9\% \\
+Std.\ dev.\ of shock, pooled & 0.078 & 0.082 & 1.245 & 1.148 \\
+Std.\ dev.\ of shock, within firm-by-date cell & 0.006 & 0.011 & 0.052 & 0.095 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{0.95\textwidth}\footnotesize
+\textit{Notes:} Statistics on the estimation samples of Table~\ref{tab:encaje_loan_growth}. ``Within cell'' is the standard deviation of the shock after subtracting the firm-by-date cell mean; this is the variation that identifies the coefficient. Loan growth is not winsorized.
+\end{minipage}
+\end{table}
+
+% ==============================================================================
+\section{Specification}
+\label{sec:spec}
+% ==============================================================================
+
+\subsection{The regression}
+
+For each credit type $k$ and rate parameter $j$, the paper estimates
+\begin{equation}
+y_{bikt} \;=\; \beta^{j}_{k}\, Z^{j}_{bt} \;+\; \alpha_{it} \;+\; \varepsilon_{bikt},
+\label{eq:main}
+\end{equation}
+where $y_{bikt}$ is loan growth from Equation~\eqref{eq:growth}, $Z^{j}_{bt}$ is the bank shock from Equation~\eqref{eq:shock}, and $\alpha_{it}$ is a firm-by-date fixed effect.
+There are four regressions: $k\in\{\text{line},\text{other}\}$ crossed with $j\in\{\text{min},\text{mar}\}$.
+Standard errors are clustered by bank.
+
+The estimator is OLS with the cell fixed effects absorbed (\code{fixest::feols}).
+The estimation sample keeps only firm-by-date cells with at least two banks.
+
+\subsection{What the coefficient estimates}
+
+The variable of interest is the bank shock $Z^{j}_{bt}$.
+The coefficient $\beta^{j}_{k}$ is the change in a relationship's log growth for a one percentage point larger deposit-weighted increase in the reserve rate.
+It is identified from differences \textit{between banks within a firm-month}.
+Take a firm that borrows from banks $b$ and $b'$ in month $t$.
+The coefficient compares growth at $b$ and $b'$, given that their shocks differ.
+
+Three consequences follow.
+
+\textit{It is a relative effect.}
+Anything that moves all banks together is absorbed by the fixed effect.
+This includes the aggregate effect of the policy change.
+The coefficient says how much more the more-exposed bank cuts, not how much lending falls overall.
+
+\textit{The sign is clear under the hypothesis.}
+A tightening reduces the loanable funds of the exposed bank.
+A supply-side response means a negative coefficient.
+A positive or zero coefficient means no differential supply response in this sample.
+
+\textit{Credit lines and other credit are estimated separately.}
+The comparison of $\beta^{j}_{\text{line}}$ with $\beta^{j}_{\text{other}}$ shows whether the response differs across loan types.
+The regressions do not test this difference formally.
+They are run on different samples, with different clusters, so the columns are not directly comparable.
+
+\subsection{Why this specification}
+
+\textit{Firm-by-date fixed effects.}
+The central problem in credit-supply work is that firms also change their demand.
+A firm hit by a bad shock borrows less from every bank.
+Comparing banks within the same firm and month removes this.
+This is the approach of Khwaja and Mian (2008).
+Fixed effects at the firm-by-date level, rather than firm and date separately, allow each firm's demand to vary freely over time.
+The cost is that the shock must vary across banks within a cell, which is why single-bank cells are dropped.
+
+\textit{A bank-level shock built from predetermined exposure.}
+Every bank faces the same BCRP rates.
+The rates are set in response to aggregate conditions.
+Their time variation is common to all banks, and the date effect absorbs it.
+What differs across banks is exposure, and exposure comes from the deposit currency mix.
+A bank with mostly foreign-currency deposits is hit hard by an ME change and little by an MN change.
+A bank with mostly soles deposits is the reverse.
+
+\textit{December 2009 shares.}
+The weights are fixed at a date that is before the first credit month (September 2010).
+It is also before the 2010 tightening cycle: the MN minimum legal rate rose from 6\% to 9\% between July and October 2010.
+So banks could not have chosen their deposit mix in response to the changes they are weighted by.
+A second reason: ME deposits are valued in soles.
+Current ME shares move mechanically with the exchange rate.
+Fixed shares avoid that.
+
+\textit{Two rate measures.}
+The minimum legal rate and the marginal rate are different policy instruments.
+They have different timing and different scales.
+The minimum legal rate moves in steps of 0.25 to 1 point.
+The marginal rate moves in steps of 1 to 10 points.
+The two measures also use different sample months, because the MN marginal rate is undefined in the single-rate regime.
+Estimating both shows whether the result depends on the instrument.
+
+\textit{Credit lines versus other credit.}
+The project studies the supply of credit lines.
+Reserve requirements change a bank's liquidity cost.
+Credit lines are the products that let a firm draw on a commitment.
+Other credit is a natural comparison group.
+Running the same regression on both lets the data show whether the response is specific to lines.
+
+\textit{Log growth in continuing relationships.}
+Log growth is a standard measure and is symmetric for increases and decreases.
+It is defined only for positive balances at both dates.
+This is a restriction of the design, not a coding choice.
+It means entry and exit are not studied.
+
+\textit{Clustering by bank.}
+The shock varies at the bank-by-month level.
+Errors are likely to be correlated within a bank across firms and months.
+So the standard errors are clustered by bank.
+This gives 8 or 11 clusters, which is too few for the usual $t$ approximation.
+
+\textit{Wild cluster bootstrap.}
+With few clusters, conventional cluster-robust tests over-reject.
+The table therefore reports $p$-values from a wild cluster bootstrap (Cameron, Gelbach and Miller, 2008; Roodman et al., 2019).
+The null is imposed and there are 9,999 draws.
+The weights are Webb six-point weights, because with fewer than 12 clusters the Rademacher distribution has too few distinct draws.
+(All four regressions have fewer than 12 clusters, so all use Webb weights.)
+The stars in the table come from the conventional clustered $t(G-1)$ test.
+The bootstrap $p$-value is the number to rely on.
+
+\textit{Small-sample correction.}
+The conventional standard errors use the \code{fixest} default.
+It scales the variance by $\tfrac{G}{G-1}\cdot\tfrac{N-1}{N-K}$, where $K$ counts the absorbed cell effects, because cells are not nested within banks.
+In column (1) this makes the standard error 0.769 rather than 0.569, which is the value with the $G/(G-1)$ factor alone.
+The bootstrap $p$-values are computed separately by \code{boottest}.
+
+\subsection{Identifying assumptions and threats}
+
+The coefficient has a supply interpretation under three assumptions.
+
+\textit{Common demand within firm-month.}
+A firm's demand for credit is the same at all of its banks.
+This is the Khwaja--Mian assumption.
+It can fail if firms direct their demand to specific banks, for example by currency.
+
+\textit{Exposure unrelated to other shocks.}
+Banks with different deposit currency mixes must not be hit differently by other events that coincide with the rate changes.
+The leading concern is the exchange rate.
+It moves the soles value of foreign-currency balances.
+It also affects dollarized banks and dollarized borrowers differently.
+Because the outcome is in soles, relationships with more foreign-currency credit mechanically show larger swings when the exchange rate moves.
+The shock is a function of deposit dollarization.
+Any other channel that works through dollarization is therefore confounded with it.
+The table does not control for the currency mix of the loan.
+
+\textit{Predetermined exposure.}
+The December 2009 shares must not predict later bank-specific loan growth in other ways.
+A fixed pre-period share is the usual defense.
+It cannot rule out that dollarized banks are different in ways that matter for lending.
+
+% ==============================================================================
+\section{Results}
+\label{sec:results}
+% ==============================================================================
+
+Table~\ref{tab:encaje_loan_growth} gives the results.
+The block below is a verbatim copy of the table file written by the R script.
+
+\begin{table}[!h]
+   \centering
+   \small
+   \begin{threeparttable}[b]
+      \caption{\label{tab:encaje_loan_growth} Reserve-requirement shocks and loan growth: credit lines versus other credit}
+      \bigskip
+      \begin{tabular}{lcccc}
+         \toprule
+         Shock measure & \multicolumn{2}{c}{Minimum legal rate} & \multicolumn{2}{c}{Marginal rate} \\ 
+         \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+         Credit type                       & Credit lines          & Other credit          & Credit lines          & Other credit \\   
+                                           & (1)                   & (2)                   & (3)                   & (4)\\  
+         \midrule 
+         Bank shock                        & -1.055                & 0.082                 & -0.120                & 0.048\\   
+                                           & (0.770)               & (0.138)               & (0.113)               & (0.056)\\   
+         Banks (= bank clusters)           & 8                     & 11                    & 8                     & 11\\  
+         Firms                             & 130                   & 394                   & 95                    & 312\\  
+         Firm-by-date cells                & 4,191                 & 17,760                & 1,693                 & 7,187\\  
+         Wild cluster bootstrap $p$-value  & 0.560                 & 0.404                 & 0.251                 & 0.565\\  
+         Mean of loan growth               & -0.015                & -0.019                & -0.009                & -0.017\\  
+          \\
+         Observations                      & 9,230                 & 52,029                & 3,686                 & 20,921\\  
+         R$^2$                             & 0.482                 & 0.352                 & 0.495                 & 0.368\\  
+         Within R$^2$                      & $4.56\times 10^{-5}$  & $2.23\times 10^{-6}$  & $4.16\times 10^{-5}$  & $5.23\times 10^{-5}$\\   
+          \\
+         Firm $\times$ date fixed effects  & $\checkmark$          & $\checkmark$          & $\checkmark$          & $\checkmark$\\   
+         \bottomrule
+      \end{tabular}
+      
+      \begin{tablenotes}\item \textit{Notes:} The dependent variable is the log change in a firm's credit balance (\textit{cr\'edito vigente}) at a bank between consecutive month-ends, $\log B_{bit}-\log B_{bi,t-1}$, so it measures growth among continuing relationships with strictly positive balances at both dates; loan entry and exit are not captured. Balances are summed across products and currencies within a bank--firm--credit-line status (foreign-currency balances are reported in soles at the month-end exchange rate, so growth includes exchange-rate revaluation). Columns (1) and (3) use credit lines (credit cards, current accounts, letters of credit, guarantees, multi-lines, other lines); columns (2) and (4) use all other credit. Because the balance is performing drawn credit, letters of credit, guarantees, multi-lines and other lines have a zero balance in every record, so the credit-line samples consist of credit cards and current accounts. The bank shock is $s^{mn}_{b,0}\Delta r^{mn}_{t}+s^{me}_{b,0}\Delta r^{me}_{t}$, where $\Delta r$ is the month-end change, in percentage points, of the statutory minimum legal reserve rate (columns 1--2) or marginal reserve rate (columns 3--4) on domestic (mn) and foreign (me) currency obligations (positive = tighter), and $s_{b,0}$ are the bank's fixed December 2009 deposit shares in each currency. The marginal-rate shock is undefined when the domestic regime is a single rate, which shortens columns (3)--(4). Each regression keeps firm-by-date cells with at least two banks and absorbs firm-by-date fixed effects. Standard errors, in parentheses, are clustered by bank; with few clusters the $p$-value from a wild cluster bootstrap (null imposed, 9,999 draws) is reported. * $p<0.10$, ** $p<0.05$, *** $p<0.01$ from the conventional clustered $t(G-1)$ test.
+      \end{tablenotes}
+   \end{threeparttable}
+\end{table}
+
+\subsection{How to read the table}
+
+\textit{Bank shock.}
+The coefficient $\beta$ from Equation~\eqref{eq:main}.
+The standard error, clustered by bank, is in parentheses.
+
+\textit{Banks (= bank clusters).}
+The number of banks contributing to the sample.
+There are 8 for credit lines and 11 for other credit.
+
+\textit{Firms and firm-by-date cells.}
+The number of distinct firms and cells in the sample.
+Each cell is a firm-month in which at least two banks have valid growth.
+
+\textit{Wild cluster bootstrap $p$-value.}
+The $p$-value of the test of $\beta=0$.
+
+\textit{Mean of loan growth.}
+The mean of the outcome in the sample, in log points.
+All four means are slightly negative: about $-0.9$ to $-1.9$ percent per month.
+
+\textit{Observations.}
+Relationship-months in the sample.
+
+\textit{R$^2$ and within R$^2$.}
+R$^2$ includes the fixed effects.
+It is high because the cell effects absorb most of the variation.
+Within R$^2$ is the share of the remaining variation that the shock explains.
+It is about $10^{-5}$ in every column.
+
+\subsection{Findings}
+
+\textit{No significant effect.}
+All four wild-bootstrap $p$-values are above 0.25: 0.560, 0.404, 0.251 and 0.565.
+Conventional $p$-values are 0.213, 0.564, 0.324 and 0.409.
+
+\textit{Pattern of signs.}
+Both credit-line coefficients are negative ($-1.055$ and $-0.120$).
+Both other-credit coefficients are positive ($0.082$ and $0.048$).
+This is the pattern one would expect if tighter reserve requirements reduce the supply of credit lines but not of other credit.
+But the standard errors are as large as the estimates, so the data do not support a conclusion.
+
+\textit{Magnitudes.}
+The variation that identifies the coefficient is small.
+The within-cell standard deviation of the shock is 0.006 (column 1), 0.011 (column 2), 0.052 (column 3) and 0.095 (column 4).
+A one-standard-deviation within-cell shock implies a change in monthly log growth of about $-0.67$, $+0.09$, $-0.63$ and $+0.46$ percentage points in columns (1) to (4).
+These are small next to the spread of the outcome.
+The standard deviation of loan growth is about 1.4 log points for credit lines and about 0.8 for other credit (Table~\ref{tab:variation}).
+
+\subsection{Why power is low}
+
+Four features of the design limit precision.
+
+\textit{Few shock months.}
+In the minimum-legal-rate regressions, the shock is non-zero in 16 of 159 months.
+In the marginal-rate regressions it is non-zero in 7 of 67 months.
+All seven of those months fall between October 2010 and January 2014.
+The October 2021 to December 2023 months add observations but no shock variation.
+
+\textit{Few banks.}
+Eight or eleven clusters.
+The shock varies across banks only through differences in deposit shares, and the large banks have similar shares (about 35--50\% MN).
+The cross-bank spread in the shock is therefore narrow.
+
+\textit{Few usable cells.}
+Only 9\% to 12\% of firm-by-date cells have shocks that differ across banks.
+In the other cells all banks have the same shock (typically zero).
+These cells add nothing to $\beta$.
+
+\textit{Thin credit-line sample.}
+The aggregated credit-line panel has 558 firms and 14 lenders.
+After the restrictions, 8 banks, 130 firms and 4,191 cells remain.
+Cells have 2.2 banks on average.
+
+% ==============================================================================
+\section{Limitations and open items}
+\label{sec:limitations}
+% ==============================================================================
+
+\begin{enumerate}
+\item \textbf{Drawn balances only.} The outcome is performing drawn credit. Undrawn commitments (\code{linea\_no\_utilizada}) are in the file but are not used. Growth in a credit line's drawn balance reflects both the limit and the firm's utilization.
+\item \textbf{Credit lines are cards and current-account advances.} The other four line products have no drawn balance. The credit-line sample is not representative of all credit lines.
+\item \textbf{Lines inside ``loans''.} Revolving lines booked under the loan product cannot be identified and sit in other credit. In the December 2015 cross-section of the v2 extract (Table~\ref{tab:products}), loans hold 62.4\% of unused lines and 51.2\% of drawn balances, and the revolving field is not identifiable for almost all of them. This blurs the contrast between the two groups.
+\item \textbf{Intensive margin only.} Entry and exit of relationships are not captured. If tightening mainly ends relationships, the table misses it.
+\item \textbf{Currency and exchange rate.} The currency basis of balances is an open question in the data dictionary. If balances are in soles, ME growth includes revaluation. The table has no control for the loan's currency mix.
+\item \textbf{Outliers.} Loan growth is not winsorized. The 1st and 99th percentiles are about $-5.0$ and $+4.7$ log points for credit lines (see Table~\ref{tab:variation}).
+\item \textbf{Timing.} The shock is contemporaneous. There are no lags or leads, and no event-study. Reserve-requirement changes may affect lending with a delay.
+\item \textbf{Marginal-rate shock.} It ignores each bank's base level and deposit growth. It is an exposure proxy, not the bank's actual reserve cost.
+\item \textbf{Sample.} The regressions use a 1,000-firm extract. Eleven lenders, holding 80.8\% of the balance, have a shock. Banco de la Naci\'on is excluded.
+\item \textbf{Inference.} With 8 and 11 clusters, the wild bootstrap is needed. The bootstrap uses Webb weights and a fixed seed (20261009).
+\end{enumerate}
+
+% ==============================================================================
+\appendix
+\section{Supporting tables}
+% ==============================================================================
+
+\begin{table}[!h]
+\centering
+\small
+\caption{Banks in the regressions: baseline deposit shares and observations}
+\label{tab:banks}
+\begin{tabular}{@{}lccrrrr@{}}
+\toprule
+ & \multicolumn{2}{c}{Dec 2009 deposit share} & \multicolumn{2}{c}{Credit file} & \multicolumn{2}{c}{Regression rows} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+Bank & MN & ME & Firms & Rows & Lines & Other \\
+ & & & & & (col.\ 1) & (col.\ 2) \\
+\midrule
+Banco de Cr\'edito (BCP) & 0.405 & 0.595 & 791 & 94,622 & 3,585 & 13,184 \\
+BBVA Per\'u & 0.494 & 0.506 & 415 & 51,242 & 3,105 & 10,793 \\
+Scotiabank Per\'u & 0.401 & 0.599 & 387 & 48,218 & 924 & 11,655 \\
+Interbank & 0.438 & 0.562 & 167 & 15,795 & 736 & 5,572 \\
+BIF & 0.406 & 0.594 & 134 & 13,863 & 532 & 3,009 \\
+Mibanco & 0.793 & 0.207 & 132 & 5,611 & 0 & 2,007 \\
+Banco Pichincha & 0.503 & 0.497 & 79 & 5,572 & 70 & 2,149 \\
+Citibank & 0.366 & 0.634 & 36 & 4,381 & 275 & 1,628 \\
+Santander Per\'u & 0.353 & 0.647 & 43 & 3,456 & 0 & 1,820 \\
+Bancom & 0.703 & 0.297 & 14 & 812 & 3 & 209 \\
+Alfin Banco & 0.952 & 0.048 & 2 & 9 & 0 & 3 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{0.95\textwidth}\footnotesize
+\textit{Notes:} Deposit shares are MN and ME deposits as shares of total deposits at December 2009, from the SBS deposit series. ``Credit file'' counts firms and rows for the bank in the raw credit file. ``Regression rows'' are the rows used in columns (1) and (2) of Table~\ref{tab:encaje_loan_growth}. Column (3) and (4) samples are subsets of these.
+\end{minipage}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\small
+\caption{Months with a non-zero reserve-rate change in the regression window}
+\label{tab:ratechanges}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+ & \multicolumn{2}{c}{Minimum legal rate} & \multicolumn{2}{c}{Marginal rate} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Month-end & MN & ME & MN & ME \\
+\midrule
+Oct 2010 & $+0.5$ & $+0.5$ & $+10$ & $+5$ \\
+May 2012 & 0 & 0 & $+5$ & 0 \\
+Aug 2013 & 0 & 0 & $-5$ & $-5$ \\
+Sep 2013 & 0 & 0 & $-5$ & 0 \\
+Oct 2013 & 0 & 0 & $-4$ & 0 \\
+Dec 2013 & 0 & 0 & $-1$ & 0 \\
+Jan 2014 & 0 & 0 & $-1$ & 0 \\
+Jan 2015 & 0 & 0 & -- & $+10$ \\
+Feb 2015 & $-0.5$ & 0 & -- & 0 \\
+Mar 2015 & $-0.5$ & 0 & -- & $+10$ \\
+Apr 2015 & $-0.5$ & 0 & -- & 0 \\
+May 2015 & $-0.5$ & 0 & -- & 0 \\
+Jun 2015 & $-0.5$ & 0 & -- & 0 \\
+Jan 2017 & $-0.5$ & 0 & -- & $-22$ \\
+Mar 2017 & 0 & 0 & -- & $-2$ \\
+Apr 2017 & $-1$ & 0 & -- & 0 \\
+May 2017 & 0 & 0 & -- & $-2$ \\
+Jul 2017 & 0 & 0 & -- & $-2$ \\
+Sep 2017 & 0 & 0 & -- & $-1$ \\
+Oct 2017 & 0 & 0 & -- & $-1$ \\
+Jan 2018 & 0 & 0 & -- & $-1$ \\
+Feb 2018 & 0 & 0 & -- & $-1$ \\
+Mar 2018 & 0 & 0 & -- & $-1$ \\
+Apr 2018 & 0 & 0 & -- & $-1$ \\
+Jul 2018 & 0 & 0 & -- & $-1$ \\
+Apr 2020 & $-1$ & 0 & -- & 0 \\
+Nov 2021 & $+0.5$ & 0 & 0 & 0 \\
+Dec 2021 & $+0.25$ & 0 & 0 & 0 \\
+Jan 2022 & $+0.25$ & 0 & 0 & 0 \\
+Feb 2022 & $+0.25$ & 0 & 0 & 0 \\
+Mar 2022 & $+0.25$ & 0 & 0 & 0 \\
+Apr 2022 & $+0.25$ & 0 & 0 & 0 \\
+May 2022 & $+0.25$ & 0 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{0.95\textwidth}\footnotesize
+\textit{Notes:} Month-end change in the rate, in percentage points ($\Delta r_t=r_t-r_{t-1}$; positive = tighter). ``--'' means the change is undefined because the MN marginal rate does not exist under the single-rate regime (February 2014 to August 2021) or in the month the regime returns (September 2021). Months not listed have no change in any of the four rates. Window: October 2010 to December 2023.
+\end{minipage}
+\end{table}
+
+% ==============================================================================
+\section{Where each piece is produced}
+% ==============================================================================
+
+\begin{table}[!h]
+\centering
+\small
+\caption{Scripts and outputs}
+\label{tab:scripts}
+\begin{tabularx}{\textwidth}{@{}p{4.6cm}X@{}}
+\toprule
+Script & Output \\
+\midrule
+\code{09\_encaje\_series.R} & \code{data/processed/encaje\_rates\_monthly.csv}: monthly reserve-rate panel rebuilt from BCRP circulars. \\
+\code{03\_validate\_direct.R} & \code{crosswalks/xwalk\_reporte.csv}: map from deposit-series institution names to \code{bank\_standardized}. Needed by script 10. \\
+\code{10\_reserve\_shocks.R} & \code{bank\_deposit\_shares.csv} (shares, all institutions and months); \code{bank\_encaje\_shocks.csv} (shock by bank and month, with the December 2009 baseline). \\
+\code{11\_loan\_reserve\_shock\_regression.R} & \code{credit\_line\_growth\_panel.csv.gz} (relationship-month panel with growth and shocks); \code{output/tables/tab\_encaje\_loan\_growth.tex}; diagnostics in \code{output/validation/encaje\_shock\_*.csv}. \\
+\code{12\_figures\_regression.R} & Figures of the reserve rates and of deposit shares over time. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Run the scripts from the project root, in the order 09, 10, 11.
+
+\section*{References}
+
+Cameron, A. C., Gelbach, J. B., and Miller, D. L. (2008). Bootstrap-based improvements for inference with clustered errors. \textit{Review of Economics and Statistics}, 90(3), 414--427.
+
+Khwaja, A. I., and Mian, A. (2008). Tracing the impact of bank liquidity shocks: Evidence from an emerging market. \textit{American Economic Review}, 98(4), 1413--1442.
+
+Roodman, D., Nielsen, M. {\O}., MacKinnon, J. G., and Webb, M. D. (2019). Fast and wild: Bootstrap inference in Stata using \code{boottest}. \textit{The Stata Journal}, 19(1), 4--60.
+
+\end{document}
