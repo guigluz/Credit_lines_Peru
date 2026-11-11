@@ -53,13 +53,16 @@ BREAK_LAB  <- "Basel III reporting change"
 PAL <- c(blue = "#2a78d6", orange = "#eb6834", aqua = "#1baf7a",
          yellow = "#eda100", magenta = "#e87ba4")
 INK  <- c(primary = "#0b0b0b", secondary = "#52514e", muted = "#8a8880")
-SURF <- "#fcfcfb"
+SURF <- "white"
 
 theme_fig <- function(base_size = 10) {
   theme_minimal(base_size = base_size) +
     theme(
       plot.background   = element_rect(fill = SURF, colour = NA),
       panel.background  = element_rect(fill = SURF, colour = NA),
+      legend.background = element_rect(fill = SURF, colour = NA),
+      legend.key        = element_rect(fill = SURF, colour = NA),
+      legend.box.background = element_rect(fill = SURF, colour = NA),
       panel.grid.minor  = element_blank(),
       panel.grid.major.x= element_blank(),
       panel.grid.major.y= element_line(colour = "#e6e5e0", linewidth = 0.3),
@@ -89,7 +92,7 @@ theme_fig <- function(base_size = 10) {
 # as code/peru_dollarization.R -- and every write is verified to have landed.
 save_fig <- function(p, stem, w = 7.2, h = 4.3) {
   f <- file.path(FIGDIR, paste0(stem, ".pdf"))
-  ggsave(f, p, width = w, height = h,
+  ggsave(f, p, width = w, height = h, bg = "white",
          device = function(filename, ...)
            grDevices::pdf(file = filename, encoding = "ISOLatin1", ...))
   if (!file.exists(f) || file.size(f) < 1000)
