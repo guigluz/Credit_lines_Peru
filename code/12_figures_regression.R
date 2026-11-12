@@ -109,6 +109,28 @@ p_rates <- ggplot(lv, aes(date, rate, colour = currency, linetype = currency)) +
 save_fig("fig_encaje_rates.pdf", p_rates, height = 5.6)
 message("Wrote ", file.path(fig_dir, "fig_encaje_rates.pdf"))
 
+# Same figure, minimum legal reserve rate panel only
+p_rates_min <- ggplot(lv[panel == "Minimum legal reserve rate"],
+                      aes(date, rate, colour = currency, linetype = currency)) +
+  geom_step(linewidth = 0.6, na.rm = TRUE) +
+  facet_wrap(~ panel, ncol = 1, scales = "free_y") +
+  scale_colour_manual(values = COL, labels = LAB) +
+  scale_linetype_manual(values = c(MN = "solid", ME = "22"), labels = LAB) +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y",
+               expand = expansion(mult = c(0.01, 0.01))) +
+  scale_y_continuous(expand = expansion(mult = c(0.08, 0.12))) +
+  labs(y = "Percent of reservable obligations",
+       title = "Statutory minimum legal reserve requirement, domestic versus foreign currency",
+       caption = wrap_cap(
+         "Source: BCRP circulars on reserve requirements. ",
+         "Each month shows the rate in force on its last day; a rate change effective at any point in a month ",
+         "appears in that month.")) +
+  base_theme +
+  theme(legend.key.width = unit(2.4, "lines"))
+
+save_fig("fig_encaje_min_legal_rate.pdf", p_rates_min, height = 3.6)
+message("Wrote ", file.path(fig_dir, "fig_encaje_min_legal_rate.pdf"))
+
 
 # ══ Figure 2: deposit currency shares by institution ═════════════════════════
 SHARES_CSV <- "data/processed/bank_deposit_shares.csv"
