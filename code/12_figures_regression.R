@@ -195,7 +195,7 @@ p_shares <- ggplot(grid, aes(date, me_pct, group = grp, colour = series, linewid
                           format(min(dates), "%b %Y"), format(max(dates), "%b %Y"),
                           length(keep), uniqueN(sh$bank_standardized), MIN_MONTHS),
        caption = wrap_cap(
-         "Source: SBS Series Estadisticas (Banca Multiple and Empresas Financieras). Share = ME deposits / (MN + ME deposits), ",
+         "Source: SBS Series Estadisticas (banca multiple, financieras, cajas municipales and rurales, edpymes). Share = ME deposits / (MN + ME deposits), ",
          "both in thousands of soles. ME deposits are valued in soles at the month-end exchange rate, so a sol depreciation ",
          "raises the ME share mechanically. A month without positive deposits is left blank. Institutions with positive deposits ",
          "in fewer than ", MIN_MONTHS, " months (edpymes, which take no deposits, and short-lived entrants and exits) are omitted. ",

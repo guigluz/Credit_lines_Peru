@@ -11,17 +11,17 @@
 #      against the national series, one panel per departamento.
 #
 # DATA ------------------------------------------------------------------------
-# Figures 1-2: data/raw/Reporte(01-2001 - 09-2022).csv
-#   SBS "Series Estadisticas", monthly Jan-2001 -- Sep-2022. Uses the published
-#   "Banca Multiple" subsystem total row.
+# Figures 1-2: data/raw/Reporte_SistemaFinanciero.csv (read_reporte())
+#   SBS "Series Estadisticas", monthly Jan-2001 -- Sep-2022. The Banca Multiple
+#   total is summed over the banca multiple institutions (the extract has no
+#   total rows; the sum matches the earlier extract's published total row to
+#   within S/ 8 thousand).
 #   UNITS: both the MN and the ME columns are already in thousands of SOLES;
 #   converted to billions here. Nominal -- the source carries no deflator.
 #   VALUATION CAVEAT: the ME column is the sol value of foreign-currency
 #   deposits, so it moves with the exchange rate even when no depositor moves
 #   money. MN is valuation-free. Figure 1 exists to separate the two.
-#   ENCODING: UTF-32LE with no BOM. Accented names cannot be translated under a
-#   C locale, so columns are renamed by POSITION on read and the aggregate row
-#   is matched by pattern rather than by the literal accented string.
+#   Entity types come from the bank map (data/documentation/bank_map_manual.csv).
 #
 # Figure 3: data/processed/b2358_branch_panel.csv.gz  (from 02_clean_deposits.R)
 #   Branch x month, Jan-2010 -- Jun-2026, no gaps, levels in miles de S/.
@@ -41,15 +41,15 @@ suppressPackageStartupMessages({
   library(dplyr); library(tidyr); library(readr); library(lubridate)
   library(ggplot2); library(scales); library(data.table)
 })
+source("code/00_sbs_utils.R")   # read_reporte(), reporte_attach_types(), reporte_subsystem()
 
 # Rscript inherits the shell locale (often "C"), which mangles accented names.
 if (!isTRUE(l10n_info()$`UTF-8`))
   for (loc in c("en_US.UTF-8", "C.UTF-8", "es_PE.UTF-8"))
     if (suppressWarnings(Sys.setlocale("LC_CTYPE", loc)) != "") break
 
-REPORTE_CSV <- "data/raw/Reporte(01-2001 - 09-2022).csv"
 BRANCH_GZ   <- "data/processed/b2358_branch_panel.csv.gz"
-AGG_PATTERN <- "^Banca M"      # matches "Banca Múltiple" without the accent
+AGG_TYPE    <- "banca_multiple"
 AGG_LABEL   <- "Banca Multiple"
 K           <- 1e6             # thousands of soles -> billions of soles
 
@@ -89,26 +89,12 @@ save_fig <- function(name, plot, height)
          device = grDevices::pdf, encoding = "ISOLatin1")
 
 # ══ Part A: aggregate series (figures 1 and 2) ═══════════════════════════════
-raw <- read_csv(REPORTE_CSV,
-                locale = locale(encoding = "UTF-32LE"),
-                col_types = cols(.default = col_character()),
-                name_repair = "minimal")
+# Subsystem total summed over its institutions; the extract has no total rows.
+ag <- read_reporte() |>
+  reporte_attach_types() |>
+  reporte_subsystem(AGG_TYPE, c("dep_total", "dep_mn", "dep_me"))
 
-stopifnot(ncol(raw) >= 8)
-names(raw)[1:8] <- c("entity", "fecha",
-                     "cred_total", "cred_mn", "cred_me",
-                     "dep_total",  "dep_mn",  "dep_me")
-
-as_num <- function(x) suppressWarnings(as.numeric(gsub(",", "", trimws(x))))
-
-ag <- raw |>
-  transmute(entity = trimws(entity),
-            date   = as.Date(trimws(fecha), format = "%d/%m/%Y"),
-            across(c(dep_total, dep_mn, dep_me), as_num)) |>
-  filter(!is.na(date), grepl(AGG_PATTERN, entity)) |>
-  arrange(date)
-
-stopifnot(nrow(ag) > 0, n_distinct(ag$entity) == 1, !anyDuplicated(ag$date))
+stopifnot(nrow(ag) > 0, !anyDuplicated(ag$date))
 
 # Monthly grid with no gaps. Count in year-month arithmetic: seq(by = "month")
 # from a month-end date overshoots (Jan-31 -> Mar-03).
@@ -141,7 +127,7 @@ x_scale_agg <- scale_x_date(date_breaks = "2 years", date_labels = "%Y",
                             expand = expansion(0.015))
 
 SRC_AGG <- paste0("Source: SBS statistical series, ", AGG_LABEL,
-                  " subsystem total as published, monthly ",
+                  " subsystem total (sum of its institutions), monthly ",
                   format(min(dep$date), "%b-%Y"), " - ",
                   format(max(dep$date), "%b-%Y"), ". ")
 

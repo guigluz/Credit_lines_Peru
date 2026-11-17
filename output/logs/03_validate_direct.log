@@ -1,10 +1,10 @@
 === 03_validate_direct.R ===
- 2026-10-09 16:11:42 
+ 2026-11-17 14:51:07 
 
 --- Source B (Series Estadisticas) ---
-rows: 7270 | entities: 62 | months: 261 (2001-01-31 .. 2022-09-30)
-entities NOT in the banca multiple universe (excluded): 31
-entities kept: 28
+rows: 14776 | entities: 114 | months: 261 (2001-01-31 .. 2022-09-30)
+entities NOT in the banca multiple universe (excluded): 84
+entities kept: 27
 
 Excel months   : 305 (2001-01-31 .. 2026-06-30)
 Series months  : 261 (2001-01-31 .. 2022-09-30)
@@ -35,13 +35,13 @@ float-noise cells (|v|<1e-6)   : 629
          3918         0.8524758         0.9931087   0.0068912711 1.228760e+05
          3918         0.8524758         0.9931087   0.0068912711 1.228760e+05
          2631         0.9946788         0.9992398   0.0007601672 3.634965e-03
-          260         0.6846154         0.9307692   0.0692307692 1.607080e+05
+          260         0.2538462         0.9307692   0.0692307692 1.607090e+05
  mean_abs_diff median_abs_diff max_rel_diff
             NA              NA           NA
   3.935363e+02    1.860000e-01 0.0506920353
   3.935363e+02    1.860000e-01 0.0506920353
   2.944098e-06    1.110223e-16 0.0009271816
-  5.926514e+03    3.340000e-01 0.0043313634
+  5.927254e+03    1.000000e+00 0.0043313902
 
 --- discrepancy concentration (bank x month, mismatch = outside 1e-4 relative) ---
          dimension             key    n n_mismatch share_mismatch max_abs_diff
@@ -74,7 +74,7 @@ banks accounting for every mismatch in the window: interbank, banco_pichincha
  bank_standardized n_months n_mismatch total_diff
          interbank       18         11   -1101933
    banco_pichincha       18         12    -438851
-system gap vs sum of bank gaps: max |residual| = 5 miles S/ over 18 months
+system gap vs sum of bank gaps: max |residual| = 0 miles S/ over 18 months
 OUTSIDE the window: n=3648, exact=87.3629%, within 1e-4 rel=99.8904%, max |diff|=2 miles S/
 
 --- review queue ---

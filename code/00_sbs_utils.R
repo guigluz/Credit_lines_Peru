@@ -451,27 +451,46 @@ standardize_banks <- function(raw, source_tag, manual) {
 # ==============================================================================
 # bank_standardized is the only key shared across datasets. Each dataset's script
 # writes data/processed/crosswalks/xwalk_<dataset>.csv with just
-#   <name as printed in that dataset>, bank_standardized, review_required
+#   <name as printed in that dataset>, bank_standardized, entity_type, review_required
 # To merge dataset A with dataset B on banks: A -> bank_standardized <- B.
 # The curated map those spokes are built from is hand-edited, never script-written.
 BANK_MAP  <- "data/documentation/bank_map_manual.csv"
 XWALK_DIR <- "data/processed/crosswalks"
 
-#' Read the curated bank map (canon_excel -> bank_standardized).
+# SBS subsystem of each hub bank (bank_map_manual.csv: entity_type). Edpymes are
+# typed empresa_credito, the SBS category that replaced them in 2021-22.
+# "aggregate" marks a published subsystem total row (B-2343's TOTAL BANCA MULTIPLE).
+ENTITY_TYPES <- c("banca_multiple", "empresa_financiera", "caja_municipal",
+                  "caja_rural", "empresa_credito", "aggregate")
+
+#' Read the curated bank map (canon_excel -> bank_standardized, entity_type).
 #' canon_excel must be unique: a duplicate would silently duplicate panel rows
-#' in the left_join inside standardize_banks().
+#' in the left_join inside standardize_banks(). Each bank_standardized must
+#' carry exactly one entity_type.
 read_bank_map <- function(path = BANK_MAP) {
   if (!file.exists(path))
     stop("bank map not found: ", path, " (run from the project root)", call. = FALSE)
   m <- readr::read_csv(path, show_col_types = FALSE)
-  need <- c("canon_excel", "bank_standardized", "note", "review_required")
+  need <- c("canon_excel", "bank_standardized", "note", "review_required", "entity_type")
   if (!all(need %in% names(m)))
     stop("bank map is missing column(s): ", paste(setdiff(need, names(m)), collapse = ", "),
          call. = FALSE)
   dup <- unique(m$canon_excel[duplicated(m$canon_excel)])
   if (length(dup))
     stop("bank map has duplicate canon_excel: ", paste(dup, collapse = "; "), call. = FALSE)
+  bad <- setdiff(unique(m$entity_type), ENTITY_TYPES)
+  if (length(bad))
+    stop("bank map has unknown entity_type: ", paste(bad, collapse = "; "), call. = FALSE)
+  multi <- m %>% distinct(bank_standardized, entity_type) %>% count(bank_standardized) %>% filter(n > 1)
+  if (nrow(multi))
+    stop("bank map gives more than one entity_type to: ",
+         paste(multi$bank_standardized, collapse = "; "), call. = FALSE)
   m
+}
+
+#' One row per hub bank: bank_standardized -> entity_type.
+bank_types <- function(manual = read_bank_map()) {
+  manual %>% distinct(bank_standardized, entity_type)
 }
 
 #' Write a dataset's minimal crosswalk and return it invisibly.
@@ -480,12 +499,111 @@ read_bank_map <- function(path = BANK_MAP) {
 #' @param dataset   short tag used in the file name, e.g. "b2343" -> xwalk_b2343.csv
 write_xwalk <- function(bank_std, dataset) {
   xw <- bank_std %>%
-    transmute(bank_raw, bank_standardized, review_required) %>%
+    left_join(bank_types(), by = "bank_standardized") %>%
+    transmute(bank_raw, bank_standardized, entity_type, review_required) %>%
     arrange(desc(review_required), bank_standardized, bank_raw)
   stopifnot(!anyDuplicated(xw$bank_raw))
   dir.create(XWALK_DIR, recursive = TRUE, showWarnings = FALSE)
   readr::write_csv(xw, file.path(XWALK_DIR, paste0("xwalk_", dataset, ".csv")))
   invisible(xw)
+}
+
+# ==============================================================================
+# Reporte -- SBS Series Estadisticas, institution x month extract
+# ==============================================================================
+# data/raw/Reporte_SistemaFinanciero.csv: monthly, Jan-2001 -- Sep-2022, every
+# institution of banca multiple, empresas financieras, cajas municipales, cajas
+# rurales and edpymes / empresas de creditos. It has NO subsystem total rows:
+# build them with reporte_subsystem().
+#
+# UNITS. Money columns are in miles de S/, with ME balances already valued in
+# soles (no exchange-rate conversion). The headers no longer say so; the units
+# come from the earlier extract (data/raw/Reporte(01-2001 - 09-2022).csv), whose
+# headers read "(Miles de S/)" and whose six credit / deposit columns are
+# identical to this file's for every shared institution-month. Liquidity ratios
+# are in percent.
+# DEPOSIT TYPES. dep_vista + dep_ahorro + dep_plazo = dep_total (to rounding).
+# An earlier download also had dep_cts, a component OF dep_plazo (not a fourth
+# category); it is still recognised if present. A blank dep_vista
+# next to a positive dep_total means no demand deposits (zero); it stays NA here.
+REPORTE_CSV <- "data/raw/Reporte_SistemaFinanciero.csv"
+
+# Printed header (accent-free, uppercase, units suffix dropped) -> column name.
+# Columns are matched by NAME, never by position.
+REPORTE_COLS <- c(
+  "ENTIDAD" = "entity", "FECHA" = "fecha",
+  "TOTAL ACTIVO" = "assets",
+  "CREDITOS" = "cred_total", "CREDITOS MN" = "cred_mn", "CREDITOS ME" = "cred_me",
+  "DEPOSITOS" = "dep_total", "DEPOSITOS MN" = "dep_mn", "DEPOSITOS ME" = "dep_me",
+  "PATRIMONIO CONTABLE" = "equity",
+  "DEPOSITOS VISTA" = "dep_vista", "DEPOSITOS AHORRO" = "dep_ahorro",
+  "DEPOSITOS PLAZO" = "dep_plazo", "DEPOSITOS CTS" = "dep_cts",
+  "RATIO DE LIQUIDEZ MN" = "liq_mn", "RATIO DE LIQUIDEZ ME" = "liq_me")
+REPORTE_REQUIRED <- c("entity", "fecha", "cred_total", "cred_mn", "cred_me",
+                      "dep_total", "dep_mn", "dep_me")
+
+#' Read the Reporte extract: one row per institution x month-end.
+#' Returns entity, date and every numeric column present (names from REPORTE_COLS).
+#' Blank cells are NA (never zero). Also reads the earlier UTF-32LE extract.
+read_reporte <- function(path = REPORTE_CSV) {
+  if (!file.exists(path))
+    stop("Reporte file not found: ", path, " (run from the project root)", call. = FALSE)
+  b <- readBin(path, "raw", 4L)
+  enc <- if (length(b) == 4L && all(b[2:4] == as.raw(0))) "UTF-32LE" else "UTF-8"
+  raw <- readr::read_csv(path, locale = readr::locale(encoding = enc),
+                         col_types = readr::cols(.default = readr::col_character()),
+                         name_repair = "minimal", progress = FALSE)
+  key <- norm_txt(str_remove(names(raw), "^﻿"))
+  key <- str_squish(str_remove(key, "\\(MILES DE S/\\)"))
+  unknown <- names(raw)[!key %in% names(REPORTE_COLS)]
+  if (length(unknown))
+    stop("Reporte has unrecognised column(s): ", paste(unknown, collapse = "; "),
+         " -- add them to REPORTE_COLS", call. = FALSE)
+  names(raw) <- unname(REPORTE_COLS[key])
+  if (anyDuplicated(names(raw))) stop("Reporte has duplicated columns", call. = FALSE)
+  miss <- setdiff(REPORTE_REQUIRED, names(raw))
+  if (length(miss)) stop("Reporte is missing column(s): ", paste(miss, collapse = ", "), call. = FALSE)
+
+  num_cols <- setdiff(names(raw), c("entity", "fecha"))
+  to_num <- function(x, nm) {
+    x <- str_squish(x); x[x %in% c("", "-")] <- NA
+    v <- suppressWarnings(as.numeric(x))
+    if (any(is.na(v) & !is.na(x)))
+      stop("Reporte column ", nm, " has non-numeric values: ",
+           paste(head(unique(x[is.na(v) & !is.na(x)])), collapse = "; "), call. = FALSE)
+    v
+  }
+  out <- tibble(entity = { e <- str_squish(raw$entity); Encoding(e) <- "UTF-8"; e },
+                date   = as.Date(str_squish(raw$fecha), format = "%d/%m/%Y"))
+  for (nm in num_cols) out[[nm]] <- to_num(raw[[nm]], nm)
+  out <- out %>% filter(!is.na(entity), entity != "")
+  if (anyNA(out$date)) stop("Reporte has unparseable dates", call. = FALSE)
+  if (anyDuplicated(out[c("entity", "date")])) stop("Reporte has duplicated entity-months", call. = FALSE)
+  out
+}
+
+#' Attach bank_standardized and entity_type to Reporte rows, via the curated map.
+#' Stops if any printed name is missing from the map.
+reporte_attach_types <- function(rep, manual = read_bank_map()) {
+  std <- standardize_banks(unique(rep$entity), "reporte", manual)
+  miss <- std$bank_raw[is.na(std$bank_standardized)]
+  if (length(miss))
+    stop("Reporte names missing from ", BANK_MAP, ": ", paste(miss, collapse = "; "), call. = FALSE)
+  rep %>%
+    left_join(std %>% select(entity = bank_raw, bank_standardized), by = "entity") %>%
+    left_join(bank_types(manual), by = "bank_standardized")
+}
+
+#' Subsystem total by month, summed from institution rows (the extract publishes
+#' no total rows). Summing reproduces the old extract's published "Banca Multiple"
+#' and "Empresas Financieras" rows to within 8 miles de S/ in every month.
+reporte_subsystem <- function(rep_typed, type, cols) {
+  stopifnot(type %in% ENTITY_TYPES, "entity_type" %in% names(rep_typed))
+  rep_typed %>%
+    filter(.data$entity_type == .env$type) %>%     # .env: the data may have its own `type` column
+    group_by(date) %>%
+    summarise(n_entities = n(), across(all_of(cols), ~ sum(.x, na.rm = TRUE)), .groups = "drop") %>%
+    arrange(date)
 }
 
 # ==============================================================================

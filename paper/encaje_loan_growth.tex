@@ -113,7 +113,7 @@ Dataset & File & Content \\
 \midrule
 Firm credit & \code{muestra\_anonima\_base2015.parquet} & Pseudonymised extract of the SBS credit register (RCC). One row per firm, lender, currency, segment, product, month. Sep 2010 to Dec 2023. 267,030 rows, 1,000 firms, 83 lenders. \\
 Classification extract & \code{muestra\_anonima\_base2015\_v2.parquet} & A different extract of the same register, with a revolving-status field. Used only for the product-classification evidence in Table~\ref{tab:products}, not in the regressions. \\
-Bank deposits & \code{Reporte(01-2001 - 09-2022).csv} & SBS statistical series. Deposits by institution and currency, in thousands of soles, monthly. Used only for the December 2009 deposit shares. \\
+Bank deposits & \code{Reporte\_SistemaFinanciero.csv} & SBS statistical series. Deposits by institution and currency, in thousands of soles, monthly. Used only for the December 2009 deposit shares. \\
 Reserve rates & \code{bcrp\_encaje/} $\rightarrow$ \code{encaje\_rates\_monthly.csv} & Reserve-requirement rates rebuilt by hand from 186 BCRP circulars. Monthly panel, one column per rate. \\
 Lender names & \code{RCC\_empresas\_supervisadas\_2026.xls}, \code{bank\_map\_manual.csv} & RCC entity code to institution name, and a hand-curated map from names to a common bank key (\code{bank\_standardized}). \\
 \bottomrule
@@ -300,7 +300,7 @@ The ME marginal rate rises in 3 months and falls in 12.
 \subsection{Deposit shares}
 
 The exposure weights come from the SBS series on deposits by institution and currency.
-The series covers mainly banks and finance companies, monthly, from January 2001 to September 2022.
+The series covers banks, finance companies, municipal and rural savings banks (\textit{cajas}) and small-business lenders (edpymes), monthly, from January 2001 to September 2022.
 Both deposit columns are in thousands of soles.
 ME deposits are therefore already valued in soles, and MN and ME can be added directly.
 The two columns sum to the published total up to rounding (maximum gap: 1 thousand soles).
@@ -313,7 +313,7 @@ Missing deposits (for non-deposit-taking institutions) are never treated as zero
 
 The regression uses \textbf{December 2009} shares, held fixed.
 Section~\ref{sec:spec} explains why.
-At December 2009, 19 institutions have valid shares.
+At December 2009, 42 institutions have valid shares: 15 banks, 4 finance companies, 13 municipal and 10 rural savings banks.
 The ME share ranges from 0 to 100\%.
 Among the large banks it is about 50--65\%.
 Table~\ref{tab:banks} in the appendix gives the shares for the banks that enter the regressions.
@@ -351,12 +351,12 @@ Excluded: not matched to any bank in the project crosswalks (includes Banco de l
 Excluded: portfolio-sale or trust vehicle (RCC status ``Venta de Cartera'') & 20 & 8,704 & 7.5\% \\
 Excluded: bank without valid December 2009 deposit shares & 9 & 2,645 & 0.3\% \\
 Excluded: entity code absent from the RCC entity list & 18 & 1,921 & 0.0\% \\
-Excluded: cooperative or municipal / rural savings bank (outside the Reporte) & 15 & 7,393 & 0.0\% \\
+Excluded: cooperative or municipal / rural savings bank (not linked to the deposit series) & 15 & 7,393 & 0.0\% \\
 \bottomrule
 \end{tabularx}
 \par\smallskip
 \begin{minipage}{0.95\textwidth}\footnotesize
-\textit{Notes:} Share of balance is the lender's share of the sum of \code{credito\_vigente} over all rows of the raw credit file. The 11 included lenders are the banks listed in Table~\ref{tab:banks}. Eight further institutions have valid December 2009 shares but no matching lender in the credit file.
+\textit{Notes:} Share of balance is the lender's share of the sum of \code{credito\_vigente} over all rows of the raw credit file. The 11 included lenders are the banks listed in Table~\ref{tab:banks}. Thirty-one further institutions have valid December 2009 shares but are not linked to a lender in the credit file; they include the 23 municipal and rural savings banks, whose RCC names are not yet in the bank map.
 \end{minipage}
 \end{table}
 

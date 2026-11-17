@@ -3,7 +3,8 @@
 # ==============================================================================
 # Figure 1  Used vs unused credit, stacked area
 #           used   = creditos directos, from the Series Estadisticas extract
-#                    data/raw/Reporte(01-2001 - 09-2022).csv, entity "Banca Multiple"
+#                    data/raw/Reporte_SistemaFinanciero.csv, summed over the banca
+#                    multiple institutions (the extract has no total rows)
 #           unused = creditos indirectos, from data/processed/b2322_unused_credit_panel.csv
 # Figure 2  Composition of unused (indirect) credit by category, stacked area
 #
@@ -35,9 +36,9 @@
 suppressPackageStartupMessages({
   library(dplyr); library(tidyr); library(readr); library(ggplot2); library(stringr)
 })
+source("code/00_sbs_utils.R")   # read_reporte(), reporte_attach_types(), reporte_subsystem()
 
 PANEL  <- "data/processed/b2322_unused_credit_panel.csv"
-REPORTE<- "data/raw/Reporte(01-2001 - 09-2022).csv"
 FIGDIR <- "output/figures"
 LOG    <- "output/logs/04_figures_unused_credit.log"
 dir.create(FIGDIR, recursive = TRUE, showWarnings = FALSE)
@@ -137,17 +138,11 @@ cat(sprintf("system months: %d (%s .. %s) | published rows: %d | summed: %d\n",
             sum(sys$system_source == "summed_bank_rows")))
 
 # ---- used credit: Series Estadisticas ----------------------------------------
-# UTF-32LE, no BOM; columns renamed by position because accented names are
-# unreliable under a C locale.
-rep_raw <- read_csv(REPORTE, locale = readr::locale(encoding = "UTF-32LE"),
-                    col_types = cols(.default = col_character()), name_repair = "minimal")
-names(rep_raw)[1:8] <- c("entity", "fecha", "cred_total", "cred_mn", "cred_me",
-                         "dep_total", "dep_mn", "dep_me")
-used <- rep_raw %>%
-  filter(str_detect(str_squish(entity), "^Banca M")) %>%    # accent-safe match
-  transmute(report_date = as.Date(str_squish(fecha), "%d/%m/%Y"),
-            used_thousand_pen = as.numeric(str_squish(cred_total))) %>%
-  filter(!is.na(report_date)) %>% arrange(report_date)
+# Banca Multiple total = sum of the banca multiple institutions' direct credit.
+used <- read_reporte() %>%
+  reporte_attach_types() %>%
+  reporte_subsystem("banca_multiple", "cred_total") %>%
+  transmute(report_date = date, used_thousand_pen = cred_total)
 stopifnot(nrow(used) > 0, !any(is.na(used$used_thousand_pen)))
 cat(sprintf("used-credit months: %d (%s .. %s)\n\n",
             nrow(used), min(used$report_date), max(used$report_date)))

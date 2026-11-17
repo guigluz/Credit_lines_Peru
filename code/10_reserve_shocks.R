@@ -22,11 +22,12 @@
 #
 # INPUTS (never modified)
 #   data/processed/encaje_rates_monthly.csv         monthly BCRP reserve-requirement panel (09_encaje_series.R)
-#   data/raw/Reporte(01-2001 - 09-2022).csv         deposits by institution and currency (S/ thousands)
-#   data/processed/crosswalks/xwalk_reporte.csv     Reporte institution name -> bank_standardized (03_validate_direct.R)
+#   data/raw/Reporte_SistemaFinanciero.csv          deposits by institution and currency (S/ thousands), via read_reporte()
+#   data/processed/crosswalks/xwalk_reporte.csv     Reporte institution name -> bank_standardized, entity_type (03_validate_direct.R)
 #
 # OUTPUTS
-#   data/processed/bank_deposit_shares.csv           MN / ME deposits and shares, every institution x month, with validation flags
+#   data/processed/bank_deposit_shares.csv           MN / ME deposits and shares, every institution x month, with entity_type
+#                                                    and validation flags
 #   data/processed/bank_encaje_shocks.csv            bank shocks, unique by bank_standardized x fecha_reporte (month-end),
 #                                                    every month of the rate panel, banks with valid baseline shares only.
 #                                                    Months up to BASELINE_DATE are included for completeness but are not
@@ -38,6 +39,7 @@ suppressPackageStartupMessages({
   library(data.table)
   library(readr)
 })
+source("code/00_sbs_utils.R")   # read_reporte(); loads dplyr after data.table (nothing used here is masked)
 
 # Rscript inherits the shell locale (often "C"), which mangles accented names.
 if (!isTRUE(l10n_info()[["UTF-8"]])) {
@@ -48,7 +50,6 @@ if (!isTRUE(l10n_info()[["UTF-8"]])) {
 
 # ---- parameters ---------------------------------------------------------------
 ENCAJE_CSV  <- "data/processed/encaje_rates_monthly.csv"
-REPORTE_CSV <- "data/raw/Reporte(01-2001 - 09-2022).csv"
 XWALK_REP   <- "data/processed/crosswalks/xwalk_reporte.csv"
 PROC  <- "data/processed"
 LOGF  <- "output/logs/10_reserve_shocks.log"
@@ -77,33 +78,23 @@ fmt <- function(x) format(x, big.mark = ",", trim = TRUE)
 # 1. Deposit currency shares, every institution and month (Reporte, S/ thousands)
 # ==============================================================================
 hdr("1. Deposit currency shares (all months)")
-raw_rep <- read_csv(REPORTE_CSV, locale = locale(encoding = "UTF-32LE"),
-                    col_types = cols(.default = col_character()), name_repair = "minimal")
-stopifnot(ncol(raw_rep) >= 8)
-# Units: both deposit columns are headed "(Miles de S/)", i.e. thousands of soles.
-# ME deposits are therefore already in soles -- no exchange-rate conversion, and MN + ME
-# can be added directly. (Same finding as the header note in code/peru_dollarization.R.)
-dep_hdr <- names(raw_rep)[6:8]
-stopifnot(all(grepl("Miles de S/", dep_hdr, fixed = TRUE)))
-cat("Deposit column headers: ", paste(dep_hdr, collapse = " | "), "\n", sep = "")
-names(raw_rep)[1:8] <- c("entity", "fecha", "cred_total", "cred_mn", "cred_me", "dep_total", "dep_mn", "dep_me")
-as_num <- function(x) suppressWarnings(as.numeric(gsub(",", "", trimws(x))))
-rep <- as.data.table(raw_rep)[, .(entity = { e <- trimws(entity); Encoding(e) <- "UTF-8"; e },
-                                  date = as.Date(trimws(fecha), format = "%d/%m/%Y"),
-                                  dep_total = as_num(dep_total), dep_mn = as_num(dep_mn), dep_me = as_num(dep_me))]
+# Units: thousands of soles, ME deposits already valued in soles -- no exchange-rate
+# conversion, and MN + ME can be added directly (see the Reporte notes in code/00_sbs_utils.R).
+# read_reporte() matches columns by header name and stops on unknown or missing ones.
+rep <- as.data.table(read_reporte())[, .(entity, date, dep_total, dep_mn, dep_me)]
 stopifnot(!anyNA(rep$date), !anyDuplicated(rep[, .(entity, date)]))
 
 # Reporte name -> bank_standardized, from the project's Reporte crosswalk (the hub key)
 xw <- fread(XWALK_REP, encoding = "UTF-8")
-stopifnot(identical(names(xw), c("bank_raw", "bank_standardized", "review_required")),
-          !anyDuplicated(xw$bank_raw), !anyNA(xw$bank_standardized))
+stopifnot(identical(names(xw), c("bank_raw", "bank_standardized", "entity_type", "review_required")),
+          !anyDuplicated(xw$bank_raw), !anyNA(xw$bank_standardized), !anyNA(xw$entity_type))
 miss <- setdiff(unique(rep$entity), xw$bank_raw)
 if (length(miss)) stop("Reporte names missing from ", XWALK_REP, ": ", paste(miss, collapse = "; "),
                        " -- rerun code/03_validate_direct.R")
 n_before <- nrow(rep)
-rep <- merge(rep, xw[, .(entity = bank_raw, bank_standardized)], by = "entity")
+rep <- merge(rep, xw[, .(entity = bank_raw, bank_standardized, entity_type)], by = "entity")
 stopifnot(nrow(rep) == n_before)                  # many-to-one: no Reporte row multiplied or lost
-rep <- rep[!bank_standardized %in% c("__SYSTEM__", "__SYSTEM_FINANCIERAS__")]
+stopifnot(!any(rep$entity_type == "aggregate"))   # the extract has institution rows only
 # two Reporte names for one hub bank must never coexist in a month (would double count)
 stopifnot(!anyDuplicated(rep[, .(bank_standardized, date)]))
 cat(sprintf("Reporte: %d institution-months, %d institutions, %s to %s.\n", nrow(rep),
@@ -120,7 +111,7 @@ stopifnot(max(abs(gap)) <= 1)       # MN + ME constitute the deposit universe (n
 
 # Shares for every institution-month, with the validation applied month by month.
 # Missing deposits (edpymes, which take no deposits) stay missing: never treated as zero.
-shares <- rep[, .(bank_standardized, reporte_name = entity, date, dep_mn, dep_me)]
+shares <- rep[, .(bank_standardized, entity_type, reporte_name = entity, date, dep_mn, dep_me)]
 shares[, denom := dep_mn + dep_me]
 shares[, `:=`(s_mn = fifelse(!is.na(denom) & denom > 0, dep_mn / denom, NA_real_),
               s_me = fifelse(!is.na(denom) & denom > 0, dep_me / denom, NA_real_))]
@@ -135,7 +126,7 @@ shares[, valid := reason == "valid"]
 stopifnot(all(shares[valid == TRUE, abs(s_mn + s_me - 1) <= TOL]),
           all(shares[valid == TRUE, dep_mn >= 0 & dep_me >= 0 & denom > 0 & s_mn >= 0 & s_me >= 0 & s_mn <= 1 & s_me <= 1]))
 setorder(shares, bank_standardized, date)
-fwrite(shares[, .(bank_standardized, reporte_name, date, dep_mn_thousand_soles = dep_mn,
+fwrite(shares[, .(bank_standardized, entity_type, reporte_name, date, dep_mn_thousand_soles = dep_mn,
                   dep_me_thousand_soles = dep_me, s_mn, s_me, valid, reason)],
        file.path(PROC, "bank_deposit_shares.csv"))
 cat(sprintf("Share panel: %s institution-months, %d institutions; valid shares in %s (%.1f%%).\n",

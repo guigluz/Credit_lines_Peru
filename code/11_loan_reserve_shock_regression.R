@@ -128,9 +128,10 @@ rcc[, unmapped_note := fcase(
   estado == "Venta de Cartera",                                 "portfolio-sale / guarantee vehicle, not an operating lender",
   tipo %in% c("Caja Municipal de Ahorro y Crédito", "Caja Rural de Ahorro y Crédito",
               "Cooperativa de Ahorro y Crédito (supervisión directa SBS)"),
-                                                                "type outside Reporte coverage (Banca Multiple + Empresas Financieras only)",
+                                                                "caja / cooperativa: RCC spelling not in the bank map (not linked to the Reporte)",
   default =                                                     "not in Reporte or any bulletin crosswalk")]
-fwrite(rcc[order(entidad), .(entidad, bank_raw, tipo, estado, bank_standardized, review_required,
+rcc <- merge(rcc, as.data.table(bank_types(manual)), by = "bank_standardized", all.x = TRUE, sort = FALSE)
+fwrite(rcc[order(entidad), .(entidad, bank_raw, tipo, estado, bank_standardized, entity_type, review_required,
                              unmapped_note, in_credit_sample)],
        file.path(PROC, "crosswalks", "xwalk_rcc.csv"))
 cat(sprintf("RCC list: %d codes (%s). Mapped to a hub bank_standardized: %d; unmapped: %d.\n",

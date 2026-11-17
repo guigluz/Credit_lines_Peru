@@ -1,103 +1,155 @@
-canon_excel,bank_standardized,note,review_required
-BANCO CONTINENTAL,bbva_peru,BBVA Continental -> BBVA Peru (rebrand),FALSE
-BANCO BBVA PERU,bbva_peru,current name,FALSE
-BBVA PERU,bbva_peru,current name,FALSE
-BANCO DE COMERCIO,bancom,Banco de Comercio -> BANCOM (rebrand),FALSE
-BANCOM,bancom,current name,FALSE
-BANCO DE CREDITO DEL PERU,bcp,BCP,FALSE
-BANCO DE CREDITO,bcp,Series Estadisticas spelling,FALSE
-BANCO FINANCIERO,banco_pichincha,Banco Financiero -> Banco Pichincha (2019 rebrand),FALSE
-BANCO PICHINCHA,banco_pichincha,current name,FALSE
-BANCO INTERAMERICANO DE FINANZAS,bif,BanBif,FALSE
-SCOTIABANK PERU,scotiabank,Scotiabank Peru,FALSE
-SCOTIABANK,scotiabank,Series Estadisticas spelling,FALSE
-CITIBANK,citibank,Citibank Peru,FALSE
-INTERBANK,interbank,Interbank,FALSE
-MIBANCO,mibanco,Mibanco,FALSE
-BANCO GNB,banco_gnb,HSBC Peru -> Banco GNB Peru (2013 acquisition),FALSE
-BANCO HSBC,hsbc_peru,kept SEPARATE from GNB; predecessor entity,FALSE
-HSBC BANK PERU,hsbc_peru,kept SEPARATE from GNB; predecessor entity,FALSE
-BANCO FALABELLA PERU,banco_falabella,Banco Falabella,FALSE
-BANCO FALABELLA,banco_falabella,Series Estadisticas spelling,FALSE
-FALABELLA PERU,banco_falabella,2007 vintages print the name without the 'B.' prefix ('Falabella Peru S.A'); unambiguous,FALSE
-BANCO SANTANDER PERU,santander_peru,Santander Peru (2007-),FALSE
-BANCO SANTANDER,santander_peru,Series Estadisticas spelling,FALSE
-SANTANDER PERU,santander_peru,2007 vintages print the name without the 'B.' prefix ('Santander Peru S.A.'); unambiguous,FALSE
-BANCO SANTANDER CENTRAL HISPANO,bsch_peru,"Banco Santander Central Hispano. ""Oper— hasta febrero 2003. En marzo 2003, fue absorbido por Banco de CrŽdito."" -- SBS",FALSE
-BANCO RIPLEY,banco_ripley,Banco Ripley,FALSE
-BANCO AZTECA PERU,alfin_banco,"Banco Azteca del Peru renamed Alfin Banco S.A. -- Res. SBS 03054-2021 (published 2021-11-09); same legal entity, so the series is continuous. Ownership changed in 2020 (Grupo Elektra sold 100%); treat as a break for ownership-based analysis, not for entity identity.",FALSE
-AZTECA DEL PERU,alfin_banco,Series Estadisticas spelling of Banco Azteca del Peru; see Res. SBS 03054-2021,FALSE
-ALFIN BANCO,alfin_banco,post-2021 denomination of the same entity (Res. SBS 03054-2021),FALSE
-BANCO ICBC,banco_icbc,ICBC Peru,FALSE
-BANK OF CHINA,bank_of_china,Bank of China Peru,FALSE
-BANCO BCI PERU,banco_bci,BCI Peru,FALSE
-BANCO BCI,banco_bci,Series Estadisticas spelling,FALSE
-BANCO EFECTIVA,banco_efectiva,Financiera Efectiva -> Banco Efectiva (Res. SBS 01444-2026),FALSE
-COMPARTAMOS BANCO,compartamos_banco,Compartamos,FALSE
-SANTANDER CONSUMER BANK,santander_consumer,distinct from Santander Peru,FALSE
-DEUTSCHE BANK PERU,deutsche_bank,exited; no successor merge,FALSE
-DEUTSCHE BANK,deutsche_bank,Series Estadisticas spelling,FALSE
-BANCO CENCOSUD,banco_cencosud,exited; no successor merge,FALSE
-BANCO DEL TRABAJO,banco_del_trabajo,exited 2009; no successor merge,FALSE
-BANCO DE TRABAJO,banco_del_trabajo,Series Estadisticas spelling,FALSE
-BANKBOSTON,bankboston,exited; no successor merge,FALSE
-BANCO STANDARD CHARTERED,standard_chartered,exited; no successor merge,FALSE
-STANDARD CHARTERED,standard_chartered,Series Estadisticas spelling,FALSE
-BANCO SUDAMERICANO,banco_sudamericano,merged into Scotiabank 2006; NOT merged here,FALSE
-BANCO WIESE SUDAMERIS,wiese_sudameris,merged into Scotiabank 2006; NOT merged here,FALSE
-WIESE SUDAMERIS,wiese_sudameris,Series Estadisticas spelling,FALSE
-BNP PARIBAS ANDES,bnp_paribas,exited; no successor merge,FALSE
-BNP PARIBAS,bnp_paribas,Series Estadisticas spelling,FALSE
-BANCO MIZUHO,banco_mizuho,Mizuho Peru,FALSE
-TOTAL BANCA MULTIPLE,__SYSTEM__,system aggregate row,FALSE
-BANCA MULTIPLE,__SYSTEM__,Series Estadisticas aggregate row,FALSE
-BANCO B V A BANCO CONTIN,bbva_peru,"B-2358 prints entity names truncated to 20 characters; ""B B V A BANCO CONTIN"" is BBVA Continental. canon_bank() expands the leading ""B "" to ""BANCO "", hence this canonical form.",FALSE
-BBVA,bbva_peru,B-2358 20-character truncation of BBVA Peru (2020 vintages onward),FALSE
-CREDITO,bcp,B-2358 20-character truncation of Banco de Credito del Peru,FALSE
-COMERCIO,bancom,B-2358 20-character truncation of Banco de Comercio,FALSE
-BANCOM2,bancom,"B-2358 prints ""BANCOM"" with a trailing footnote digit and no slash, which canon_bank() does not strip; same entity as BANCOM / Banco de Comercio",FALSE
-FINANCIERO,banco_pichincha,B-2358 20-character truncation of Banco Financiero (now Banco Pichincha),FALSE
-BANBIF,bif,B-2358 short form of Banco Interamericano de Finanzas,FALSE
-BANCO INTERAMERICANO,bif,B-2358 20-character truncation of Banco Interamericano de Finanzas,FALSE
-CITIBANK PERU,citibank,B-2358 spelling of Citibank Peru,FALSE
-CITIBANK DEL PERU,citibank,B-2358 spelling of Citibank Peru,FALSE
-ICBC BANK,banco_icbc,B-2358 spelling of ICBC Peru Bank,FALSE
-ICBC PERU BANK,banco_icbc,B-2358 spelling of ICBC Peru Bank (canonical form after canon_bank() strips the trailing S.A.),FALSE
-BANK OF CHINA (PERU),bank_of_china,"B-2358 spelling of Bank of China Peru; the parenthetical is not a scope qualifier, so it survives canon_bank()",FALSE
-BANCO AZTECA,alfin_banco,B-2358 20-character truncation of Banco Azteca del Peru; see Res. SBS 03054-2021 (renamed Alfin Banco),FALSE
-BANCO RIPLEY PERU,banco_ripley,B-2358 spelling of Banco Ripley Peru (canonical form after canon_bank() strips the trailing S.A.),FALSE
-AMERIKA FINANCIERA,amerika_financiera,Series Estadisticas non-bank (financiera); Reporte 2010-05..2022-09,FALSE
-CRAC CAT,crac_cat,"Series Estadisticas non-bank (caja rural); Reporte 2019-03..2020-06. Followed by CRAC Cencosud Scotia the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-CRAC CENCOSUD SCOTIA,crac_cencosud_scotia,"Series Estadisticas non-bank (caja rural); Reporte 2020-07..2022-09. Follows CRAC CAT the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-COMPARTAMOS FINANCIERA,compartamos_financiera,"Series Estadisticas non-bank (financiera); Reporte 2013-04..2022-09. B-2343 has Compartamos Banco (compartamos_banco) from 2025: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-CREDISCOTIA FINANCIERA,crediscotia_financiera,Series Estadisticas non-bank (financiera); Reporte 2009-01..2022-09,FALSE
-EDPYME CAMCO PIURA,edpyme_camco_piura,Series Estadisticas non-bank (edpyme); Reporte 2001-02..2004-12,FALSE
-EDPYME CONFIANZA,edpyme_confianza,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2009-08. Followed by Financiera Confianza the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-EDPYME CREAR AREQUIPA,edpyme_crear_arequipa,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2009-08. Followed by Financiera Crear the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-EDPYME EDYFICAR,edpyme_edyficar,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2008-02. Followed by Financiera Edyficar the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-EDPYME EFECTIVA,edpyme_efectiva,"Series Estadisticas non-bank (edpyme); Reporte 2005-01..2010-03. Followed by Financiera Efectiva the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-EDPYME NUEVA VISION,edpyme_nueva_vision,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2013-09. Followed by Financiera Nueva Vision the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-EDPYME PROEMPRESA,edpyme_proempresa,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2012-07. Followed by Financiera Proempresa the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-EMPRESAS FINANCIERAS,__SYSTEM_FINANCIERAS__,Series Estadisticas aggregate row for the Empresas Financieras subsystem; parallel to __SYSTEM__ for Banca Multiple,FALSE
-FINANCIERA CMR,financiera_cmr,"Series Estadisticas non-bank (financiera); Reporte 2001-01..2007-05. Followed by Banco Falabella the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-FINANCIERA CONFIANZA,financiera_confianza,"Series Estadisticas non-bank (financiera); Reporte 2009-09..2022-09. Follows Edpyme Confianza the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-FINANCIERA CORDILLERA,financiera_cordillera,Series Estadisticas non-bank (financiera); Reporte 2001-01..2007-12,FALSE
-FINANCIERA CREAR,financiera_crear,"Series Estadisticas non-bank (financiera); Reporte 2009-09..2013-03. Follows Edpyme Crear Arequipa the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-FINANCIERA CREDINKA,financiera_credinka,Series Estadisticas non-bank (financiera); Reporte 2015-09..2022-09,FALSE
-FINANCIERA DAEWOO,financiera_daewoo,Series Estadisticas non-bank (financiera); Reporte 2001-01..2003-04,FALSE
-FINANCIERA EDYFICAR,financiera_edyficar,"Series Estadisticas non-bank (financiera); Reporte 2008-03..2015-11. Follows Edpyme Edyficar the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-FINANCIERA EFECTIVA,financiera_efectiva,"Series Estadisticas non-bank (financiera); Reporte 2010-04..2022-09. Follows Edpyme Efectiva the previous month (candidate succession, NOT merged). Kept apart from banco_efectiva although the BANCO EFECTIVA row documents Financiera Efectiva -> Banco Efectiva (Res. SBS 01444-2026): merging would pull it into the bank-level B-2343 reconciliation",FALSE
-FINANCIERA NUEVA VISION,financiera_nueva_vision,"Series Estadisticas non-bank (financiera); Reporte 2013-10..2015-08. Follows Edpyme Nueva Vision the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-FINANCIERA OH!,financiera_oh,"Series Estadisticas non-bank (financiera); Reporte 2016-06..2022-09. Follows Financiera Uno the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-FINANCIERA PROEMPRESA,financiera_proempresa,"Series Estadisticas non-bank (financiera); Reporte 2012-08..2022-09. Follows Edpyme Proempresa the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-FINANCIERA QAPAQ,financiera_qapaq,Series Estadisticas non-bank (financiera); Reporte 2014-02..2022-09,FALSE
-FINANCIERA TFC,financiera_tfc,Series Estadisticas non-bank (financiera); Reporte 2006-04..2019-11,FALSE
-FINANCIERA UNIVERSAL,financiera_universal,Series Estadisticas non-bank (financiera); Reporte 2010-01..2014-01,FALSE
-FINANCIERA UNO,financiera_uno,"Series Estadisticas non-bank (financiera); Reporte 2010-03..2016-05. Followed by Financiera Oh! the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE
-MITSUI AUTO FINANCE,mitsui_auto_finance,Series Estadisticas non-bank (finance arm of a vehicle importer); Reporte 2010-12..2022-09,FALSE
-SOLUCION FINANCIERA DE CREDITO,solucion_financiera_de_credito,Series Estadisticas non-bank (financiera); Reporte 2001-01..2010-05,FALSE
-VOLVO FINANCE,volvo_finance,Series Estadisticas non-bank (finance arm of a vehicle importer); Reporte 2001-01..2006-03,FALSE
-BANCO INTERNACIONAL DEL PERU,interbank,RCC_empresas_supervisadas_2026 spelling of Interbank (RCC code 00002),FALSE
-MIBANCO BANCO DE LA MICRO EMPRESA,mibanco,RCC_empresas_supervisadas_2026 spelling of Mibanco (RCC code 00123),FALSE
-BANCO GNB PERU,banco_gnb,"RCC_empresas_supervisadas_2026 spelling of Banco GNB Peru (RCC code 00126). The RCC code is continuous across the 2013 HSBC -> GNB rename; hub keeps hsbc_peru separate, so the code has no pre-2013 deposit baseline",FALSE
-MITSUI AUTO FINANCE PERU,mitsui_auto_finance,RCC_empresas_supervisadas_2026 spelling of Mitsui Auto Finance Peru (RCC code 00185),FALSE
+canon_excel,bank_standardized,note,review_required,entity_type
+BANCO CONTINENTAL,bbva_peru,BBVA Continental -> BBVA Peru (rebrand),FALSE,banca_multiple
+BANCO BBVA PERU,bbva_peru,current name,FALSE,banca_multiple
+BBVA PERU,bbva_peru,current name,FALSE,banca_multiple
+BANCO DE COMERCIO,bancom,Banco de Comercio -> BANCOM (rebrand),FALSE,banca_multiple
+BANCOM,bancom,current name,FALSE,banca_multiple
+BANCO DE CREDITO DEL PERU,bcp,BCP,FALSE,banca_multiple
+BANCO DE CREDITO,bcp,Series Estadisticas spelling,FALSE,banca_multiple
+BANCO FINANCIERO,banco_pichincha,Banco Financiero -> Banco Pichincha (2019 rebrand),FALSE,banca_multiple
+BANCO PICHINCHA,banco_pichincha,current name,FALSE,banca_multiple
+BANCO INTERAMERICANO DE FINANZAS,bif,BanBif,FALSE,banca_multiple
+SCOTIABANK PERU,scotiabank,Scotiabank Peru,FALSE,banca_multiple
+SCOTIABANK,scotiabank,Series Estadisticas spelling,FALSE,banca_multiple
+CITIBANK,citibank,Citibank Peru,FALSE,banca_multiple
+INTERBANK,interbank,Interbank,FALSE,banca_multiple
+MIBANCO,mibanco,Mibanco,FALSE,banca_multiple
+BANCO GNB,banco_gnb,HSBC Peru -> Banco GNB Peru (2013 acquisition),FALSE,banca_multiple
+BANCO HSBC,hsbc_peru,kept SEPARATE from GNB; predecessor entity,FALSE,banca_multiple
+HSBC BANK PERU,hsbc_peru,kept SEPARATE from GNB; predecessor entity,FALSE,banca_multiple
+BANCO FALABELLA PERU,banco_falabella,Banco Falabella,FALSE,banca_multiple
+BANCO FALABELLA,banco_falabella,Series Estadisticas spelling,FALSE,banca_multiple
+FALABELLA PERU,banco_falabella,2007 vintages print the name without the 'B.' prefix ('Falabella Peru S.A'); unambiguous,FALSE,banca_multiple
+BANCO SANTANDER PERU,santander_peru,Santander Peru (2007-),FALSE,banca_multiple
+BANCO SANTANDER,santander_peru,Series Estadisticas spelling,FALSE,banca_multiple
+SANTANDER PERU,santander_peru,2007 vintages print the name without the 'B.' prefix ('Santander Peru S.A.'); unambiguous,FALSE,banca_multiple
+BANCO SANTANDER CENTRAL HISPANO,bsch_peru,"Banco Santander Central Hispano. ""Oper— hasta febrero 2003. En marzo 2003, fue absorbido por Banco de CrŽdito."" -- SBS",FALSE,banca_multiple
+BANCO RIPLEY,banco_ripley,Banco Ripley,FALSE,banca_multiple
+BANCO AZTECA PERU,alfin_banco,"Banco Azteca del Peru renamed Alfin Banco S.A. -- Res. SBS 03054-2021 (published 2021-11-09); same legal entity, so the series is continuous. Ownership changed in 2020 (Grupo Elektra sold 100%); treat as a break for ownership-based analysis, not for entity identity.",FALSE,banca_multiple
+AZTECA DEL PERU,alfin_banco,Series Estadisticas spelling of Banco Azteca del Peru; see Res. SBS 03054-2021,FALSE,banca_multiple
+ALFIN BANCO,alfin_banco,post-2021 denomination of the same entity (Res. SBS 03054-2021),FALSE,banca_multiple
+BANCO ICBC,banco_icbc,ICBC Peru,FALSE,banca_multiple
+BANK OF CHINA,bank_of_china,Bank of China Peru,FALSE,banca_multiple
+BANCO BCI PERU,banco_bci,BCI Peru,FALSE,banca_multiple
+BANCO BCI,banco_bci,Series Estadisticas spelling,FALSE,banca_multiple
+BANCO EFECTIVA,banco_efectiva,Financiera Efectiva -> Banco Efectiva (Res. SBS 01444-2026),FALSE,banca_multiple
+COMPARTAMOS BANCO,compartamos_banco,Compartamos,FALSE,banca_multiple
+SANTANDER CONSUMER BANK,santander_consumer,distinct from Santander Peru,FALSE,banca_multiple
+DEUTSCHE BANK PERU,deutsche_bank,exited; no successor merge,FALSE,banca_multiple
+DEUTSCHE BANK,deutsche_bank,Series Estadisticas spelling,FALSE,banca_multiple
+BANCO CENCOSUD,banco_cencosud,exited; no successor merge,FALSE,banca_multiple
+BANCO DEL TRABAJO,banco_del_trabajo,exited 2009; no successor merge,FALSE,banca_multiple
+BANCO DE TRABAJO,banco_del_trabajo,Series Estadisticas spelling,FALSE,banca_multiple
+BANKBOSTON,bankboston,exited; no successor merge,FALSE,banca_multiple
+BANCO STANDARD CHARTERED,standard_chartered,exited; no successor merge,FALSE,banca_multiple
+STANDARD CHARTERED,standard_chartered,Series Estadisticas spelling,FALSE,banca_multiple
+BANCO SUDAMERICANO,banco_sudamericano,merged into Scotiabank 2006; NOT merged here,FALSE,banca_multiple
+BANCO WIESE SUDAMERIS,wiese_sudameris,merged into Scotiabank 2006; NOT merged here,FALSE,banca_multiple
+WIESE SUDAMERIS,wiese_sudameris,Series Estadisticas spelling,FALSE,banca_multiple
+BNP PARIBAS ANDES,bnp_paribas,exited; no successor merge,FALSE,banca_multiple
+BNP PARIBAS,bnp_paribas,Series Estadisticas spelling,FALSE,banca_multiple
+BANCO MIZUHO,banco_mizuho,Mizuho Peru,FALSE,banca_multiple
+TOTAL BANCA MULTIPLE,__SYSTEM__,system aggregate row,FALSE,aggregate
+BANCO B V A BANCO CONTIN,bbva_peru,"B-2358 prints entity names truncated to 20 characters; ""B B V A BANCO CONTIN"" is BBVA Continental. canon_bank() expands the leading ""B "" to ""BANCO "", hence this canonical form.",FALSE,banca_multiple
+BBVA,bbva_peru,B-2358 20-character truncation of BBVA Peru (2020 vintages onward),FALSE,banca_multiple
+CREDITO,bcp,B-2358 20-character truncation of Banco de Credito del Peru,FALSE,banca_multiple
+COMERCIO,bancom,B-2358 20-character truncation of Banco de Comercio,FALSE,banca_multiple
+BANCOM2,bancom,"B-2358 prints ""BANCOM"" with a trailing footnote digit and no slash, which canon_bank() does not strip; same entity as BANCOM / Banco de Comercio",FALSE,banca_multiple
+FINANCIERO,banco_pichincha,B-2358 20-character truncation of Banco Financiero (now Banco Pichincha),FALSE,banca_multiple
+BANBIF,bif,B-2358 short form of Banco Interamericano de Finanzas,FALSE,banca_multiple
+BANCO INTERAMERICANO,bif,B-2358 20-character truncation of Banco Interamericano de Finanzas,FALSE,banca_multiple
+CITIBANK PERU,citibank,B-2358 spelling of Citibank Peru,FALSE,banca_multiple
+CITIBANK DEL PERU,citibank,B-2358 spelling of Citibank Peru,FALSE,banca_multiple
+ICBC BANK,banco_icbc,B-2358 spelling of ICBC Peru Bank,FALSE,banca_multiple
+ICBC PERU BANK,banco_icbc,B-2358 spelling of ICBC Peru Bank (canonical form after canon_bank() strips the trailing S.A.),FALSE,banca_multiple
+BANK OF CHINA (PERU),bank_of_china,"B-2358 spelling of Bank of China Peru; the parenthetical is not a scope qualifier, so it survives canon_bank()",FALSE,banca_multiple
+BANCO AZTECA,alfin_banco,B-2358 20-character truncation of Banco Azteca del Peru; see Res. SBS 03054-2021 (renamed Alfin Banco),FALSE,banca_multiple
+BANCO RIPLEY PERU,banco_ripley,B-2358 spelling of Banco Ripley Peru (canonical form after canon_bank() strips the trailing S.A.),FALSE,banca_multiple
+AMERIKA FINANCIERA,amerika_financiera,Series Estadisticas non-bank (financiera); Reporte 2010-05..2022-09,FALSE,empresa_financiera
+CRAC CAT,crac_cat,"Series Estadisticas non-bank (caja rural); Reporte 2019-03..2020-06. Followed by CRAC Cencosud Scotia the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,caja_rural
+CRAC CENCOSUD SCOTIA,crac_cencosud_scotia,"Series Estadisticas non-bank (caja rural); Reporte 2020-07..2022-09. Follows CRAC CAT the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,caja_rural
+COMPARTAMOS FINANCIERA,compartamos_financiera,"Series Estadisticas non-bank (financiera); Reporte 2013-04..2022-09. B-2343 has Compartamos Banco (compartamos_banco) from 2025: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_financiera
+CREDISCOTIA FINANCIERA,crediscotia_financiera,Series Estadisticas non-bank (financiera); Reporte 2009-01..2022-09,FALSE,empresa_financiera
+EDPYME CAMCO PIURA,edpyme_camco_piura,Series Estadisticas non-bank (edpyme); Reporte 2001-02..2004-12,FALSE,empresa_credito
+EDPYME CONFIANZA,edpyme_confianza,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2009-08. Followed by Financiera Confianza the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_credito
+EDPYME CREAR AREQUIPA,edpyme_crear_arequipa,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2009-08. Followed by Financiera Crear the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_credito
+EDPYME EDYFICAR,edpyme_edyficar,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2008-02. Followed by Financiera Edyficar the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_credito
+EDPYME EFECTIVA,edpyme_efectiva,"Series Estadisticas non-bank (edpyme); Reporte 2005-01..2010-03. Followed by Financiera Efectiva the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_credito
+EDPYME NUEVA VISION,edpyme_nueva_vision,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2013-09. Followed by Financiera Nueva Vision the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_credito
+EDPYME PROEMPRESA,edpyme_proempresa,"Series Estadisticas non-bank (edpyme); Reporte 2001-01..2012-07. Followed by Financiera Proempresa the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_credito
+FINANCIERA CMR,financiera_cmr,"Series Estadisticas non-bank (financiera); Reporte 2001-01..2007-05. Followed by Banco Falabella the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_financiera
+FINANCIERA CONFIANZA,financiera_confianza,"Series Estadisticas non-bank (financiera); Reporte 2009-09..2022-09. Follows Edpyme Confianza the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_financiera
+FINANCIERA CORDILLERA,financiera_cordillera,Series Estadisticas non-bank (financiera); Reporte 2001-01..2007-12,FALSE,empresa_financiera
+FINANCIERA CREAR,financiera_crear,"Series Estadisticas non-bank (financiera); Reporte 2009-09..2013-03. Follows Edpyme Crear Arequipa the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_financiera
+FINANCIERA CREDINKA,financiera_credinka,Series Estadisticas non-bank (financiera); Reporte 2015-09..2022-09,FALSE,empresa_financiera
+FINANCIERA DAEWOO,financiera_daewoo,Series Estadisticas non-bank (financiera); Reporte 2001-01..2003-04,FALSE,empresa_financiera
+FINANCIERA EDYFICAR,financiera_edyficar,"Series Estadisticas non-bank (financiera); Reporte 2008-03..2015-11. Follows Edpyme Edyficar the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_financiera
+FINANCIERA EFECTIVA,financiera_efectiva,"Series Estadisticas non-bank (financiera); Reporte 2010-04..2022-09. Follows Edpyme Efectiva the previous month (candidate succession, NOT merged). Kept apart from banco_efectiva although the BANCO EFECTIVA row documents Financiera Efectiva -> Banco Efectiva (Res. SBS 01444-2026): merging would pull it into the bank-level B-2343 reconciliation",FALSE,empresa_financiera
+FINANCIERA NUEVA VISION,financiera_nueva_vision,"Series Estadisticas non-bank (financiera); Reporte 2013-10..2015-08. Follows Edpyme Nueva Vision the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_financiera
+FINANCIERA OH!,financiera_oh,"Series Estadisticas non-bank (financiera); Reporte 2016-06..2022-09. Follows Financiera Uno the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_financiera
+FINANCIERA PROEMPRESA,financiera_proempresa,"Series Estadisticas non-bank (financiera); Reporte 2012-08..2022-09. Follows Edpyme Proempresa the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_financiera
+FINANCIERA QAPAQ,financiera_qapaq,Series Estadisticas non-bank (financiera); Reporte 2014-02..2022-09,FALSE,empresa_financiera
+FINANCIERA TFC,financiera_tfc,Series Estadisticas non-bank (financiera); Reporte 2006-04..2019-11,FALSE,empresa_financiera
+FINANCIERA UNIVERSAL,financiera_universal,Series Estadisticas non-bank (financiera); Reporte 2010-01..2014-01,FALSE,empresa_financiera
+FINANCIERA UNO,financiera_uno,"Series Estadisticas non-bank (financiera); Reporte 2010-03..2016-05. Followed by Financiera Oh! the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_financiera
+MITSUI AUTO FINANCE,mitsui_auto_finance,Series Estadisticas non-bank (finance arm of a vehicle importer); Reporte 2010-12..2022-09,FALSE,empresa_financiera
+SOLUCION FINANCIERA DE CREDITO,solucion_financiera_de_credito,Series Estadisticas non-bank (financiera); Reporte 2001-01..2010-05,FALSE,empresa_financiera
+VOLVO FINANCE,volvo_finance,Series Estadisticas non-bank (finance arm of a vehicle importer); Reporte 2001-01..2006-03,FALSE,empresa_financiera
+BANCO INTERNACIONAL DEL PERU,interbank,RCC_empresas_supervisadas_2026 spelling of Interbank (RCC code 00002),FALSE,banca_multiple
+MIBANCO BANCO DE LA MICRO EMPRESA,mibanco,RCC_empresas_supervisadas_2026 spelling of Mibanco (RCC code 00123),FALSE,banca_multiple
+BANCO GNB PERU,banco_gnb,"RCC_empresas_supervisadas_2026 spelling of Banco GNB Peru (RCC code 00126). The RCC code is continuous across the 2013 HSBC -> GNB rename; hub keeps hsbc_peru separate, so the code has no pre-2013 deposit baseline",FALSE,banca_multiple
+MITSUI AUTO FINANCE PERU,mitsui_auto_finance,RCC_empresas_supervisadas_2026 spelling of Mitsui Auto Finance Peru (RCC code 00185),FALSE,empresa_financiera
+CMAC AREQUIPA,cmac_arequipa,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09,FALSE,caja_municipal
+CMAC CHINCHA,cmac_chincha,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2006-06,FALSE,caja_municipal
+CMAC CUSCO,cmac_cusco,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09,FALSE,caja_municipal
+CMAC DEL SANTA,cmac_del_santa,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09,FALSE,caja_municipal
+CMAC HUANCAYO,cmac_huancayo,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09,FALSE,caja_municipal
+CMAC ICA,cmac_ica,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09,FALSE,caja_municipal
+CMAC MAYNAS,cmac_maynas,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09,FALSE,caja_municipal
+CMAC PAITA,cmac_paita,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09,FALSE,caja_municipal
+CMAC PISCO,cmac_pisco,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2014-04,FALSE,caja_municipal
+CMAC PIURA,cmac_piura,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09,FALSE,caja_municipal
+CMAC SULLANA,cmac_sullana,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09,FALSE,caja_municipal
+CMAC TACNA,cmac_tacna,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09,FALSE,caja_municipal
+CMAC TRUJILLO,cmac_trujillo,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09,FALSE,caja_municipal
+CMCP LIMA,cmcp_lima,Series Estadisticas non-bank (caja municipal); Reporte 2001-01..2022-09. Caja Municipal de Credito Popular de Lima (Caja Metropolitana); SBS groups it with the cajas municipales,FALSE,caja_municipal
+CRAC CAJAMARCA,crac_cajamarca,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2016-07,FALSE,caja_rural
+CRAC CAJASUR,crac_cajasur,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2008-07,FALSE,caja_rural
+CRAC CHAVIN,crac_chavin,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2016-04,FALSE,caja_rural
+CRAC CREDINKA,crac_credinka,"Series Estadisticas non-bank (caja rural); Reporte 2004-03..2015-08. Followed by Financiera Credinka the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,caja_rural
+CRAC CRUZ DE CHALPON,crac_cruz_de_chalpon,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2006-02,FALSE,caja_rural
+CRAC DEL CENTRO,crac_del_centro,Series Estadisticas non-bank (caja rural); Reporte 2014-09..2022-09,FALSE,caja_rural
+CRAC INCASUR,crac_incasur,Series Estadisticas non-bank (caja rural); Reporte 2011-10..2022-09,FALSE,caja_rural
+CRAC LA LIBERTAD,crac_la_libertad,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2002-01,FALSE,caja_rural
+CRAC LIBERTADORES AYACUCHO,crac_libertadores_ayacucho,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2015-09,FALSE,caja_rural
+CRAC LOS ANDES,crac_los_andes,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2022-09,FALSE,caja_rural
+CRAC NOR PERU,crac_nor_peru,Series Estadisticas non-bank (caja rural); Reporte 2002-02..2008-07,FALSE,caja_rural
+CRAC NUESTRA GENTE,crac_nuestra_gente,Series Estadisticas non-bank (caja rural); Reporte 2008-08..2013-04,FALSE,caja_rural
+CRAC PROFINANZAS,crac_profinanzas,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2012-11,FALSE,caja_rural
+CRAC PRYMERA,crac_prymera,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2022-09,FALSE,caja_rural
+CRAC QUILLABAMBA,crac_quillabamba,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2004-02,FALSE,caja_rural
+CRAC RAIZ,crac_raiz,"Series Estadisticas non-bank (caja rural); Reporte 2016-05..2022-09. Follows Edpyme Raiz the previous month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,caja_rural
+CRAC SAN MARTIN,crac_san_martin,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2008-02,FALSE,caja_rural
+CRAC SENOR DE LUREN,crac_senor_de_luren,Series Estadisticas non-bank (caja rural); Reporte 2001-01..2015-05,FALSE,caja_rural
+CRAC SIPAN,crac_sipan,Series Estadisticas non-bank (caja rural); Reporte 2006-03..2021-08,FALSE,caja_rural
+EC ACCESO CREDITICIO,ec_acceso_crediticio,"Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2022-09..2022-09. Follows Edpyme Acceso Crediticio the previous month (edpyme -> empresa de creditos): candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_credito
+EC VOLVO FINANCE,ec_volvo_finance,"Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2022-08..2022-09. Unrelated in time to Volvo Finance (financiera, Reporte 2001-01..2006-03); NOT merged",FALSE,empresa_credito
+EDPYME ACCESO CREDITICIO,edpyme_acceso_crediticio,"Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2008-02..2022-08. Followed by EC Acceso Crediticio the next month (edpyme -> empresa de creditos): candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_credito
+EDPYME ALTERNATIVA,edpyme_alternativa,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2001-09..2022-09,FALSE,empresa_credito
+EDPYME BBVA CONSUMER FINANCE,edpyme_bbva_consumer_finance,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2014-04..2022-01,FALSE,empresa_credito
+EDPYME CREAR CUSCO,edpyme_crear_cusco,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2001-01..2006-11,FALSE,empresa_credito
+EDPYME CREAR TACNA,edpyme_crear_tacna,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2001-01..2008-07,FALSE,empresa_credito
+EDPYME CREAR TRUJILLO,edpyme_crear_trujillo,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2001-03..2008-01,FALSE,empresa_credito
+EDPYME CREDIJET,edpyme_credijet,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2008-08..2016-05,FALSE,empresa_credito
+EDPYME CREDIVISION,edpyme_credivision,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2001-01..2022-09,FALSE,empresa_credito
+EDPYME GMG,edpyme_gmg,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2014-07..2021-04,FALSE,empresa_credito
+EDPYME INVERSIONES LA CRUZ,edpyme_inversiones_la_cruz,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2012-05..2022-09,FALSE,empresa_credito
+EDPYME MARCIMEX,edpyme_marcimex,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2012-01..2019-05,FALSE,empresa_credito
+EDPYME MICASITA,edpyme_micasita,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2007-01..2022-09,FALSE,empresa_credito
+EDPYME PROGRESO,edpyme_progreso,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2019-06..2021-07,FALSE,empresa_credito
+EDPYME PRONEGOCIOS,edpyme_pronegocios,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2002-08..2011-12,FALSE,empresa_credito
+EDPYME RAIZ,edpyme_raiz,"Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2001-01..2016-04. Followed by CRAC Raiz the next month: candidate succession, NOT merged (no SBS resolution cited)",FALSE,empresa_credito
+EDPYME SANTANDER,edpyme_santander,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2015-11..2021-06. Followed by Edpyme Santander Consumo the next month: candidate succession NOT merged (no SBS resolution cited),FALSE,empresa_credito
+EDPYME SANTANDER CONSUMO,edpyme_santander_consumo,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2021-07..2022-09. Follows Edpyme Santander the previous month: candidate succession NOT merged (no SBS resolution cited),FALSE,empresa_credito
+EDPYME SOLIDARIDAD,edpyme_solidaridad,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2001-01..2017-05,FALSE,empresa_credito
+SERVICIOS FINANCIEROS TOTAL EDPYME,total_servicios_financieros,"Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2021-06..2022-09. An institution, not a subsystem total: TOTAL Servicios Financieros (RCC: TOTAL SERVICIOS FINANCIEROS EMPRESA DE CREDITOS, code 00184)",FALSE,empresa_credito

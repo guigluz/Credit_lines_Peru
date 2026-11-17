@@ -2,12 +2,14 @@
 # 03_validate_direct.R -- Reconcile parsed B-2343 against Series Estadisticas
 # ==============================================================================
 # Source A: data/processed/b2343_*.csv          (parsed SBS bulletin workbooks)
-# Source B: data/raw/Reporte(01-2001 - 09-2022).csv  (Series Estadisticas extract)
+# Source B: data/raw/Reporte_SistemaFinanciero.csv  (Series Estadisticas extract,
+#           read with read_reporte() in code/00_sbs_utils.R)
 #
-# Source B carries ONLY total Creditos/Depositos by entity-month (split MN/ME).
-# It has no modality breakdown, so bank x modality x month CANNOT be validated
-# across sources. That grain is checked internally instead, and the gap is
-# reported rather than papered over.
+# Source B carries total Creditos (split MN/ME) by entity-month but no modality
+# breakdown, so bank x modality x month CANNOT be validated across sources. That
+# grain is checked internally instead, and the gap is reported rather than
+# papered over. Source B has no subsystem total rows: its Banca Multiple total is
+# the sum of its banca multiple institutions (reporte_subsystem()).
 #
 # All monetary values are in miles de S/ in BOTH sources.
 #
@@ -23,7 +25,6 @@ source("code/00_sbs_utils.R")
 PROC   <- "data/processed"
 VALID  <- "output/validation"
 LOG    <- "output/logs/03_validate_direct.log"
-REPORTE<- "data/raw/Reporte(01-2001 - 09-2022).csv"
 dir.create(VALID, recursive = TRUE, showWarnings = FALSE)
 dir.create(dirname(LOG), recursive = TRUE, showWarnings = FALSE)
 
@@ -102,32 +103,20 @@ totals <- read_csv(file.path(PROC, "b2343_total_credits.csv"), show_col_types = 
 manual <- read_bank_map()
 
 # ---- Source B: Series Estadisticas extract ----------------------------------
-# UTF-32LE, no BOM. Columns are renamed BY POSITION: accented names are
-# unreliable under a C locale (same approach as code/peru_dollarization.R).
-srcB_raw <- read_csv(REPORTE, locale = readr::locale(encoding = "UTF-32LE"),
-                     col_types = cols(.default = col_character()),
-                     name_repair = "minimal")
-stopifnot(ncol(srcB_raw) >= 8)
-names(srcB_raw)[1:8] <- c("entity", "fecha", "cred_total", "cred_mn", "cred_me",
-                          "dep_total", "dep_mn", "dep_me")
-
-srcB <- srcB_raw %>%
-  transmute(
-    entity_raw  = str_squish(entity),
-    report_date = as.Date(str_squish(fecha), format = "%d/%m/%Y"),
-    cred_total  = sbs_num(cred_total),
-    cred_mn     = sbs_num(cred_mn),
-    cred_me     = sbs_num(cred_me)
-  ) %>%
-  filter(!is.na(report_date), !is.na(entity_raw), entity_raw != "")
+srcB <- read_reporte() %>%
+  transmute(entity_raw = entity, report_date = date, cred_total, cred_mn, cred_me)
 
 bstd <- standardize_banks(unique(srcB$entity_raw), "series_estadisticas", manual)
-# Minimal spoke for this dataset (this is the only script that standardizes the
-# Series Estadisticas names). Non-bank entities have their own slugs in the bank map.
+# Minimal spoke for this dataset (this is the only script that writes the Reporte
+# crosswalk). Every institution has its own slug and entity_type in the bank map.
 write_xwalk(bstd, "reporte")
+if (any(is.na(bstd$bank_standardized)))
+  stop("Reporte names missing from the bank map: ",
+       paste(bstd$bank_raw[is.na(bstd$bank_standardized)], collapse = "; "))
 srcB <- srcB %>% left_join(bstd %>% select(entity_raw = bank_raw, bank_standardized,
                                            review_required),
-                           by = "entity_raw")
+                           by = "entity_raw") %>%
+  left_join(bank_types(manual), by = "bank_standardized")
 
 cat("--- Source B (Series Estadisticas) ---\n")
 cat(sprintf("rows: %d | entities: %d | months: %d (%s .. %s)\n",
@@ -275,8 +264,11 @@ a_sys <- full_join(a_sys_published, a_sys_summed, by = "report_date") %>%
          system_source = ifelse(is.na(published), "summed_bank_rows", "published_total_row"),
          published_vs_summed_diff = published - summed)
 
-b_sys <- srcB_bm %>% filter(bank_standardized == "__SYSTEM__") %>%
-  select(report_date, value_b = cred_total)
+# Source B publishes no total row: its system total is the sum of ALL its banca
+# multiple institutions (not only those also present in Source A).
+b_sys <- srcB %>% rename(date = report_date) %>%
+  reporte_subsystem("banca_multiple", "cred_total") %>%
+  select(report_date = date, value_b = cred_total)
 
 recon_sys <- full_join(a_sys, b_sys, by = "report_date") %>%
   filter(report_date %in% overlap) %>%
