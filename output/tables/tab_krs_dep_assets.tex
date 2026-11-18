@@ -1,0 +1,34 @@
+
+\begin{table}[!h]
+   \centering
+   \small
+   \begin{threeparttable}[b]
+      \caption{\label{tab:krs_dep_assets} Loan commitments and the deposit share of assets}
+      \bigskip
+      \begin{tabular}{lcccc}
+         \toprule
+         Dependent variable & \multicolumn{2}{c}{COMRAT} & \multicolumn{2}{c}{$U$ / assets} \\ 
+         \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+                                          & (1)            & (2)           & (3)            & (4)\\  
+         \midrule 
+         Deposits / assets                & -0.866$^{***}$ & -0.016        & -3.948$^{***}$ & -1.262$^{***}$\\   
+                                          & (0.296)        & (0.157)       & (0.999)        & (0.372)\\   
+         Banks                            & 19             & 19            & 19             & 19\\  
+         Mean of dep. variable            & 0.384          & 0.384         & 0.622          & 0.622\\  
+         Wild cluster bootstrap $p$-value & 0.043          & 0.929         & 0.030          & 0.075\\  
+          \\
+         Observations                     & 2,193          & 2,193         & 2,193          & 2,193\\  
+         R$^2$                            & 0.172          & 0.895         & 0.278          & 0.878\\  
+         Within R$^2$                     & 0.167          & 0.0003        & 0.265          & 0.100\\  
+          \\
+         Month fixed effects              & $\checkmark$   & $\checkmark$  & $\checkmark$   & $\checkmark$\\   
+         Bank fixed effects               &                & $\checkmark$  &                & $\checkmark$\\   
+         \bottomrule
+      \end{tabular}
+      
+      \begin{tablenotes}\item \textit{Notes:} Banca M\'ultiple, monthly, July 2010 to September 2022 (19 banks, 2,193 bank-months). $U$ is total indirect credit (SBS cuadro B-2322): guarantees, letters of credit, bank acceptances, and unused credit lines and credit granted but not disbursed; $L$ is direct credit; deposits by type, total assets and equity are from SBS Series Estad\'isticas. COMRAT $= U/(U+L)$. DEPRAT (vista) is demand deposits over total deposits; DEPRAT (vista + ahorro) adds savings deposits. $U$/assets can exceed one because indirect credit is off balance sheet. Standard errors clustered by bank in parentheses; with few clusters the $p$-value of a wild cluster bootstrap (null imposed, Rademacher weights, 9,999 draws, or full enumeration when fewer distinct draws exist) on the first regressor shown is also reported. * $p<0.10$, ** $p<0.05$, *** $p<0.01$ from the conventional clustered test.
+      \end{tablenotes}
+   \end{threeparttable}
+\end{table}
+
+

@@ -1,0 +1,39 @@
+
+\begin{table}[!h]
+   \centering
+   \small
+   \begin{threeparttable}[b]
+      \caption{\label{tab:krs_post2018} Loan commitments and deposit funding after the 2018 reporting change}
+      \bigskip
+      \begin{tabular}{lcccccc}
+         \toprule
+         Dependent variable & \multicolumn{4}{c}{COMRAT} & \multicolumn{2}{c}{$U$ / assets} \\ 
+         \cmidrule(lr){2-5} \cmidrule(lr){6-7}
+         Funding measure & Vista & Vista + ahorro & \multicolumn{4}{c}{Deposits / assets} \\ 
+                                          & (1)           & (2)           & (3)           & (4)           & (5)           & (6)\\  
+         \midrule 
+         DEPRAT                           & -0.128        & 0.007         &               &               &               &   \\   
+                                          & (0.089)       & (0.140)       &               &               &               &   \\   
+         Deposits / assets                &               &               & -0.372        & -0.100        & -2.123        & 0.287\\   
+                                          &               &               & (0.657)       & (0.251)       & (1.305)       & (0.657)\\   
+         Log assets                       & -0.040        & -0.040        &               &               &               &   \\   
+                                          & (0.057)       & (0.061)       &               &               &               &   \\   
+         Banks                            & 18            & 18            & 18            & 18            & 18            & 18\\  
+         Mean of dep. variable            & 0.386         & 0.386         & 0.386         & 0.386         & 0.532         & 0.532\\  
+         Wild cluster bootstrap $p$-value & 0.316         & 0.993         & 0.611         & 0.845         & 0.136         & 0.776\\  
+          \\
+         Observations                     & 789           & 789           & 789           & 789           & 789           & 789\\  
+         R$^2$                            & 0.967         & 0.967         & 0.024         & 0.966         & 0.096         & 0.967\\  
+         Within R$^2$                     & 0.037         & 0.016         & 0.019         & 0.010         & 0.093         & 0.013\\  
+          \\
+         Month fixed effects              & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$  & $\checkmark$\\   
+         Bank fixed effects               & $\checkmark$  & $\checkmark$  &               & $\checkmark$  &               & $\checkmark$\\   
+         \bottomrule
+      \end{tabular}
+      
+      \begin{tablenotes}\item \textit{Notes:} Banca M\'ultiple, monthly, June 2018 to September 2022 (18 banks, 789 bank-months). The sample starts after the June 2018 jump in reported unused lines. $U$ is total indirect credit (SBS cuadro B-2322): guarantees, letters of credit, bank acceptances, and unused credit lines and credit granted but not disbursed; $L$ is direct credit; deposits by type, total assets and equity are from SBS Series Estad\'isticas. COMRAT $= U/(U+L)$. DEPRAT (vista) is demand deposits over total deposits; DEPRAT (vista + ahorro) adds savings deposits. Column (1) measures DEPRAT with demand deposits and column (2) with demand plus savings deposits. $U$/assets can exceed one because indirect credit is off balance sheet. Standard errors clustered by bank in parentheses; with few clusters the $p$-value of a wild cluster bootstrap (null imposed, Rademacher weights, 9,999 draws, or full enumeration when fewer distinct draws exist) on the first regressor shown is also reported. * $p<0.10$, ** $p<0.05$, *** $p<0.01$ from the conventional clustered test.
+      \end{tablenotes}
+   \end{threeparttable}
+\end{table}
+
+

@@ -1,0 +1,40 @@
+
+\begin{table}[!h]
+   \centering
+   \small
+   \begin{threeparttable}[b]
+      \caption{\label{tab:krs_rcc_2015} Loan commitments and deposit funding: credit-registry sample, 2015}
+      \bigskip
+      \begin{tabular}{lccccc}
+         \toprule
+         Dependent variable & \multicolumn{4}{c}{COMRAT (RCC)} & Ex guar. \\ 
+         Sample & \multicolumn{2}{c}{Bank averages} & Bank-months & \multicolumn{2}{c}{Bank averages} \\ 
+                                          & (1)     & (2)     & (3)           & (4)     & (5)\\  
+         \midrule 
+         Constant                         & 0.125   & -0.516  &               & 0.102   & 0.080\\   
+                                          & (0.089) & (0.423) &               & (0.113) & (0.050)\\   
+         DEPRAT (vista)                   & -0.023  & -0.055  & -0.018        &         & 0.013\\   
+                                          & (0.161) & (0.129) & (0.146)       &         & (0.122)\\   
+         Log assets                       &         & 0.040   &               &         &   \\   
+                                          &         & (0.028) &               &         &   \\   
+         DEPRAT (vista + ahorro)          &         &         &               & 0.042   &   \\   
+                                          &         &         &               & (0.192) &   \\   
+         Banks                            & 12      & 12      & 12            & 12      & 12\\  
+         Mean of dep. variable            & 0.120   & 0.120   & 0.120         & 0.120   & 0.084\\  
+         Wild cluster bootstrap $p$-value &         &         & 0.929         &         & \\  
+          \\
+         Standard-Errors & \multicolumn{2}{c}{Heteroskedasticity-robust} & Bank & \multicolumn{2}{c}{Heteroskedasticity-robust} \\ 
+         Observations                     & 12      & 12      & 144           & 12      & 12\\  
+         R$^2$                            & 0.0006  & 0.086   & 0.002         & 0.002   & 0.0005\\  
+         Within R$^2$                     &         &         & 0.0004        &         & \\  
+          \\
+         Month fixed effects              &         &         & $\checkmark$  &         & \\  
+         \bottomrule
+      \end{tabular}
+      
+      \begin{tablenotes}\item \textit{Notes:} Banca M\'ultiple, 2015. $U$ and $L$ are summed over the firms in the credit-registry (RCC) sample drawn in 2015 (9,276 firms borrowing from 12 banks), so COMRAT $= U/(U+L)$ refers to the bank's lending to firms only. $U$ is account 7205 (unused lines and credit granted but not disbursed); unlike the bulletin measure it excludes outstanding guarantees and letters of credit. Column (5) also excludes unused guarantee and letter-of-credit facilities. DEPRAT, assets and equity are from SBS Series Estad\'isticas. Columns (1), (2), (4) and (5) are cross-sections of 2015 bank averages with heteroskedasticity-robust (HC1) standard errors; column (3) pools bank-months with month fixed effects, standard errors clustered by bank and a wild cluster bootstrap $p$-value. Several banks report few or no unused lines for sampled firms (COMRAT below 1\%: bcp, banco\_pichincha, citibank, santander\_peru, banco\_gnb, bancom, banco\_icbc); no correction is made. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+      \end{tablenotes}
+   \end{threeparttable}
+\end{table}
+
+

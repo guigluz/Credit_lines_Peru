@@ -1,0 +1,40 @@
+
+\begin{table}[!h]
+   \centering
+   \small
+   \begin{threeparttable}[b]
+      \caption{\label{tab:krs_comrat_deprat} Loan commitments and deposit funding: Kashyap, Rajan and Stein (2002) regressions}
+      \bigskip
+      \begin{tabular}{lcccccccc}
+         \toprule
+         DEPRAT definition & None & \multicolumn{4}{c}{Vista / deposits} & \multicolumn{3}{c}{(Vista + ahorro) / deposits} \\ 
+         \cmidrule(lr){3-6} \cmidrule(lr){7-9}
+                                          & (1)           & (2)           & (3)           & (4)           & (5)           & (6)           & (7)           & (8)\\  
+         \midrule 
+         DEPRAT                           &               & 0.035         & 0.056         & -0.244        & -0.241        & -0.065        & -0.062        & -0.066\\   
+                                          &               & (0.173)       & (0.128)       & (0.162)       & (0.151)       & (0.179)       & (0.209)       & (0.205)\\   
+         Log assets                       & -0.017        &               & 0.023         &               & 0.010         &               & 0.035         &   \\   
+                                          & (0.033)       &               & (0.025)       &               & (0.069)       &               & (0.038)       &   \\   
+         Equity / assets                  &               &               & 1.990$^{***}$ &               &               &               & 2.039$^{***}$ &   \\   
+                                          &               &               & (0.499)       &               &               &               & (0.498)       &   \\   
+         Constant                         &               & 0.377$^{***}$ &               &               &               & 0.407$^{***}$ &               &   \\   
+                                          &               & (0.081)       &               &               &               & (0.108)       &               &   \\   
+         Banks                            & 19            & 19            & 19            & 19            & 19            & 19            & 19            & 19\\  
+         Mean of dep. variable            & 0.384         & 0.384         & 0.384         & 0.384         & 0.384         & 0.384         & 0.384         & 0.384\\  
+         Wild cluster bootstrap $p$-value & 0.601         & 0.845         & 0.656         & 0.308         & 0.311         & 0.732         & 0.771         & 0.766\\  
+          \\
+         Observations                     & 2,193         & 2,193         & 2,193         & 2,193         & 2,193         & 2,193         & 2,193         & 2,193\\  
+         R$^2$                            & 0.023         & 0.001         & 0.262         & 0.898         & 0.898         & 0.007         & 0.263         & 0.896\\  
+         Within R$^2$                     & 0.017         &               & 0.258         & 0.029         & 0.030         &               & 0.258         & 0.003\\  
+          \\
+         Month fixed effects              & $\checkmark$  &               & $\checkmark$  & $\checkmark$  & $\checkmark$  &               & $\checkmark$  & $\checkmark$\\   
+         Bank fixed effects               &               &               &               & $\checkmark$  & $\checkmark$  &               &               & $\checkmark$\\   
+         \bottomrule
+      \end{tabular}
+      
+      \begin{tablenotes}\item \textit{Notes:} Banca M\'ultiple, monthly, July 2010 to September 2022 (19 banks, 2,193 bank-months). The dependent variable is COMRAT. $U$ is total indirect credit (SBS cuadro B-2322): guarantees, letters of credit, bank acceptances, and unused credit lines and credit granted but not disbursed; $L$ is direct credit; deposits by type, total assets and equity are from SBS Series Estad\'isticas. COMRAT $= U/(U+L)$. DEPRAT (vista) is demand deposits over total deposits; DEPRAT (vista + ahorro) adds savings deposits. Column (1) regresses COMRAT on log assets alone. Columns (2)--(5) measure DEPRAT with demand deposits, columns (6)--(8) with demand plus savings deposits; column (5) adds log assets to the specification with month and bank fixed effects. The bootstrap $p$-value refers to log assets in column (1) and to DEPRAT elsewhere. Reported unused lines jump for some banks in June 2018 and March 2019 (reporting changes); month fixed effects absorb the common part. Standard errors clustered by bank in parentheses; with few clusters the $p$-value of a wild cluster bootstrap (null imposed, Rademacher weights, 9,999 draws, or full enumeration when fewer distinct draws exist) on the first regressor shown is also reported. * $p<0.10$, ** $p<0.05$, *** $p<0.01$ from the conventional clustered test.
+      \end{tablenotes}
+   \end{threeparttable}
+\end{table}
+
+
