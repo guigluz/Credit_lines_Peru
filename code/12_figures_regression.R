@@ -17,8 +17,8 @@
 #   data/processed/encaje_rates_monthly.csv   BCRP reserve-requirement panel
 #       (from 09_encaje_series.R). Percent of reservable obligations; each month's
 #       value is the rate in force on the LAST day of the month.
-#   The MN marginal rate is NA (not applicable, NOT zero) while the MN regime is a
-#   single rate; the NA months are left blank, so the line simply breaks there.
+#       The MN marginal rate is NA (not applicable, NOT zero) while the MN regime is a
+#       single rate; the NA months are left blank, so the line simply breaks there.
 #   data/processed/bank_deposit_shares.csv    MN / ME deposit shares, every Reporte institution
 #       x month (from 10_reserve_shocks.R). `valid` = positive MN + ME deposits; months that
 #       are not valid are drawn as gaps, never as zero. ME deposits are valued in soles at the

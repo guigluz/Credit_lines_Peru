@@ -72,4 +72,13 @@ CREDIT_LINE_PRODUCTS <- c("tarjeta_credito", "cuenta_corriente", "cartas_credito
 new_sample[, credit_line := producto %in% CREDIT_LINE_PRODUCTS]
 new_sample[fecha_reporte==ymd("2015-12-31"), .(balance = sum(credito_vigente), unused = sum(linea_no_utilizada)), by = .(credit_line)] 
 
+# Find one identificador that has both "cartas_credito" and "credito_por_liquidar"
+new_sample[producto %in% c("cartas_credito", "credito_por_liquidar"), .(sum(credito_vigente)), by = .(identificador)] %>% 
+  group_by(identificador) %>%
+  summarise(N = n()) %>%
+  filter(N == 2) 
+
+new_sample[producto %in% c("credito_por_liquidar"), ] %>% View()
+
+
 sink(); close(log_con)
