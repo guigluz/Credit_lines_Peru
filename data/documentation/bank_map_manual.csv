@@ -153,3 +153,27 @@ EDPYME SANTANDER,edpyme_santander,Series Estadisticas non-bank (edpyme / empresa
 EDPYME SANTANDER CONSUMO,edpyme_santander_consumo,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2021-07..2022-09. Follows Edpyme Santander the previous month: candidate succession NOT merged (no SBS resolution cited),FALSE,empresa_credito
 EDPYME SOLIDARIDAD,edpyme_solidaridad,Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2001-01..2017-05,FALSE,empresa_credito
 SERVICIOS FINANCIEROS TOTAL EDPYME,total_servicios_financieros,"Series Estadisticas non-bank (edpyme / empresa de creditos); Reporte 2021-06..2022-09. An institution, not a subsystem total: TOTAL Servicios Financieros (RCC: TOTAL SERVICIOS FINANCIEROS EMPRESA DE CREDITOS, code 00184)",FALSE,empresa_credito
+CAJA MUNICIPAL DE AHORRO Y CREDITO DE AREQUIPA,cmac_arequipa,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA MUNICIPAL DE AHORRO Y CREDITO CUSCO,cmac_cusco,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA MUNICIPAL DE AHORRO Y CREDITO DEL SANTA,cmac_del_santa,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA MUNICIPAL DE AHORRO Y CREDITO HUANCAYO,cmac_huancayo,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA MUNICIPAL DE AHORRO Y CREDITO ICA,cmac_ica,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA MUNICIPAL DE AHORRO Y CREDITO MAYNAS,cmac_maynas,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA MUNICIPAL DE AHORRO Y CREDITO PAITA,cmac_paita,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA MUNICIPAL DE AHORRO Y CREDITO PIURA,cmac_piura,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA MUNICIPAL DE AHORRO Y CREDITO DE SULLANA EN LIQUIDACION,cmac_sullana,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA MUNICIPAL DE AHORRO Y CREDITO TACNA,cmac_tacna,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA MUNICIPAL DE AHORRO Y CREDITO TRUJILLO,cmac_trujillo,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA MUNICIPAL DE CREDITO POPULAR DE LIMA,cmcp_lima,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_municipal
+CAJA RURAL DE AHORRO Y CREDITO SENOR DE LUREN EN LIQUIDACION,crac_senor_de_luren,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_rural
+CAJA RURAL PRYMERA,crac_prymera,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_rural
+CAJA RURAL DE AHORRO Y CREDITO LOS ANDES,crac_los_andes,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,caja_rural
+FINANCIERA TFC S A EN LIQUIDACION,financiera_tfc,RCC legal name (RCC_empresas_supervisadas_2026),FALSE,empresa_financiera
+CAJA MUNICIPAL DE AHORRO Y CREDITO PISCO,cmac_pisco,SBS 2013 entity-code table (INSTRUCTIVO_RO-ROPE 2013),FALSE,caja_municipal
+CAJA RURAL DE AHORRO Y CREDITO CREDINKA,crac_credinka,SBS 2013 entity-code table (INSTRUCTIVO_RO-ROPE 2013),FALSE,caja_rural
+CAJA RURAL DE AHORRO Y CREDITO LOS LIBERTADORES DE AYACUCHO,crac_libertadores_ayacucho,SBS 2013 entity-code table (INSTRUCTIVO_RO-ROPE 2013),FALSE,caja_rural
+CAJA RURAL DE AHORRO Y CREDITO NUESTRA GENTE,crac_nuestra_gente,SBS 2013 entity-code table (INSTRUCTIVO_RO-ROPE 2013),FALSE,caja_rural
+CAJA RURAL DE AHORRO Y CREDITO PROMOTORA DE FINANZAS,crac_profinanzas,SBS 2013 entity-code table (INSTRUCTIVO_RO-ROPE 2013),FALSE,caja_rural
+CAJA RURAL DE AHORRO Y CREDITO SIPAN,crac_sipan,SBS 2013 entity-code table (INSTRUCTIVO_RO-ROPE 2013),FALSE,caja_rural
+CAJA RURAL DE AHORRO Y CREDITO CAJAMARCA,crac_cajamarca,SBS 2013 entity-code table (INSTRUCTIVO_RO-ROPE 2013),FALSE,caja_rural
+EMPRESA FINANCIERA EDYFICAR,financiera_edyficar,SBS 2013 entity-code table (INSTRUCTIVO_RO-ROPE 2013),FALSE,empresa_financiera

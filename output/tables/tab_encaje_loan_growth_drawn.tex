@@ -7,26 +7,26 @@
       \bigskip
       \begin{tabular}{lcc}
          \toprule
-         Shock measure                     & Minimum legal rate   & Marginal rate \\   
-                                           & (1)                  & (2)\\  
+         Shock measure                     & Minimum legal rate    & Marginal rate \\   
+                                           & (1)                   & (2)\\  
          \midrule 
-         Bank shock                        & 0.384$^{*}$          & 0.006\\   
-                                           & (0.188)              & (0.012)\\   
-         Banks (= bank clusters)           & 9                    & 9\\  
-         Firms                             & 1,508                & 1,080\\  
-         Firm-by-date cells                & 50,646               & 19,254\\  
-         Wild cluster bootstrap $p$-value  & 0.169                & 0.656\\  
-         Mean of dependent variable        & -0.018               & -0.014\\  
+         Bank shock                        & 0.544$^{**}$          & 0.012\\   
+                                           & (0.194)               & (0.012)\\   
+         Lenders (= clusters)              & 13                    & 13\\  
+         Firms                             & 1,520                 & 1,091\\  
+         Firm-by-date cells                & 51,012                & 19,403\\  
+         Wild cluster bootstrap $p$-value  & 0.087                 & 0.396\\  
+         Mean of dependent variable        & -0.018                & -0.015\\  
           \\
-         Observations                      & 109,926              & 41,867\\  
-         R$^2$                             & 0.452                & 0.449\\  
-         Within R$^2$                      & $1.6\times 10^{-5}$  & $1.11\times 10^{-6}$\\   
+         Observations                      & 110,794               & 42,202\\  
+         R$^2$                             & 0.452                 & 0.449\\  
+         Within R$^2$                      & $4.08\times 10^{-5}$  & $4.39\times 10^{-6}$\\   
           \\
-         Firm $\times$ date fixed effects  & $\checkmark$         & $\checkmark$\\   
+         Firm $\times$ date fixed effects  & $\checkmark$          & $\checkmark$\\   
          \bottomrule
       \end{tabular}
       
-      \begin{tablenotes}\item \textit{Notes:} The dependent variable is the log change between consecutive month-ends of a firm's drawn credit-line balance (\textit{cr\'edito vigente}) at a bank, excluding the unused part of the line; the main specification instead uses total commitments (drawn plus unused). Credit is classified with a manual product table: credit cards, current-account advances, guarantees, letters of credit, credits to be settled, multi-line facilities and other lines are credit lines; leasing, lease-back, real-estate, mortgage, pawn, income-property and RFA credit are term loans; \textit{pr\'estamos} are credit lines when reported as revolving, term loans when non-revolving, and, when the revolving status is not identified, credit lines if the row carries an unused line and term loans otherwise. Products whose nature is ambiguous (overdrafts, factoring, discounting, foreign-trade finance, project finance, other credits, credit to consolidable entities) are excluded from all columns. Amounts are summed across products and currencies within a bank--firm--credit-type cell (foreign-currency amounts are reported in soles at the month-end exchange rate, so growth includes exchange-rate revaluation). Growth is computed for continuing relationships with strictly positive amounts at both dates; entry and exit are not captured. The bank shock is $s^{mn}_{b,0}\Delta r^{mn}_{t}+s^{me}_{b,0}\Delta r^{me}_{t}$, where $\Delta r$ is the month-end change, in percentage points, of the statutory minimum legal reserve rate or marginal reserve rate on domestic (mn) and foreign (me) currency obligations (positive = tighter), and $s_{b,0}$ are the bank's fixed December 2009 deposit shares in each currency. The marginal-rate shock is undefined when the domestic regime is a single rate, which shortens the marginal-rate columns. Each regression keeps firm-by-date cells with at least two banks and absorbs firm-by-date fixed effects. Sample: RCC sample of 10,000 firms, September 2010 to December 2023. Standard errors, in parentheses, are clustered by bank; with few clusters the $p$-value from a wild cluster bootstrap (null imposed, 9,999 draws) is reported. * $p<0.10$, ** $p<0.05$, *** $p<0.01$ from the conventional clustered $t(G-1)$ test.
+      \begin{tablenotes}\item \textit{Notes:} The dependent variable is the log change between consecutive month-ends of a firm's drawn credit-line balance (\textit{cr\'edito vigente}) at a lender, excluding the unused part of the line; the main specification instead uses total commitments (drawn plus unused). Lenders are all institutions with a reserve shock: commercial banks, cajas municipales and rurales, and financieras. Credit is classified with a manual product table: credit cards, current-account advances, guarantees, letters of credit, credits to be settled, multi-line facilities and other lines are credit lines; leasing, lease-back, real-estate, mortgage, pawn, income-property and RFA credit are term loans; \textit{pr\'estamos} are credit lines when reported as revolving, term loans when non-revolving, and, when the revolving status is not identified, credit lines if the row carries an unused line and term loans otherwise. Products whose nature is ambiguous (overdrafts, factoring, discounting, foreign-trade finance, project finance, other credits, credit to consolidable entities) are excluded from all columns. Amounts are summed across products and currencies within a bank--firm--credit-type cell (foreign-currency amounts are reported in soles at the month-end exchange rate, so growth includes exchange-rate revaluation). Growth is computed for continuing relationships with strictly positive amounts at both dates; entry and exit are not captured. The bank shock is $s^{mn}_{b,0}\Delta r^{mn}_{t}+s^{me}_{b,0}\Delta r^{me}_{t}$, where $\Delta r$ is the month-end change, in percentage points, of the statutory minimum legal reserve rate or marginal reserve rate on domestic (mn) and foreign (me) currency obligations (positive = tighter), and $s_{b,0}$ are the bank's fixed December 2009 deposit shares in each currency. The marginal-rate shock is undefined when the domestic regime is a single rate, which shortens the marginal-rate columns. Each regression keeps firm-by-date cells with at least two lenders and absorbs firm-by-date fixed effects. Sample: RCC sample of 10,000 firms, September 2010 to December 2023. Standard errors, in parentheses, are clustered by lender; with few clusters the $p$-value from a wild cluster bootstrap (null imposed, 9,999 draws) is reported. * $p<0.10$, ** $p<0.05$, *** $p<0.01$ from the conventional clustered $t(G-1)$ test.
       \end{tablenotes}
    \end{threeparttable}
 \end{table}

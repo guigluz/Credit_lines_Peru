@@ -1,0 +1,107 @@
+tipo_sbs,entidad,nombre
+B,1,Banco de Crédito del Perú
+B,2,Banco Internacional del Perú
+B,4,Scotiabank Perú S A A
+B,6,B B V A Banco Continental
+B,22,Banco de Comercio
+S,41,La Positiva Compañía de Seguros y Reaseguros S A
+S,44,El Pacifico Peruano Suiza Compañía de Seguros y Reaseguros S A
+S,45,Secrex Compañía de Seguros de Créditos y Garantías S A
+S,50,Rímac Seguros y Reaseguros
+B,52,Citibank del Perú S A
+B,55,Banco Interamericano de Finanzas
+B,61,Banco de la Nación
+S,71,Mapfre Perú Compañía de Seguros y Reaseguros
+F,72,Crediscotia Financiera S A
+B,73,Banco Ripley Perú S A
+AH,76,Solución Empresa Administradora Hipotecaria
+B,82,Banco Financiero del Perú
+B,90,Banco Central de Reserva del Perú
+B,99,Corporación Financiera de Desarrollo S A
+F,100,Amerika Financiera S A
+C,101,Caja Municipal de Ahorro y Crédito de Sullana S A
+C,102,Caja Municipal de Crédito Popular de Lima
+C,103,Caja Municipal de Ahorro y Crédito Piura
+C,104,Caja Municipal de Ahorro y Crédito de Arequipa
+C,106,Caja Municipal de Ahorro y Crédito Cusco S A
+C,107,Caja Municipal de Ahorro y Crédito Huancayo
+C,108,Caja Municipal de Ahorro y Crédito Ica
+C,109,Caja Municipal de Ahorro y Crédito Maynas
+C,110,Caja Municipal de Ahorro y Crédito Paita
+C,111,Caja Municipal de Ahorro y Crédito del Santa
+C,112,Caja Municipal de Ahorro y Crédito Trujillo
+C,113,Caja Municipal de Ahorro y Crédito Pisco
+C,114,Caja Municipal de Ahorro y Crédito Tacna
+B,123,MIBANCO Banco de la Micro Empresa S A
+B,125,Banco Agropecuario
+B,126,HSBC Bank Perú S A
+B,127,Banco Santander Perú S A
+B,128,Deutsche Bank Perú S A
+B,129,Banco Cencosud S A
+B,140,Banco Azteca del Perú S A
+B,142,Banco Falabella Perú S A
+F,143,Financiera TFC S A
+F,144,Financiera Universal S A
+F,145,Financiera Uno S A
+R,154,Caja Rural de Ahorro y Crédito Credinka S A
+R,156,Caja Rural de Ahorro y Crédito Chavín S A
+R,157,Caja Rural de Ahorro y Crédito Los Libertadores de Ayacucho
+R,158,Caja Rural de Ahorro y Crédito Nuestra Gente S A A
+R,159,Caja Rural de Ahorro y Crédito Señor de Luren
+R,160,Caja Rural de Ahorro y Crédito Promotora de Finanzas S A A
+R,162,Caja Rural de Ahorro y Crédito Sipan S A
+R,164,Caja Rural de Ahorro y Crédito Cajamarca S A
+R,169,Caja Rural de Ahorro y Crédito Los Andes S A
+R,170,Productos y Mercados Agrícolas de Huaral Caja Rural de Ahorro y Crédito S A
+R,171,Caja Rural de Ahorro y Crédito Incasur S A
+AF,179,Leasing Perú S A
+AF,184,Leasing Total S A
+F,185,Mitsui Auto Finance Perú S A
+S,200,El Pacifico Vida Compañía de Seguros y Reaseguros
+S,202,Interseguro Compañía de Seguros S A
+S,203,Ace Seguros Compañía de Seguros y Reaseguros S A
+S,204,Mapfre Perú Vida Compañía de Seguros y Reaseguros
+S,205,Seguros Sura
+S,207,La Positiva Vida Seguros y Reaseguros
+S,208,Cardif del Perú S A Compañía de Seguros y Reaseguros
+S,209,Protecta S A Compañía de Seguros
+S,210,Insur S A Compañía de Seguros
+FO,216,Fondo MIVIVIENDA S A
+G,220,Fundación Fondo de Garantía Para Prestamos A la Pequeña Industria
+FD,221,La Fiduciaria S A
+FD,222,FIDUPERÚ S A Sociedad Fiduciaria
+E,223,Edpyme Credijet del Perú S A
+F,226,Empresa Financiera Edyficar S A
+F,227,Financiera Proempresa S A
+F,228,Empresa Financiera Créditos Arequipa S A - Financiera Crear
+E,230,Edpyme Nueva Visión S A
+F,231,Empresa Financiera Confianza S A - Financiera Confianza
+E,232,Edpyme Raíz S A
+E,234,Edpyme Solidaridad y Desarrollo Empresarial S A C
+E,235,Edpyme Credivision S A
+E,236,Edpyme Acceso Crediticio Sociedad Anónima
+F,237,Financiera Efectiva S A
+E,238,Edpyme Alternativa S A
+E,239,Edpyme Marcimex S A
+E,240,Edpyme Micasita S A
+FP,241,Administradora Privada de Fondos de Pensiones Horizonte S A
+FP,242,Administradora Privada de Fondos de Pensiones Integra S A
+FP,243,Administradora Privada de Fondos de Pensiones Profuturo S A
+FP,245,Prima AFP S A
+E,248,Edpyme Inversiones La Cruz S A
+AH,249,INCASA Empresa Administradora Hipotecaria
+SC,250,Cámara de Compensación Electrónica S A
+AG,256,Compañía Almacenera S A
+AG,257,Almacenera del Perú S A
+AG,262,Depósitos S. A.
+AG,264,Almacenes Financieros S A – Almafin
+TC,265,Compañía de Seguridad Prosegur S A
+TC,266,Hermes Transportes Blindados S A
+FA,268,Factoring Total S. A.
+TF,400,Argenper S A
+TF,403,Red Perú Mundo S A
+TF,404,Serviban S A
+TF,406,Jet Perú S A
+TF,411,Union Express S A
+TF,412,DHL Express Perú S A C
+TF,413,Perú Express Servicios Internacionales S A

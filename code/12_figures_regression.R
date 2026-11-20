@@ -25,6 +25,9 @@
 #       month-end exchange rate, so sol depreciation raises the ME share mechanically.
 #   data/processed/bank_encaje_shocks.csv     read only for `baseline_date`.
 #
+# Figure 3) fig_cum_bank_shock_hist  Histogram across institutions of the minimum-legal-rate bank shock
+#      summed over 2013-2023; commercial banks shaded.
+#
 # Usage:  Rscript code/12_figures_regression.R      (output: output/figures/*.pdf)
 # ==============================================================================
 
@@ -204,3 +207,55 @@ p_shares <- ggplot(grid, aes(date, me_pct, group = grp, colour = series, linewid
 
 save_fig("fig_deposit_shares.pdf", p_shares, height = 5.2)
 message("Wrote ", file.path(fig_dir, "fig_deposit_shares.pdf"))
+
+
+# ══ Figure 3: bank shocks accumulated over 2013-2023 ══════════════════════════
+# Sum of the monthly minimum-legal-rate bank shock (bank_shock_gen_min_legal, 10_reserve_shocks.R) over
+# CUM_START..CUM_END, one value per institution with valid baseline deposit shares. Only the minimum legal
+# rate is used: the marginal-rate shock is undefined (NA) in the single-rate months of the window.
+# Commercial banks (entity_type banca_multiple in the curated bank map) are shaded.
+BANK_MAP_CSV <- "data/documentation/bank_map_manual.csv"
+CUM_START <- as.Date("2013-01-01"); CUM_END <- as.Date("2023-12-31")
+stopifnot(file.exists(BANK_MAP_CSV))
+
+shk <- fread(SHOCKS_CSV)
+shk[, fecha_reporte := as.Date(fecha_reporte)]
+win3 <- shk[fecha_reporte >= CUM_START & fecha_reporte <= CUM_END]
+stopifnot(!anyNA(win3$bank_shock_gen_min_legal))          # every institution has a shock in every month of the window
+cum <- win3[, .(cum_shock = sum(bank_shock_gen_min_legal), n_months = .N), by = bank_standardized]
+stopifnot(uniqueN(cum$n_months) == 1L)
+
+types <- unique(fread(BANK_MAP_CSV, select = c("bank_standardized", "entity_type")))
+stopifnot(!anyDuplicated(types$bank_standardized))
+cum <- merge(cum, types, by = "bank_standardized", all.x = TRUE)
+stopifnot(!anyNA(cum$entity_type))
+REG_LAB <- sprintf("Commercial banks (n = %d)", sum(cum$entity_type == "banca_multiple"))
+OTH_LAB <- sprintf("Cajas and financieras (n = %d)", sum(cum$entity_type != "banca_multiple"))
+cum[, group := factor(fifelse(entity_type == "banca_multiple", REG_LAB, OTH_LAB), c(REG_LAB, OTH_LAB))]
+message(sprintf("Figure 3: %d institutions, %d months; cumulative shock from %.2f to %.2f pp.",
+                nrow(cum), cum$n_months[1], min(cum$cum_shock), max(cum$cum_shock)))
+
+# net change in the statutory rates over the window (common to all banks)
+net_mn <- sum(unique(win3[, .(fecha_reporte, d_mn_gen_min_legal)])$d_mn_gen_min_legal)
+net_me <- sum(unique(win3[, .(fecha_reporte, d_me_gen_min_legal)])$d_me_gen_min_legal)
+
+p_cum <- ggplot(cum, aes(cum_shock, fill = group)) +
+  geom_histogram(binwidth = 0.2, boundary = 0, colour = "white", linewidth = 0.3) +
+  scale_fill_manual(values = setNames(c(COL[["MN"]], "grey75"), c(REG_LAB, OTH_LAB))) +
+  scale_x_continuous(breaks = seq(floor(min(cum$cum_shock)), 0, 0.5)) +
+  scale_y_continuous(breaks = function(l) seq(0, ceiling(l[2]), 2), expand = expansion(mult = c(0, 0.05))) +
+  labs(x = "Cumulative bank shock, percentage points", y = "Number of institutions",
+       title = "Minimum-legal-rate bank shocks accumulated over 2013-2023",
+       subtitle = sprintf("Sum of monthly shocks, %s to %s, one observation per institution",
+                          format(CUM_START, "%b %Y"), format(CUM_END, "%b %Y")),
+       caption = wrap_cap(
+         "The monthly bank shock is s_mn x change in the MN minimum legal rate + s_me x change in the ME rate, with deposit shares fixed at ",
+         format(base_date, "%B %Y"), ". Over the window the MN rate changed by a net ", sprintf("%+.2f", net_mn),
+         " pp and the ME rate by ", sprintf("%+.2f", net_me), " pp, so the cumulative shock equals ", sprintf("%.2f", net_mn),
+         " times the bank's baseline MN deposit share: banks with more soles deposits had a larger net easing. ",
+         "Institutions shown are those with valid baseline deposit shares (SBS Series Estadisticas).")) +
+  base_theme +
+  theme(axis.title.x = element_text(size = 8), panel.grid.major.x = element_blank())
+
+save_fig("fig_cum_bank_shock_hist.pdf", p_cum, height = 3.8)
+message("Wrote ", file.path(fig_dir, "fig_cum_bank_shock_hist.pdf"))

@@ -1276,3 +1276,42 @@ loaded via a namespace (and not attached):
 [64] glue_1.7.0           xml2_1.3.6           vroom_1.6.5          svglite_2.1.3        rstudioapi_0.15.0    R6_2.5.1             systemfonts_1.0.5   
 
 > sink(); close(log_con)
+
+> #!/usr/bin/env Rscript
+> #
+> # Compile every .tex table fragment in this folder to a standalone PDF.
+> # Re-run any time a table is added, removed,  .... [TRUNCATED] 
+
+> folder <- "output/tables"
+
+> out_dir <- file.path(folder, "_gallery")
+
+> # varwidth needs an explicit max, or it silently clips content wider than a
+> # normal page's textwidth (~355pt) instead of growing the page to fit  .... [TRUNCATED] 
+
+> postamble <- "\n\\end{document}\n"
+
+> unlink(out_dir, recursive = TRUE)
+
+> dir.create(out_dir, recursive = TRUE)
+
+> tex_files <- list.files(folder, pattern = "\\.tex$", full.names = TRUE)
+
+> tex_files <- tex_files[basename(tex_files) != "build_tables.R"]
+
+> for (tex_path in tex_files) {
++   tex_filename <- basename(tex_path)
++   name <- tools::file_path_sans_ext(tex_filename)
++   cat("Compiling", tex_fi .... [TRUNCATED] 
+Compiling tab_encaje_loan_growth_banks.tex ... ok
+Compiling tab_encaje_loan_growth_drawn.tex ... ok
+Compiling tab_encaje_loan_growth.tex ... ok
+Compiling tab_krs_comrat_deprat.tex ... ok
+Compiling tab_krs_dep_assets.tex ... ok
+Compiling tab_krs_post2018.tex ... ok
+Compiling tab_krs_rcc_2015.tex ... ok
+Compiling tab_kundu_deposit_concentration.tex ... ok
+
+> cat("\nDone. PDFs in", out_dir, "\n")
+
+Done. PDFs in output/tables/_gallery 
