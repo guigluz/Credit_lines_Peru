@@ -44,7 +44,7 @@ VALID <- "output/validation"
 LOGF  <- "output/logs/11a_credit_classification.log"
 
 for (d in c(dirname(OUT_PQ), VALID, dirname(LOGF))) dir.create(d, recursive = TRUE, showWarnings = FALSE)
-log_con <- file(LOGF, open = "wt"); sink(log_con, split = TRUE)
+if (!interactive()) { log_con <- file(LOGF, open = "wt"); sink(log_con, split = TRUE) }   # log only under Rscript: an interactive run that stops early would leave the sink open
 fmt <- function(x) format(x, big.mark = ",", trim = TRUE)
 hdr <- function(s) cat("\n", strrep("=", 78), "\n", s, "\n", strrep("=", 78), "\n", sep = "")
 
@@ -139,4 +139,4 @@ hdr("3. Output")
 write_parquet(cr[, .(fecha_reporte, identificador, entidad, moneda_codigo, segmento_credito, producto, revolvencia,
                      credito_vigente, linea_no_utilizada, credit_class, class_rule)], OUT_PQ)
 cat("Wrote ", OUT_PQ, " (", fmt(nrow(cr)), " rows)\n", sep = "")
-sink(); close(log_con)
+if (!interactive()) { sink(); close(log_con) }

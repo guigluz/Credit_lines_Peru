@@ -8,7 +8,7 @@ library(fixest)
 
 LOGF  <- "output/logs/credit_classification.log"
 
-log_con <- file(LOGF, open = "wt"); sink(log_con, split = TRUE)
+if (!interactive()) { log_con <- file(LOGF, open = "wt"); sink(log_con, split = TRUE) }   # log only under Rscript: an interactive run that stops early would leave the sink open
 
 new_sample = read_parquet('data/raw/muestra_anonima_base2015_v2.parquet')
 
@@ -79,4 +79,4 @@ new_sample[producto %in% c("cartas_credito", "credito_por_liquidar"), .(sum(cred
   filter(N == 2) 
 
 
-sink(); close(log_con)
+if (!interactive()) { sink(); close(log_con) }

@@ -68,7 +68,7 @@ FEW_CLUSTERS <- 30L      # flag conventional cluster inference below this many b
 
 for (d in c(PROC, VALID, TABS, dirname(LOGF), file.path(PROC, "crosswalks")))
   dir.create(d, recursive = TRUE, showWarnings = FALSE)
-log_con <- file(LOGF, open = "wt"); sink(log_con, split = TRUE)
+if (!interactive()) { log_con <- file(LOGF, open = "wt"); sink(log_con, split = TRUE) }   # log only under Rscript: an interactive run that stops early would leave the sink open
 
 hdr <- function(s) cat("\n", strrep("=", 78), "\n", s, "\n", strrep("=", 78), "\n", sep = "")
 fmt <- function(x) format(x, big.mark = ",", trim = TRUE)
@@ -383,4 +383,4 @@ write_table(
 
 hdr("Session")
 print(sessionInfo())
-sink(); close(log_con)
+if (!interactive()) { sink(); close(log_con) }

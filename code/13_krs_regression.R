@@ -81,7 +81,7 @@ N_BOOT <- 9999L
 SEED   <- 20261117L
 
 for (d in c(PROC, TABS, FIGS, dirname(LOGF))) dir.create(d, recursive = TRUE, showWarnings = FALSE)
-log_con <- file(LOGF, open = "wt"); sink(log_con, split = TRUE)
+if (!interactive()) { log_con <- file(LOGF, open = "wt"); sink(log_con, split = TRUE) }   # log only under Rscript: an interactive run that stops early would leave the sink open
 
 hdr <- function(s) cat("\n", strrep("=", 78), "\n", s, "\n", strrep("=", 78), "\n", sep = "")
 fmt <- function(x) format(x, big.mark = ",", trim = TRUE)
@@ -578,4 +578,4 @@ save_fig("fig_krs_deposit_mix_context.pdf", p3, 4.2)
 
 hdr("Session")
 print(sessionInfo())
-sink(); close(log_con)
+if (!interactive()) { sink(); close(log_con) }

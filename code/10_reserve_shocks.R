@@ -69,7 +69,7 @@ MEASURES <- c("gen_min_legal", "gen_marginal")
 TOL <- 1e-9
 
 for (d in c(PROC, dirname(LOGF))) dir.create(d, recursive = TRUE, showWarnings = FALSE)
-log_con <- file(LOGF, open = "wt"); sink(log_con, split = TRUE)
+if (!interactive()) { log_con <- file(LOGF, open = "wt"); sink(log_con, split = TRUE) }   # log only under Rscript: an interactive run that stops early would leave the sink open
 
 hdr <- function(s) cat("\n", strrep("=", 78), "\n", s, "\n", strrep("=", 78), "\n", sep = "")
 fmt <- function(x) format(x, big.mark = ",", trim = TRUE)
@@ -231,4 +231,4 @@ for (j in MEASURES) {
 
 hdr("Session")
 print(sessionInfo())
-sink(); close(log_con)
+if (!interactive()) { sink(); close(log_con) }
