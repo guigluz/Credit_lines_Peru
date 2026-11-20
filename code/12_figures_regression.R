@@ -26,7 +26,7 @@
 #   data/processed/bank_encaje_shocks.csv     read only for `baseline_date`.
 #
 # Figure 3) fig_cum_bank_shock_hist  Histogram across institutions of the minimum-legal-rate bank shock
-#      summed over 2013-2023; commercial banks shaded.
+#      summed over 2013-2021; commercial banks shaded.
 #
 # Usage:  Rscript code/12_figures_regression.R      (output: output/figures/*.pdf)
 # ==============================================================================
@@ -209,13 +209,13 @@ save_fig("fig_deposit_shares.pdf", p_shares, height = 5.2)
 message("Wrote ", file.path(fig_dir, "fig_deposit_shares.pdf"))
 
 
-# ══ Figure 3: bank shocks accumulated over 2013-2023 ══════════════════════════
+# ══ Figure 3: bank shocks accumulated over 2013-2021 ══════════════════════════
 # Sum of the monthly minimum-legal-rate bank shock (bank_shock_gen_min_legal, 10_reserve_shocks.R) over
 # CUM_START..CUM_END, one value per institution with valid baseline deposit shares. Only the minimum legal
 # rate is used: the marginal-rate shock is undefined (NA) in the single-rate months of the window.
 # Commercial banks (entity_type banca_multiple in the curated bank map) are shaded.
 BANK_MAP_CSV <- "data/documentation/bank_map_manual.csv"
-CUM_START <- as.Date("2013-01-01"); CUM_END <- as.Date("2023-12-31")
+CUM_START <- as.Date("2013-01-01"); CUM_END <- as.Date("2021-12-31")
 stopifnot(file.exists(BANK_MAP_CSV))
 
 shk <- fread(SHOCKS_CSV)
@@ -245,7 +245,7 @@ p_cum <- ggplot(cum, aes(cum_shock, fill = group)) +
   scale_x_continuous(breaks = seq(floor(min(cum$cum_shock)), 0, 0.5)) +
   scale_y_continuous(breaks = function(l) seq(0, ceiling(l[2]), 2), expand = expansion(mult = c(0, 0.05))) +
   labs(x = "Cumulative bank shock, percentage points", y = "Number of institutions",
-       title = "Minimum-legal-rate bank shocks accumulated over 2013-2023",
+       title = sprintf("Minimum-legal-rate bank shocks accumulated over %s-%s", format(CUM_START, "%Y"), format(CUM_END, "%Y")),
        subtitle = sprintf("Sum of monthly shocks, %s to %s, one observation per institution",
                           format(CUM_START, "%b %Y"), format(CUM_END, "%b %Y")),
        caption = wrap_cap(
