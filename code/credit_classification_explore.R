@@ -48,7 +48,7 @@ new_sample[fecha_reporte==ymd("2015-12-31"), .(balance = sum(credito_vigente), u
 new_sample[, .(unused = sum(linea_no_utilizada)), by = .(producto)] %>% 
   filter(unused > 0) 
 
-  # Growth right arround the reporting break
+  # Growth right around the reporting break
 new_sample[fecha_reporte %in% ymd(c("2018-05-31", "2018-06-30")) , .(unused = sum(linea_no_utilizada)), by = .(producto, before_2018)] %>% 
   filter(unused > 0) %>% 
   pivot_wider(names_from = "before_2018", names_prefix = "before_2018_", values_from = "unused" ) %>%
@@ -77,8 +77,6 @@ new_sample[producto %in% c("cartas_credito", "credito_por_liquidar"), .(sum(cred
   group_by(identificador) %>%
   summarise(N = n()) %>%
   filter(N == 2) 
-
-new_sample[producto %in% c("credito_por_liquidar"), ] %>% View()
 
 
 sink(); close(log_con)

@@ -3,14 +3,15 @@
 # regressions on the bank reserve-requirement shocks built in code/10_reserve_shocks.R
 # ==============================================================================
 # Run from the project root:   Rscript code/11_loan_reserve_shock_regression.R
-# Requires:                    Rscript code/10_reserve_shocks.R (run first)
+# Requires:                    Rscript code/10_reserve_shocks.R and
+#                              Rscript code/11a_credit_classification.R (run first)
 #
 # DESIGN
-#   Loan growth is log growth of a firm's credit balance at a bank between two
-#   consecutive month-ends, separately for credit lines and other credit. The
-#   regression compares banks lending to the SAME firm in the SAME month
-#   (firm-by-date fixed effects, so firm demand is absorbed), regressing growth on
-#   the bank's reserve-requirement shock; standard errors are clustered by bank.
+#   Credit rows are classified as credit lines or term loans in 11a_credit_classification.R
+#   The outcome is log growth between two consecutive month-ends of a firm's position at a bank:
+#     credit lines (main):        total commitment = credito_vigente + linea_no_utilizada
+#     credit lines (robustness):  drawn credit     = credito_vigente
+#     term loans:                 drawn credit     = credito_vigente
 #
 #   The shocks are keyed by bank_standardized (the project's hub key); the credit
 #   file identifies banks by the RCC entity code (`entidad`). This script builds
@@ -19,7 +20,7 @@
 #   panel row -> entidad -> bank_standardized -> shock.
 #
 # INPUTS (never modified)
-#   data/raw/muestra_anonima_base2015.parquet        credit, firm x bank x product x currency x month
+#   data/processed/credit_classified_v2.parquet      classified credit rows, v2 sample (11a_credit_classification.R)
 #   data/processed/bank_encaje_shocks.csv            bank shocks, unique by bank_standardized x fecha_reporte (10_reserve_shocks.R)
 #   data/documentation/RCC_empresas_supervisadas_2026.xls   RCC entity code -> name (tab-delimited text
 #                                                    saved with an .xls extension, ISO-8859-1)
@@ -27,9 +28,9 @@
 #
 # OUTPUTS
 #   data/processed/crosswalks/xwalk_rcc.csv          entidad code -> bank_standardized (project spoke format + code)
-#   data/processed/credit_balances_by_currency.csv.gz  currency-specific intermediate (entidad x firm x credit_line x moneda x date)
-#   data/processed/credit_line_growth_panel.csv.gz   relationship-month panel with growth, exclusion reason and shocks
-#   output/tables/tab_encaje_loan_growth.tex         regression table fragment
+#   data/processed/credit_line_growth_panel.csv.gz   relationship-month panel (entidad x firm x credit_class x month) with growth and shocks
+#   output/tables/tab_encaje_loan_growth.tex         main table: credit-line commitment growth vs term-loan growth
+#   output/tables/tab_encaje_loan_growth_drawn.tex   robustness: credit-line drawn-credit growth
 #   output/validation/encaje_shock_*.csv             diagnostics (coverage, classification, exclusions, regressions)
 #   output/logs/11_loan_reserve_shock_regression.log this script's console log
 # ==============================================================================
@@ -43,7 +44,7 @@ suppressPackageStartupMessages({
 source("code/00_sbs_utils.R")   # canon_bank(), standardize_banks(), read_bank_map(); loads dplyr/stringr, hardens the locale
 
 # ---- parameters ---------------------------------------------------------------
-CREDIT_PQ  <- "data/raw/muestra_anonima_base2015.parquet"
+CREDIT_PQ  <- "data/processed/credit_classified_v2.parquet"
 SHOCKS_CSV <- "data/processed/bank_encaje_shocks.csv"
 RCC_LIST   <- "data/documentation/RCC_empresas_supervisadas_2026.xls"
 PROC  <- "data/processed"
@@ -55,8 +56,7 @@ LOGF  <- "output/logs/11_loan_reserve_shock_regression.log"
 # layout (two panels of columns) assumes exactly these two.
 MEASURES <- c("gen_min_legal", "gen_marginal")
 
-CREDIT_LINE_PRODUCTS <- c("tarjeta_credito", "cuenta_corriente", "cartas_credito",
-                          "avales_fianzas", "multilinea", "otras_lineas")
+REG_CLASSES <- c("credit_line", "term_loan")    # 11a classes used; "undefined" and "ignored" are dropped
 
 N_BOOT <- 9999L          # wild cluster bootstrap draws
 SEED   <- 20261009L
@@ -74,12 +74,12 @@ write_val <- function(x, name) fwrite(x, file.path(VALID, paste0("encaje_shock_"
 # 1. Credit data, bank shocks and the entidad -> bank_standardized crosswalk
 # ==============================================================================
 hdr("1. Credit data, shocks and RCC crosswalk")
-cr <- as.data.table(read_parquet(CREDIT_PQ, col_select = c("fecha_reporte", "identificador", "entidad",
-                                                           "moneda_codigo", "producto", "credito_vigente")))
+cr <- as.data.table(read_parquet(CREDIT_PQ, col_select = c("fecha_reporte", "identificador", "entidad", "moneda_codigo",
+                                                           "producto", "credito_vigente", "linea_no_utilizada", "credit_class")))
 cat(sprintf("Credit file: %s rows, %s firms, %d entidad codes, %d dates.\n", fmt(nrow(cr)),
             fmt(uniqueN(cr$identificador)), uniqueN(cr$entidad), uniqueN(cr$fecha_reporte)))
-stopifnot(inherits(cr$fecha_reporte, "Date"), is.numeric(cr$credito_vigente),
-          !anyNA(cr))     # the extract is complete in every column used (no missing product, firm, bank, currency, date or balance)
+stopifnot(inherits(cr$fecha_reporte, "Date"), is.numeric(cr$credito_vigente), is.numeric(cr$linea_no_utilizada),
+          !anyNA(cr))     # the extract is complete in every column used (no missing product, firm, bank, currency, date, balance or class)
 cr_dates <- sort(unique(cr$fecha_reporte))
 stopifnot(all(as.integer(format(cr_dates + 1, "%d")) == 1L), all(diff(cr_dates) %in% 28:31))   # consecutive month-ends
 cat(sprintf("Credit calendar: %d consecutive month-ends, %s to %s.\n", length(cr_dates),
@@ -146,29 +146,14 @@ cat(sprintf("Hub banks reached by more than one RCC code: %s\n",
             if (nrow(dupb)) paste(dupb$bank_standardized, collapse = ", ") else "none"))
 
 # ==============================================================================
-# 2. Product classification
+# 2. Credit classification (from 11a_credit_classification.R)
 # ==============================================================================
-hdr("2. Product classification")
-# Normalize whitespace and case only; product meanings unchanged.
-cr[, producto := tolower(trimws(gsub("\\s+", " ", as.character(producto))))]
-stopifnot(all(cr$producto != ""))
-unknown <- setdiff(CREDIT_LINE_PRODUCTS, unique(cr$producto))
-if (length(unknown)) stop("credit-line products absent from the data: ", paste(unknown, collapse = ", "))
-cr[, credit_line := producto %in% CREDIT_LINE_PRODUCTS]
+hdr("2. Credit classification")
 
-pc <- cr[, .(n_rows = .N, n_firms = uniqueN(identificador), sum_credito_vigente = sum(credito_vigente),
-             n_positive_rows = sum(credito_vigente > 0),
-             share_positive_rows = mean(credito_vigente > 0)), by = .(producto, credit_line)][order(-credit_line, -n_rows)]
-write_val(pc, "product_classification")
-cat("Product classification (credit_line = TRUE for the six listed products):\n")
-print(pc[, .(producto, credit_line, n_rows, n_firms, n_positive_rows, share_positive_rows = round(share_positive_rows, 3))], nrows = 50)
-cat(sprintf("NOTE: credito_vigente is identically zero for %s; credit-line growth therefore rests on %s.\n",
-            paste(pc[credit_line == TRUE & n_positive_rows == 0, producto], collapse = ", "),
-            paste(pc[credit_line == TRUE & n_positive_rows > 0, producto], collapse = " and ")))
-cat(sprintf("Rows: credit_line TRUE %s | FALSE %s.\n", fmt(sum(cr$credit_line)), fmt(sum(!cr$credit_line))))
-cat(sprintf("credito_vigente: negative %s | zero %s (%.1f%%) | positive %s\n",
-            fmt(sum(cr$credito_vigente < 0)), fmt(sum(cr$credito_vigente == 0)),
-            100 * mean(cr$credito_vigente == 0), fmt(sum(cr$credito_vigente > 0))))
+N_FIRMS_SAMPLE <- uniqueN(cr$identificador)     # full sample size, reported in the table notes
+cat(sprintf("Keeping classes %s; dropping %s rows of other classes.\n", paste(REG_CLASSES, collapse = ", "),
+            fmt(sum(!cr$credit_class %in% REG_CLASSES))))
+cr <- cr[credit_class %in% REG_CLASSES]
 
 # Entity statistics (computed before the merge, on the raw credit rows)
 ent_stats <- cr[, .(n_firms = uniqueN(identificador), n_obs = .N,
@@ -180,15 +165,20 @@ ent_stats <- cr[, .(n_firms = uniqueN(identificador), n_obs = .N,
 # ==============================================================================
 hdr("3. Currency, aggregation and merge with shocks")
 
-# ---- aggregate: entidad x firm x credit_line x month (products and currencies summed) ----
+# ---- aggregate: entidad x firm x credit_class x month (products and currencies summed) ----
 agg <- cr[, .(
-  balance = sum(credito_vigente), n_products = uniqueN(producto), n_raw_rows = .N,
-  bal_me = sum(credito_vigente[moneda_codigo == "2"])),
-  by = .(entidad, identificador, credit_line, fecha_reporte)]
-agg[, me_balance_share := fifelse(balance > 0, bal_me / balance, NA_real_)]   # undefined (NA) when the balance is zero
-cat(sprintf("Aggregated to %s entidad x firm x credit_line x month rows (from %s product-currency rows).\n",
+  balance = sum(credito_vigente), unused = sum(linea_no_utilizada),
+  n_products = uniqueN(producto), n_raw_rows = .N,
+  bal_me = sum(credito_vigente[moneda_codigo == "2"]),
+  com_me = sum((credito_vigente + linea_no_utilizada)[moneda_codigo == "2"])),
+  by = .(entidad, identificador, credit_class, fecha_reporte)]
+agg[, commitment := balance + unused]
+agg[, `:=`(me_balance_share    = fifelse(balance > 0, bal_me / balance, NA_real_),          # NA when the base is zero
+           me_commitment_share = fifelse(commitment > 0, com_me / commitment, NA_real_))]
+cat(sprintf("Aggregated to %s entidad x firm x credit_class x month rows (from %s product-currency rows).\n",
             fmt(nrow(agg)), fmt(sum(agg$n_raw_rows))))
-cat(sprintf("  negative balances: %d; zero balances: %s\n", sum(agg$balance < 0), fmt(sum(agg$balance == 0))))
+cat(sprintf("  negative balances: %d; zero balances: %s; zero commitments: %s\n", sum(agg$balance < 0),
+            fmt(sum(agg$balance == 0)), fmt(sum(agg$commitment == 0))))
 
 # ---- merge shocks: panel row -> entidad -> bank_standardized -> shock --------------
 # Both steps are many-to-one: the crosswalk is unique by entidad and the shock table is unique by
@@ -225,19 +215,23 @@ print(head(cov[status != "included: shock available", .(entidad, bank_raw, statu
 # ==============================================================================
 hdr("4. Loan growth")
 agg[, idx := match(fecha_reporte, cr_dates)]
-setorder(agg, entidad, identificador, credit_line, idx)
+setorder(agg, entidad, identificador, credit_class, idx)
 agg[, `:=`(bal_lag = shift(balance),
+           com_lag = shift(commitment),
            gap     = idx - shift(idx)),
-    by = .(entidad, identificador, credit_line)]
+    by = .(entidad, identificador, credit_class)]
 
-# Valid growth requires consecutive months and positive balances at t and t-1.
-# Excluded: first observation, reporting gaps, missing, negative or zero balances.
-agg[, valid_growth := fcoalesce(gap == 1L & balance > 0 & bal_lag > 0, FALSE)]
-agg[(valid_growth), loan_growth := log(balance) - log(bal_lag)]
+# Valid growth requires consecutive months and positive values at t and t-1 (separately for drawn
+# credit and commitments). Excluded: first observation, reporting gaps, zero or negative values.
+agg[, valid_growth        := fcoalesce(gap == 1L & balance > 0 & bal_lag > 0, FALSE)]
+agg[, valid_commit_growth := fcoalesce(gap == 1L & commitment > 0 & com_lag > 0, FALSE)]
+agg[(valid_growth),        loan_growth   := log(balance) - log(bal_lag)]
+agg[(valid_commit_growth), commit_growth := log(commitment) - log(com_lag)]
+print(agg[, .(rows = .N, valid_drawn = sum(valid_growth), valid_commitment = sum(valid_commit_growth)), by = credit_class])
 
-fwrite(agg[, .(entidad, bank_standardized, identificador, credit_line, fecha_reporte,
-               balance, bal_lag, valid_growth, loan_growth,
-               n_products, me_balance_share,
+fwrite(agg[, .(entidad, bank_standardized, identificador, credit_class, fecha_reporte,
+               balance, unused, commitment, bal_lag, com_lag, valid_growth, valid_commit_growth,
+               loan_growth, commit_growth, n_products, me_balance_share, me_commitment_share,
                bank_shock_gen_min_legal, bank_shock_gen_marginal)],
        file.path(PROC, "credit_line_growth_panel.csv.gz"))
 
@@ -246,24 +240,24 @@ fwrite(agg[, .(entidad, bank_standardized, identificador, credit_line, fecha_rep
 # ==============================================================================
 hdr("5. Regressions")
 # Using Wild cluster bootstrap for small number of clusters (Cameron, Gelbach and Miller, 2008; Roodman et al., 2019)
-fit_one <- function(measure, cl_flag) {
+fit_one <- function(measure, cls, depvar) {
   v <- paste0("bank_shock_", measure)
-  fit_dat <- agg[credit_line == cl_flag & !is.na(loan_growth) & !is.na(get(v)),
-           .(entidad, identificador, fecha_reporte, loan_growth, bank_shock = get(v))]
+  fit_dat <- agg[credit_class == cls & !is.na(get(depvar)) & !is.na(get(v)),
+           .(entidad, identificador, fecha_reporte, growth = get(depvar), bank_shock = get(v))]
   # keep firm-date cells with at least two lending banks
   fit_dat <- fit_dat[, if (uniqueN(entidad) >= 2L) .SD, by = .(identificador, fecha_reporte)]
   fit_dat[, cell := .GRP, by = .(identificador, fecha_reporte)]
   # boottest() re-evaluates the model's `data` argument in the global environment
   assign("fit_dat", fit_dat, envir = globalenv())
 
-  m <- feols(loan_growth ~ bank_shock | cell, data = fit_dat, cluster = ~entidad, notes = FALSE)
+  m <- feols(growth ~ bank_shock | cell, data = fit_dat, cluster = ~entidad, notes = FALSE)
   
   G <- fitstat(m, "g")[[1]]
   set.seed(SEED); dqrng::dqset.seed(SEED)
   bt <- boottest(m, param = "bank_shock", clustid = "entidad", fe = "cell", B = N_BOOT, type = if (G < 12L) "webb" else "rademacher")
 
   list(model = m,
-       stats = data.table(measure = measure, credit_line = cl_flag,
+       stats = data.table(measure = measure, credit_class = cls, depvar = depvar,
                           coef = coef(m)[["bank_shock"]], se_cluster = se(m)[["bank_shock"]],
                           p_cluster_t_G1 = pvalue(m)[["bank_shock"]], p_wild_cluster_boot = bt$p_val,
                           n_obs = nobs(m), n_banks = G, n_clusters = G, n_firms = uniqueN(fit_dat$identificador),
@@ -271,16 +265,22 @@ fit_one <- function(measure, cl_flag) {
                           mean_y = mean(fitted(m) + resid(m))))
 }
 
+# specifications: credit-line commitment growth (main), term-loan drawn growth, credit-line drawn growth (robustness)
+SPECS <- data.table(spec   = c("cl_commit", "term_loan", "cl_drawn"),
+                    cls    = c("credit_line", "term_loan", "credit_line"),
+                    depvar = c("commit_growth", "loan_growth", "loan_growth"))
 fits <- list()
-for (j in MEASURES) for (cl_flag in c(TRUE, FALSE)) {
-  key <- paste(j, if (cl_flag) "credit_line" else "other_credit", sep = "|")
-  cat(sprintf("\n-- %s, credit_line == %s --\n", j, cl_flag))
-  fits[[key]] <- fit_one(j, cl_flag)
+for (j in MEASURES) for (k in seq_len(nrow(SPECS))) {
+  key <- paste(j, SPECS$spec[k], sep = "|")
+  cat(sprintf("\n-- %s, %s, %s --\n", j, SPECS$cls[k], SPECS$depvar[k]))
+  fits[[key]] <- fit_one(j, SPECS$cls[k], SPECS$depvar[k])
+  fits[[key]]$stats[, spec := SPECS$spec[k]]
   print(summary(fits[[key]]$model))
 }
 reg <- rbindlist(lapply(fits, `[[`, "stats"))
+write_val(reg, "regressions")
 cat("\nRegression summary:\n")
-print(reg[, .(measure, credit_line, coef = signif(coef, 4), se = signif(se_cluster, 4), p_t = round(p_cluster_t_G1, 3),
+print(reg[, .(measure, spec, coef = signif(coef, 4), se = signif(se_cluster, 4), p_t = round(p_cluster_t_G1, 3),
               p_wild = round(p_wild_cluster_boot, 3), n_obs, n_banks, n_firms)])
 few <- reg[n_clusters < FEW_CLUSTERS]
 if (nrow(few)) cat(sprintf("\nLIMITED-CLUSTER FLAG: %d of %d regressions have fewer than %d bank clusters; wild-cluster-bootstrap p-values are reported next to the t(G-1) p-values.\n",
@@ -289,47 +289,70 @@ if (nrow(few)) cat(sprintf("\nLIMITED-CLUSTER FLAG: %d of %d regressions have fe
 # ==============================================================================
 # 6. LaTeX table
 # ==============================================================================
-hdr("6. LaTeX table")
-mods <- list(fits[["gen_min_legal|credit_line"]]$model, fits[["gen_min_legal|other_credit"]]$model,
-             fits[["gen_marginal|credit_line"]]$model, fits[["gen_marginal|other_credit"]]$model)
-ord <- c("gen_min_legal|credit_line", "gen_min_legal|other_credit", "gen_marginal|credit_line", "gen_marginal|other_credit")
-rg <- reg[match(ord, paste(measure, fifelse(credit_line, "credit_line", "other_credit"), sep = "|"))]
+hdr("6. LaTeX tables")
 pf <- function(p) formatC(p, format = "f", digits = 3)
-extra <- list(
-  "^Banks (= bank clusters)"         = formatC(rg$n_banks, format = "d"),
-  "^Firms"                           = formatC(rg$n_firms, format = "d", big.mark = ","),
-  "^Firm-by-date cells"              = formatC(rg$n_firm_date_cells, format = "d", big.mark = ","),
-  "^Wild cluster bootstrap $p$-value" = pf(rg$p_wild_cluster_boot),
-  "^Mean of loan growth"             = formatC(rg$mean_y, format = "f", digits = 3)
-)
-dict <- c(bank_shock = "Bank shock", loan_growth = "Loan growth",
-          cell = "Firm $\\times$ date")
-notes <- paste0(
-  "\\textit{Notes:} The dependent variable is the log change in a firm's credit balance (\\textit{cr\\'edito vigente}) at a bank between ",
-  "consecutive month-ends, $\\log B_{bit}-\\log B_{bi,t-1}$, so it measures growth among continuing relationships with strictly positive balances at ",
-  "both dates; loan entry and exit are not captured. Balances are summed across products and currencies within a bank--firm--credit-line status ",
-  "(foreign-currency balances are reported in soles at the month-end exchange rate, so growth includes exchange-rate revaluation). ",
-  "Columns (1) and (3) use credit lines (credit cards, current accounts, letters of credit, guarantees, multi-lines, other lines); columns (2) and (4) use all other credit. ",
-  "Because the balance is performing drawn credit, letters of credit, guarantees, multi-lines and other lines have a zero balance in every record, so the credit-line samples consist of credit cards and current accounts. ",
+dict <- c(bank_shock = "Bank shock", cell = "Firm $\\times$ date")
+
+write_table <- function(keys, file, headers, title, label, notes, postprocess = identity) {
+  rg <- reg[match(keys, paste(measure, spec, sep = "|"))]
+  stopifnot(!anyNA(rg$coef))
+  extra <- list(
+    "^Banks (= bank clusters)"          = formatC(rg$n_banks, format = "d"),
+    "^Firms"                            = formatC(rg$n_firms, format = "d", big.mark = ","),
+    "^Firm-by-date cells"               = formatC(rg$n_firm_date_cells, format = "d", big.mark = ","),
+    "^Wild cluster bootstrap $p$-value" = pf(rg$p_wild_cluster_boot),
+    "^Mean of dependent variable"       = formatC(rg$mean_y, format = "f", digits = 3))
+  etable(lapply(fits[keys], `[[`, "model"), tex = TRUE, file = file, replace = TRUE, dict = dict, tpt = TRUE,
+         notes = notes, title = title, label = label, headers = headers,
+         fitstat = ~ n + r2 + wr2, extralines = extra, style.tex = style.tex("aer"),
+         signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.10), digits = "r3", digits.stats = 3,
+         postprocess.tex = postprocess, fontsize = "small", placement = "!h", depvar = FALSE)
+  cat("Wrote ", file, "\n", sep = "")
+}
+
+common_notes <- paste0(
+  "Credit is classified with a manual product table: credit cards, current-account advances, guarantees, letters of credit, credits to be settled, ",
+  "multi-line facilities and other lines are credit lines; leasing, lease-back, real-estate, mortgage, pawn, income-property and RFA credit are term loans; ",
+  "\\textit{pr\\'estamos} are credit lines when reported as revolving, term loans when non-revolving, and, when the revolving status is not identified, ",
+  "credit lines if the row carries an unused line and term loans otherwise. Products whose nature is ambiguous (overdrafts, factoring, discounting, ",
+  "foreign-trade finance, project finance, other credits, credit to consolidable entities) are excluded from all columns. ",
+  "Amounts are summed across products and currencies within a bank--firm--credit-type cell ",
+  "(foreign-currency amounts are reported in soles at the month-end exchange rate, so growth includes exchange-rate revaluation). ",
+  "Growth is computed for continuing relationships with strictly positive amounts at both dates; entry and exit are not captured. ",
   "The bank shock is $s^{mn}_{b,0}\\Delta r^{mn}_{t}+s^{me}_{b,0}\\Delta r^{me}_{t}$, where $\\Delta r$ is the month-end change, in percentage points, of the ",
-  "statutory minimum legal reserve rate (columns 1--2) or marginal reserve rate (columns 3--4) on domestic (mn) and foreign (me) currency obligations ",
+  "statutory minimum legal reserve rate or marginal reserve rate on domestic (mn) and foreign (me) currency obligations ",
   "(positive = tighter), and $s_{b,0}$ are the bank's fixed ", format(BASELINE_DATE, "%B %Y"), " deposit shares in each currency. ",
-  "The marginal-rate shock is undefined when the domestic regime is a single rate, which shortens columns (3)--(4). ",
+  "The marginal-rate shock is undefined when the domestic regime is a single rate, which shortens the marginal-rate columns. ",
   "Each regression keeps firm-by-date cells with at least two banks and absorbs firm-by-date fixed effects. ",
+  "Sample: RCC sample of ", fmt(N_FIRMS_SAMPLE), " firms, ", format(min(cr_dates), "%B %Y"), " to ", format(max(cr_dates), "%B %Y"), ". ",
   "Standard errors, in parentheses, are clustered by bank; with few clusters the $p$-value from a wild cluster bootstrap ",
   "(null imposed, ", format(N_BOOT, big.mark = ","), " draws) is reported. ",
   "* $p<0.10$, ** $p<0.05$, *** $p<0.01$ from the conventional clustered $t(G-1)$ test.")
-tex_file <- file.path(TABS, "tab_encaje_loan_growth.tex")
-etable(mods, tex = TRUE, file = tex_file, replace = TRUE, dict = dict, tpt = TRUE, notes = notes,
-       title = "Reserve-requirement shocks and loan growth: credit lines versus other credit",
-       label = "tab:encaje_loan_growth",
-       headers = list("^Shock measure" = list("Minimum legal rate" = 2, "Marginal rate" = 2),
-                      "^Credit type" = rep(c("Credit lines", "Other credit"), 2)),
-       fitstat = ~ n + r2 + wr2, extralines = extra, style.tex = style.tex("aer"),
-       signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.10), digits = "r3", digits.stats = 3,
-       postprocess.tex = function(x) sub("(Shock measure[^\n]*\\\\ *\n)", "\\1\\\\cmidrule(lr){2-3} \\\\cmidrule(lr){4-5}\n", x),
-       fontsize = "small", placement = "!h", depvar = FALSE)
-cat("Wrote ", tex_file, "\n", sep = "")
+
+# main table: credit-line commitment growth vs term-loan drawn growth
+write_table(
+  keys = c("gen_min_legal|cl_commit", "gen_min_legal|term_loan", "gen_marginal|cl_commit", "gen_marginal|term_loan"),
+  file = file.path(TABS, "tab_encaje_loan_growth.tex"),
+  headers = list("^Shock measure" = list("Minimum legal rate" = 2, "Marginal rate" = 2),
+                 "^Credit type"   = rep(c("Credit lines", "Term loans"), 2),
+                 "^Outcome"       = rep(c("Commitment", "Drawn"), 2)),
+  title = "Reserve-requirement shocks and credit growth: credit lines versus term loans",
+  label = "tab:encaje_loan_growth",
+  notes = paste0("\\textit{Notes:} The dependent variable is the log change between consecutive month-ends of a firm's position at a bank. ",
+                 "For credit lines (columns 1 and 3) it is the total commitment, drawn credit (\\textit{cr\\'edito vigente}) plus the unused line ",
+                 "(\\textit{l\\'inea no utilizada}); for term loans (columns 2 and 4) it is drawn credit. ", common_notes),
+  postprocess = function(x) sub("(Shock measure[^\n]*\\\\ *\n)", "\\1\\\\cmidrule(lr){2-3} \\\\cmidrule(lr){4-5}\n", x))
+
+# robustness: credit-line drawn growth
+write_table(
+  keys = c("gen_min_legal|cl_drawn", "gen_marginal|cl_drawn"),
+  file = file.path(TABS, "tab_encaje_loan_growth_drawn.tex"),
+  headers = list("^Shock measure" = c("Minimum legal rate", "Marginal rate")),
+  title = "Reserve-requirement shocks and drawn credit-line balances (robustness)",
+  label = "tab:encaje_loan_growth_drawn",
+  notes = paste0("\\textit{Notes:} The dependent variable is the log change between consecutive month-ends of a firm's drawn credit-line balance ",
+                 "(\\textit{cr\\'edito vigente}) at a bank, excluding the unused part of the line; the main specification instead uses ",
+                 "total commitments (drawn plus unused). ", common_notes))
 
 hdr("Session")
 print(sessionInfo())
