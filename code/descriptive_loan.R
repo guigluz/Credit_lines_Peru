@@ -1,58 +1,190 @@
 # =========================================================
 # Initial analysis of the loan data
 #
-# sample of 100 firms, from 2010-09 to 2023-12 (160 months)
+# Sample: muestra_anonima_base2015_v2.parquet
+#   10,000 firms, 2010-09 to 2023-12 (160 months), firm x bank x product x
+#   currency x month rows.
+#
+# Every plot is built and printed. Only the plots listed in SAVE_PLOTS are
+# written to output/figures/ (as .pdf).
 # =========================================================
+
+# ---- Options ----------------------------------------------------------------
+
+# Plots to save. Leave empty to save nothing; add any of the names below.
+#   "n_banks_2023"        Number of banks per firm, Dec 2023
+#   "n_products_2023"     Number of products per firm, Dec 2023
+#   "n_products_all"      Number of products per firm, entire sample
+#   "used_vs_unused"      Aggregate used vs unused credit, monthly
+SAVE_PLOTS <- c("n_products_all", "n_banks_2023")
+
+SNAPSHOT_DATE <- as.Date("2023-12-31")
+FIGDIR        <- "output/figures"
+
+# ---- Packages ---------------------------------------------------------------
 
 library(arrow)
 library(tidyverse)
 library(data.table)
+library(scales)
 
-sample = read_parquet("data/raw/base_muestra_seudonimizada.parquet")
+# ---- Figure style -----------------------------------------------------------
 
+PAL  <- c(blue = "#2a78d6", orange = "#eb6834")
+INK  <- c(primary = "#0b0b0b", secondary = "#52514e", muted = "#8a8880")
+SURF <- "white"
+
+theme_fig <- function(base_size = 11) {
+  theme_minimal(base_size = base_size) +
+    theme(
+      plot.background    = element_rect(fill = SURF, colour = NA),
+      panel.background   = element_rect(fill = SURF, colour = NA),
+      panel.grid.minor   = element_blank(),
+      panel.grid.major.x = element_blank(),
+      panel.grid.major.y = element_line(colour = "#e6e5e0", linewidth = 0.3),
+      axis.line.x        = element_line(colour = "#c9c8c2", linewidth = 0.3),
+      axis.ticks         = element_blank(),
+      axis.title         = element_text(colour = INK[["secondary"]], size = base_size - 1),
+      axis.text          = element_text(colour = INK[["secondary"]], size = base_size - 1),
+      plot.title         = element_text(colour = INK[["primary"]], size = base_size + 2,
+                                        face = "bold", margin = margin(b = 2)),
+      plot.subtitle      = element_text(colour = INK[["secondary"]], size = base_size - 1,
+                                        margin = margin(b = 8)),
+      plot.caption       = element_text(colour = INK[["muted"]], size = base_size - 2.5,
+                                        hjust = 0, margin = margin(t = 8)),
+      plot.title.position   = "plot",
+      plot.caption.position = "plot",
+      legend.position    = "top",
+      legend.justification = "left",
+      legend.title       = element_blank(),
+      legend.text        = element_text(colour = INK[["secondary"]], size = base_size - 1),
+      legend.key.size    = unit(9, "pt"),
+      plot.margin        = margin(10, 14, 8, 10)
+    )
+}
+
+# Base pdf device: cairo_pdf fails silently on this machine (see
+# code/04_figures_unused_credit.R). All figure text is ASCII.
+save_fig <- function(p, stem, w = 7.2, h = 4.3) {
+  f <- file.path(FIGDIR, paste0("fig_desc_", stem, ".pdf"))
+  ggsave(f, p, width = w, height = h, bg = "white",
+         device = function(filename, ...)
+           grDevices::pdf(file = filename, encoding = "ISOLatin1", ...))
+  if (!file.exists(f) || file.size(f) < 1000) stop("figure was not written: ", f)
+  cat(sprintf("  wrote %s (%d bytes)\n", f, file.size(f)))
+}
+
+plots <- list()
+
+# Bar chart of a discrete count per firm (number of banks / products).
+count_bar <- function(dt, var, title, x_lab, subtitle, x_breaks = pretty_breaks()) {
+  ggplot(dt, aes(x = .data[[var]])) +
+    geom_bar(fill = PAL[["blue"]], width = 0.8) +
+    scale_x_continuous(breaks = x_breaks, expand = expansion(add = 0.6)) +
+    scale_y_continuous(labels = label_comma(), expand = expansion(mult = c(0, 0.05))) +
+    labs(title = title, subtitle = subtitle, x = x_lab, y = "Number of firms") +
+    theme_fig()
+}
+
+# ---- Data -------------------------------------------------------------------
+
+sample <- read_parquet("data/raw/muestra_anonima_base2015_v2.parquet")
 setDT(sample)
 glimpse(sample)
 
-sample[, cantidad_empresas:= as.integer(cantidad_empresas)]
+sample[, cantidad_empresas := as.integer(cantidad_empresas)]
 
-# Plot number of banks
+n_firms_snap <- uniqueN(sample[fecha_reporte == SNAPSHOT_DATE, identificador])
+n_firms_all  <- uniqueN(sample$identificador)
+snap_lab     <- format(SNAPSHOT_DATE, "%B %Y")
 
-sample[fecha_reporte == as.Date("2023-12-31"), .(cantidad_empresas=mean(cantidad_empresas)), by = identificador] %>%
-  ggplot(aes(x = cantidad_empresas)) +
-  geom_histogram() +
-  labs(title = "Dist of the number of banks per firm in the sample", 
-       x = "Number of banks", y = "Count",
-       subtitle = "2023-12-31")  
+# ---- Number of banks per firm -----------------------------------------------
 
-# Plot number of products
+N_BANKS_MAX <- 10   # x-axis truncation for the lenders plot
 
-sample[fecha_reporte == as.Date("2023-12-31"), .(n_products=uniqueN(producto)), by = identificador] %>%
-  ggplot(aes(x = n_products)) +
-  geom_histogram() +
-  labs(title = "Dist of the number of products per firm in the sample", 
-       x = "Number of products", y = "Count",
-       subtitle = "2023-12-31")  
+n_banks_snap <- sample[fecha_reporte == SNAPSHOT_DATE,
+                       .(cantidad_empresas = as.integer(round(mean(cantidad_empresas)))),
+                       by = identificador]
+n_above_max  <- n_banks_snap[cantidad_empresas > N_BANKS_MAX, .N]
 
-sample[ , .(n_products=uniqueN(producto)), by = identificador] %>%
-  ggplot(aes(x = n_products)) +
-  geom_histogram() +
-  labs(title = "Dist of the number of products per firm in the sample", 
-       x = "Number of products", y = "Count",
-       subtitle = "Over entire sample")  
+plots$n_banks_2023 <- count_bar(
+  n_banks_snap,
+  "cantidad_empresas",
+  title    = "Number of lenders per firm",
+  x_lab    = "Number of financial institutions",
+  subtitle = sprintf("%s, %s firms", snap_lab, comma(n_firms_snap)),
+  x_breaks = 1:N_BANKS_MAX
+) +
+  coord_cartesian(xlim = c(1, N_BANKS_MAX)) +
+  labs(caption = sprintf("Axis truncated at %d lenders; %s firm(s) with more are not shown.",
+                         N_BANKS_MAX, comma(n_above_max)))
 
-# Products with non-zero linea_no_utilizada:
-# tarjeta_credito, prestamos, descuentos, credito_otorgado_no_desembolsado, 
-# cartas_credito, cuenta_corriente, avales_fianzas, mutilineas, otras_lineas
+# ---- Number of products per firm --------------------------------------------
 
-sample[no_utilizado_total!=0, .(producto)] %>% unique()
+plots$n_products_2023 <- count_bar(
+  sample[fecha_reporte == SNAPSHOT_DATE, .(n_products = uniqueN(producto)), by = identificador],
+  "n_products",
+  title    = "Number of credit products per firm",
+  x_lab    = "Number of distinct products",
+  subtitle = sprintf("%s, %s firms", snap_lab, comma(n_firms_snap))
+)
 
-# Plot used vs unused
-sample[, .(used = sum(credito_utilizado), unused = sum(no_utilizado_total)), by = fecha_reporte] %>%
-  pivot_longer(cols = c(used, unused), names_to = "type", values_to = "amount") %>%
-  ggplot(aes(x = fecha_reporte, y = amount, fill = type)) +
-  geom_bar(stat = "identity", position = "stack") +
-  labs(title = "Used vs Unused credit", 
-       x = NULL, y = "Amount") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+plots$n_products_all <- count_bar(
+  sample[, .(n_products = uniqueN(producto)), by = identificador],
+  "n_products",
+  title    = "Number of credit products per firm",
+  x_lab    = "Number of distinct products ever held",
+  subtitle = sprintf("Pooled 2010-2023, %s firms", comma(n_firms_all))
+)
 
+# ---- Products with non-zero unused lines ------------------------------------
 
+unused_products <- sample[no_utilizado_total != 0,
+                          .(n_rows = .N, unused = sum(no_utilizado_total)),
+                          by = producto][order(-unused)]
+unused_products[, share_unused := unused / sum(unused)]
+print(unused_products)
+
+# ---- Used vs unused credit --------------------------------------------------
+
+# Sep 2010 is dropped: one firm reports ~S/295bn of used credit that month
+# (vs ~S/14bn for the whole sample in a typical month), an apparent data error.
+TS_START <- as.Date("2010-10-31")
+
+used_unused <- sample[fecha_reporte >= TS_START,
+                      .(Used   = sum(credito_utilizado,  na.rm = TRUE),
+                          Unused = sum(no_utilizado_total, na.rm = TRUE)),
+                      by = fecha_reporte] %>%
+  pivot_longer(c(Used, Unused), names_to = "type", values_to = "amount") %>%
+  mutate(type = factor(type, levels = c("Unused", "Used")))
+
+plots$used_vs_unused <- ggplot(used_unused,
+                               aes(x = fecha_reporte, y = amount / 1e9, fill = type)) +
+  geom_area(colour = SURF, linewidth = 0.2) +
+  scale_fill_manual(values = c(Used = PAL[["blue"]], Unused = PAL[["orange"]]),
+                    breaks = c("Used", "Unused")) +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y",
+               expand = expansion(mult = 0.01)) +
+  scale_y_continuous(labels = label_comma(accuracy = 0.1),
+                     expand = expansion(mult = c(0, 0.05))) +
+  labs(title    = "Used and unused credit",
+       subtitle = sprintf("Monthly totals across %s sample firms", comma(n_firms_all)),
+       x = NULL, y = "Billions",
+       caption  = paste("Sums across all currencies as reported. Unused = no_utilizado_total.",
+                        "Sample starts Oct 2010 (Sep 2010 excluded: single-firm reporting outlier).",
+                        sep = "\n")) +
+  theme_fig()
+
+# ---- Print and save ---------------------------------------------------------
+
+walk(plots, print)
+
+unknown <- setdiff(SAVE_PLOTS, names(plots))
+if (length(unknown)) stop("Unknown plot name(s) in SAVE_PLOTS: ", paste(unknown, collapse = ", "))
+
+if (length(SAVE_PLOTS)) {
+  dir.create(FIGDIR, recursive = TRUE, showWarnings = FALSE)
+  walk(SAVE_PLOTS, ~ save_fig(plots[[.x]], .x))
+} else {
+  cat("SAVE_PLOTS is empty: no figures written.\n")
+}
