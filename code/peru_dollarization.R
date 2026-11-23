@@ -42,7 +42,6 @@ u8 <- function(x) { if (is.character(x)) Encoding(x) <- "UTF-8"; x }
 PANEL_YEARS <- c(2010, 2021)          # the two December cross-sections plotted
 TS_TYPE     <- "banca_multiple"       # subsystem shown in the time series
 TS_UNIT     <- "Banca Múltiple"       # its label
-CC_DATE     <- as.Date("2011-01-01")  # Keller's event line: capital controls
 
 fig_dir <- "output/figures"
 dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
@@ -179,7 +178,7 @@ y_top <- ceiling(max(d$share) / 10) * 10
 y_bot <- floor(min(d$share) / 10) * 10
 
 # Same visual language as the Keller replication: serif, firebrick solid for
-# loans, grey dashed for deposits, y-axis snapped to multiples of 10.
+# loans, grey solid for deposits, y-axis snapped to multiples of 10.
 keller_theme <- theme_bw(base_size = 10, base_family = "serif") +
   theme(
     panel.grid.minor   = element_blank(),
@@ -187,10 +186,12 @@ keller_theme <- theme_bw(base_size = 10, base_family = "serif") +
     panel.grid.major.y = element_line(colour = "grey85", linewidth = 0.3),
     panel.border       = element_rect(colour = "grey30", linewidth = 0.4),
     axis.title.x       = element_blank(),
-    axis.text.x        = element_text(size = 7),
-    axis.title.y       = element_text(size = 8),
+    axis.text          = element_text(size = 10),
+    axis.title.y       = element_text(size = 10),
     legend.title       = element_blank(),
-    legend.position    = "bottom",
+    legend.text        = element_text(size = 11),
+    legend.position = "inside",
+    legend.position.inside = c(0.8,0.8),
     legend.key.width   = unit(1.6, "lines"),
     legend.margin      = margin(t = -4),
     plot.title         = element_text(size = 10, face = "bold"),
@@ -204,15 +205,9 @@ cap_ts <- u8(paste0(
   "conversion is applied and the series is not affected by sol depreciation mechanically revaluing the dollar stock."
 ))
 
-p_ts <- ggplot(d, aes(date, share, colour = series, linetype = series)) +
-  geom_vline(xintercept = CC_DATE, linetype = "dashed",
-             colour = "grey20", linewidth = 0.35) +
-  annotate("text", x = CC_DATE - 90, y = y_top - 0.14 * (y_top - y_bot),
-           label = "Capital Controls", angle = 90, hjust = 1, size = 2.5,
-           family = "serif", colour = "grey20") +
+p_ts <- ggplot(d, aes(date, share, colour = series)) +
   geom_line(linewidth = 0.6) +
   scale_colour_manual(values = c("firebrick2", "grey45")) +
-  scale_linetype_manual(values = c("solid", "22")) +
   scale_x_date(date_breaks = "2 years", date_labels = "%Y",
                expand = expansion(0.015)) +
   scale_y_continuous(breaks = seq(y_bot, y_top, by = 10),

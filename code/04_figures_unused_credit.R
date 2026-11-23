@@ -180,7 +180,7 @@ p1 <- ggplot(f1_long, aes(report_date, bn, fill = series)) +
   scale_y_continuous(labels = function(x) format(x, big.mark = ","),
                      expand = expansion(c(0, 0.05))) +
   labs(title = "Used and Unused Credit in the Peruvian Banking System",
-       subtitle = "Banca Multiple, monthly, billions of soles",
+       subtitle = "Commercial banks, monthly, billions of soles",
        y = "S/ billions",
        caption = paste0(
          "Used credit = creditos directos (SBS Series Estadisticas). Unused credit = creditos indirectos (SBS B-2322),\n",

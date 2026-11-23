@@ -129,7 +129,14 @@ p_rates_min <- ggplot(lv[panel == "Minimum legal reserve rate"],
          "Each month shows the rate in force on its last day; a rate change effective at any point in a month ",
          "appears in that month.")) +
   base_theme +
-  theme(legend.key.width = unit(2.4, "lines"))
+  # Larger type for presentation use
+  theme(legend.key.width = unit(2.4, "lines"),
+        axis.text        = element_text(size = 11),
+        axis.title.y     = element_text(size = 11),
+        strip.text       = element_text(size = 11, face = "bold"),
+        legend.text      = element_text(size = 11),
+        plot.title       = element_text(size = 12, face = "bold"),
+        plot.caption     = element_text(size = 8, hjust = 0, colour = "grey30"))
 
 save_fig("fig_encaje_min_legal_rate.pdf", p_rates_min, height = 3.6)
 message("Wrote ", file.path(fig_dir, "fig_encaje_min_legal_rate.pdf"))
