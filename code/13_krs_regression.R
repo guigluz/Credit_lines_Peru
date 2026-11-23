@@ -58,6 +58,7 @@ suppressPackageStartupMessages({
   library(ggplot2)
   library(ggrepel)
 })
+source("code/00_palette.R")     # LANCET, lancet_n()
 
 # ---- parameters ---------------------------------------------------------------
 REPORTE_CSV <- "data/raw/Reporte_SistemaFinanciero.csv"
@@ -523,7 +524,7 @@ LABELS <- c(bcp = "BCP", bbva_peru = "BBVA", interbank = "Interbank", scotiabank
             hsbc_peru = "HSBC", bank_of_china = "Bank of China", compartamos_banco = "Compartamos",
             santander_consumer = "Santander Consumer", deutsche_bank = "Deutsche")
 lab_of <- function(x) fifelse(x %in% names(LABELS), LABELS[x], tools::toTitleCase(gsub("_", " ", x)))
-BLUE <- "#2a78d6"
+BLUE <- LANCET[["navy"]]
 
 # ---- Figure 1: bank-level scatter, both approaches -----------------------------
 bm <- pan[, .(comrat = mean(comrat), deprat = mean(deprat_vista), assets = mean(assets)), by = bank]
@@ -568,7 +569,7 @@ p3 <- ggplot(ctx, aes(assets / 1e6, transact, colour = type)) +
   geom_point(size = 1.8, alpha = 0.85) +
   scale_x_log10(labels = function(x) format(x, big.mark = ",", scientific = FALSE)) +
   scale_y_continuous(labels = function(x) paste0(100 * x, "%"), limits = c(0, 1)) +
-  scale_colour_manual(values = c("#2a78d6", "#eb6834", "#1baf7a", "#4a3aa7", "#eda100"), name = NULL) +
+  scale_colour_manual(values = lancet_n(5), name = NULL) +
   labs(x = "Average total assets, S/ bn (log scale)", y = "(Vista + ahorro) / total deposits",
        caption = wrap_cap("Descriptive context only: unused credit lines are available for banks alone, so only banks enter the regressions. ",
                           "Each point is an institution averaged over ", RCC_YEAR, " (institutions without deposits are omitted). ",

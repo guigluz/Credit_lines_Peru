@@ -30,6 +30,7 @@
 
 library(tidyverse)
 source("code/00_sbs_utils.R")   # read_reporte(), reporte_attach_types(), reporte_subsystem()
+source("code/00_palette.R")     # LANCET, lancet_n()
 
 # Rscript inherits the shell locale (often "C"), which mangles accented names.
 if (!isTRUE(l10n_info()$`UTF-8`))
@@ -133,7 +134,7 @@ p_scatter <- ggplot(usable, aes(doll_deposit, doll_credit)) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed",
               colour = "grey40", linewidth = 0.35) +
   geom_point(aes(colour = type, shape = type), size = 1.9, stroke = 0.6, alpha = 0.9) +
-  scale_colour_manual(values = setNames(c("firebrick2", "grey35", "darkorange2", "steelblue3", "darkgreen"),
+  scale_colour_manual(values = setNames(lancet_n(5),
                                         u8(TYPE_LABELS)), drop = TRUE) +
   scale_shape_manual(values = setNames(c(16, 17, 18, 15, 4), u8(TYPE_LABELS)), drop = TRUE) +
   scale_x_continuous(breaks = seq(0, 100, 20), expand = expansion(0.02)) +
@@ -177,8 +178,8 @@ d <- ts |>
 y_top <- ceiling(max(d$share) / 10) * 10
 y_bot <- floor(min(d$share) / 10) * 10
 
-# Same visual language as the Keller replication: serif, firebrick solid for
-# loans, grey solid for deposits, y-axis snapped to multiples of 10.
+# Same visual language as the Keller replication: serif, Lancet red solid for
+# loans, Lancet navy solid for deposits, y-axis snapped to multiples of 10.
 keller_theme <- theme_bw(base_size = 10, base_family = "serif") +
   theme(
     panel.grid.minor   = element_blank(),
@@ -207,7 +208,7 @@ cap_ts <- u8(paste0(
 
 p_ts <- ggplot(d, aes(date, share, colour = series)) +
   geom_line(linewidth = 0.6) +
-  scale_colour_manual(values = c("firebrick2", "grey45")) +
+  scale_colour_manual(values = c(LANCET[["red"]], LANCET[["navy"]])) +
   scale_x_date(date_breaks = "2 years", date_labels = "%Y",
                expand = expansion(0.015)) +
   scale_y_continuous(breaks = seq(y_bot, y_top, by = 10),

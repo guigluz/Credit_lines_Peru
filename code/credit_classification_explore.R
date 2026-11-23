@@ -5,6 +5,7 @@ library(tidyverse)
 library(data.table)
 library(arrow)
 library(fixest)
+source("code/00_palette.R")     # LANCET, lancet_n()
 
 LOGF  <- "output/logs/credit_classification.log"
 
@@ -25,6 +26,7 @@ new_sample[entidad<10, .(unused = sum(linea_no_utilizada)), by = .(fecha_reporte
 ggplot(aes(x=fecha_reporte, y=unused/10^6, color=as.factor(entidad))) + 
   geom_line() + geom_point() +
   labs(y="Unused (millions)", x=NULL, color="Entidad") +
+  scale_colour_manual(values = lancet_n(4)) +
   theme_bw()
 
   # "Otras lineas" was introduced in 2018-06-30
@@ -32,6 +34,7 @@ new_sample[entidad==1, .(unused = sum(linea_no_utilizada)), by = .(fecha_reporte
   ggplot(aes(x=fecha_reporte, y=unused/10^6, color=producto)) + 
   geom_line() + geom_point() +
   labs(y="Unused (millions)", x=NULL, color="Product", title = "BCP - Unused credit by product") +
+  # 19 products: more than the 7 Lancet category slots, so ggplot default hues are kept
   theme_bw()
 
 # What are the relevant products?
@@ -64,6 +67,7 @@ new_sample[identificador == "EMP_004D06CEF2C3A57B15DCD5F396066B5D" & producto=="
   ggplot(aes(x=fecha_reporte, y=amount/10^3, fill=as.factor(category))) + 
   geom_area(position = "stack") +
   labs(y="$ (millions)", x=NULL, fill="Used_Revolver") +
+  scale_fill_manual(values = lancet_n(6)) +   # balance/unused x 3 revolvencia levels
   theme_bw()
 
 # Results from the product-based classification

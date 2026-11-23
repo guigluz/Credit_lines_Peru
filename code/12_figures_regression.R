@@ -36,15 +36,15 @@ suppressPackageStartupMessages({
   library(ggplot2)
   library(ggrepel)
 })
+source("code/00_palette.R")     # LANCET, lancet_n()
 
 ENCAJE_CSV <- "data/processed/encaje_rates_monthly.csv"
 fig_dir <- "output/figures"
 dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
 
-# Two-series categorical colours: slots 1 (blue) and 2 (orange) of the validated default
-# palette (validate_palette.py --mode light --pairs all: all checks pass, CVD delta-E 24.7).
-# MN is always blue and ME always orange. Swap here to re-colour every panel.
-COL <- c(MN = "#2a78d6", ME = "#eb6834")
+# Two-series categorical colours: slots 1 (navy) and 2 (red) of the project Lancet
+# palette (code/00_palette.R). MN is always navy and ME always red.
+COL <- c(MN = LANCET[["navy"]], ME = LANCET[["red"]])
 LAB <- c(MN = "MN (soles)", ME = "ME (foreign currency)")
 
 # ── Shared look (same as code/05_figures_deposits.R) ─────────────────────────
@@ -148,9 +148,9 @@ SHOCKS_CSV <- "data/processed/bank_encaje_shocks.csv"
 MIN_MONTHS <- 60L          # months with positive deposits required: five years (total, not necessarily consecutive)
 # Big four by deposits (Sep 2022, S/ bn: BCP 122, BBVA 71, Interbank 45, Scotiabank 44; next is BanBif at 13)
 BIG4 <- c(bcp = "BCP", bbva_peru = "BBVA", interbank = "Interbank", scotiabank = "Scotiabank")
-# Highlight colours: slots 1, 2, 3 and 7 of the validated default palette (validate_palette.py
-# --pairs all: all checks pass; aqua is below 3:1 contrast, relieved by the visible direct labels).
-COL_BIG4 <- c(BCP = "#2a78d6", BBVA = "#eb6834", Interbank = "#1baf7a", Scotiabank = "#4a3aa7")
+# Highlight colours: slots 1-4 of the project Lancet palette (code/00_palette.R); all other
+# institutions stay grey context lines.
+COL_BIG4 <- setNames(lancet_n(4), c("BCP", "BBVA", "Interbank", "Scotiabank"))
 
 stopifnot(file.exists(SHARES_CSV), file.exists(SHOCKS_CSV))
 sh <- fread(SHARES_CSV, encoding = "UTF-8")

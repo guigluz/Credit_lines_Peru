@@ -23,12 +23,8 @@
 # aggregate is summed from the bank rows instead and flagged as such in the
 # accompanying data tables.
 #
-# Palette: categorical slots assigned in a fixed order that was validated for
-# colour-vision separation on the adjacent pairlist (stacked fills) in light
-# mode. Three slots (aqua, yellow, magenta) fall below 3:1 contrast on the chart
-# surface; they carry the three smallest categories in figure 2, so they are
-# legible only via the legend. Add direct labels if those categories ever need
-# to be read off the figure itself.
+# Palette: project-wide ggsci Lancet palette (code/00_palette.R), categorical
+# slots assigned in a fixed order: used/first category navy, unused/second red.
 #
 # Usage:  Rscript code/04_figures_unused_credit.R
 # ==============================================================================
@@ -37,6 +33,7 @@ suppressPackageStartupMessages({
   library(dplyr); library(tidyr); library(readr); library(ggplot2); library(stringr)
 })
 source("code/00_sbs_utils.R")   # read_reporte(), reporte_attach_types(), reporte_subsystem()
+source("code/00_palette.R")     # LANCET, lancet_n()
 
 PANEL  <- "data/processed/b2322_unused_credit_panel.csv"
 FIGDIR <- "output/figures"
@@ -50,9 +47,8 @@ cat("=== 04_figures_unused_credit.R ===\n", format(Sys.time()), "\n\n")
 BREAK_DATE <- as.Date("2010-07-31")
 BREAK_LAB  <- "Basel III reporting change"
 
-# Validated categorical slots, assigned by entity in a fixed order (never cycled).
-PAL <- c(blue = "#2a78d6", orange = "#eb6834", aqua = "#1baf7a",
-         yellow = "#eda100", magenta = "#e87ba4")
+# Categorical slots from the project Lancet palette, assigned in a fixed order (never cycled).
+PAL <- LANCET[c("navy", "red", "green", "teal", "purple")]
 INK  <- c(primary = "#0b0b0b", secondary = "#52514e", muted = "#8a8880")
 SURF <- "white"
 
@@ -175,7 +171,7 @@ p1 <- ggplot(f1_long, aes(report_date, bn, fill = series)) +
              colour = INK[["secondary"]], linewidth = 0.4) +
   annotate("text", x = BREAK_DATE - 60, y = ymax1 * 0.97, label = BREAK_LAB,
            hjust = 1, vjust = 1, size = 2.9, colour = INK[["secondary"]]) +
-  scale_fill_manual(values = unname(PAL[c("blue", "orange")])) +
+  scale_fill_manual(values = unname(PAL[c("navy", "red")])) +
   scale_x_date(date_breaks = "3 years", date_labels = "%Y", expand = expansion(c(0.01, 0.01))) +
   scale_y_continuous(labels = function(x) format(x, big.mark = ","),
                      expand = expansion(c(0, 0.05))) +
@@ -208,11 +204,11 @@ CATS <- c(
 # the stack does not repaint the series. The resulting adjacent pairs were
 # re-validated for colour-vision separation after the reorder.
 CAT_COL <- c(
-  "Unused credit lines & undisbursed commitments" = unname(PAL["blue"]),
-  "Letters of guarantee (cartas fianza)"          = unname(PAL["orange"]),
-  "Letters of credit"                             = unname(PAL["aqua"]),
-  "Bankers' acceptances"                          = unname(PAL["yellow"]),
-  "Guarantees (avales)"                           = unname(PAL["magenta"]))
+  "Unused credit lines & undisbursed commitments" = unname(PAL["navy"]),
+  "Letters of guarantee (cartas fianza)"          = unname(PAL["red"]),
+  "Letters of credit"                             = unname(PAL["green"]),
+  "Bankers' acceptances"                          = unname(PAL["teal"]),
+  "Guarantees (avales)"                           = unname(PAL["purple"]))
 
 f2 <- sys %>% select(report_date, system_source, all_of(names(CATS))) %>%
   pivot_longer(all_of(names(CATS)), names_to = "cat", values_to = "thousand_pen") %>%

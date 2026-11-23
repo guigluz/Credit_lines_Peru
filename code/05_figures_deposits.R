@@ -42,6 +42,7 @@ suppressPackageStartupMessages({
   library(ggplot2); library(scales); library(data.table)
 })
 source("code/00_sbs_utils.R")   # read_reporte(), reporte_attach_types(), reporte_subsystem()
+source("code/00_palette.R")     # LANCET, lancet_n()
 
 # Rscript inherits the shell locale (often "C"), which mangles accented names.
 if (!isTRUE(l10n_info()$`UTF-8`))
@@ -154,8 +155,8 @@ p_cur <- ggplot(dcomp, aes(date, contrib, fill = book)) +
   geom_col(width = 22, colour = NA) +
   geom_line(data = dep, aes(date, g), inherit.aes = FALSE,
             colour = "grey15", linewidth = 0.3, alpha = 0.75) +
-  scale_fill_manual(values = c("Domestic currency (MN)" = "firebrick2",
-                               "Foreign currency (ME), sol value" = "steelblue3")) +
+  scale_fill_manual(values = c("Domestic currency (MN)" = LANCET[["navy"]],
+                               "Foreign currency (ME), sol value" = LANCET[["red"]])) +
   x_scale_agg +
   scale_y_continuous(expand = expansion(mult = 0.08)) +
   labs(y = "Contribution to monthly deposit growth (pp)",
@@ -182,7 +183,7 @@ p_12 <- ggplot(dep, aes(date)) +
   geom_col(aes(y = g, fill = "Monthly growth"), width = 22, colour = NA) +
   geom_line(aes(y = g12, colour = "12-month growth"), linewidth = 0.55) +
   scale_fill_manual(values = c("Monthly growth" = "grey60")) +
-  scale_colour_manual(values = c("12-month growth" = "firebrick2")) +
+  scale_colour_manual(values = c("12-month growth" = LANCET[["red"]])) +
   x_scale_agg +
   scale_y_continuous(expand = expansion(mult = 0.08)) +
   labs(y = "Growth (log points, %)",
@@ -229,7 +230,7 @@ cap_pan <- wrap_cap(
 p_pan <- ggplot(pan, aes(report_date)) +
   geom_hline(yintercept = 0, colour = "grey70", linewidth = 0.25) +
   geom_line(aes(y = g12_nat), colour = "grey65", linewidth = 0.35) +
-  geom_line(aes(y = g12), colour = "firebrick2", linewidth = 0.4) +
+  geom_line(aes(y = g12), colour = LANCET[["red"]], linewidth = 0.4) +
   facet_wrap(~ dept_f, ncol = 5, scales = "free_y") +
   scale_x_date(date_breaks = "6 years", date_labels = "%Y", expand = c(0.02, 0)) +
   labs(y = "12-month deposit growth (log points, %)",

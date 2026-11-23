@@ -27,10 +27,11 @@ library(arrow)
 library(tidyverse)
 library(data.table)
 library(scales)
+source("code/00_palette.R")     # LANCET, lancet_n()
 
 # ---- Figure style -----------------------------------------------------------
 
-PAL  <- c(blue = "#2a78d6", orange = "#eb6834")
+PAL  <- LANCET   # project Lancet palette (code/00_palette.R)
 INK  <- c(primary = "#0b0b0b", secondary = "#52514e", muted = "#8a8880")
 SURF <- "white"
 
@@ -79,7 +80,7 @@ plots <- list()
 # Bar chart of a discrete count per firm (number of banks / products).
 count_bar <- function(dt, var, title, x_lab, subtitle, x_breaks = pretty_breaks()) {
   ggplot(dt, aes(x = .data[[var]])) +
-    geom_bar(fill = PAL[["blue"]], width = 0.8) +
+    geom_bar(fill = PAL[["navy"]], width = 0.8) +
     scale_x_continuous(breaks = x_breaks, expand = expansion(add = 0.6)) +
     scale_y_continuous(labels = label_comma(), expand = expansion(mult = c(0, 0.05))) +
     labs(title = title, subtitle = subtitle, x = x_lab, y = "Number of firms") +
@@ -153,7 +154,7 @@ used_unused <- sample[fecha_reporte >= TS_START,
 plots$used_vs_unused <- ggplot(used_unused,
                                aes(x = fecha_reporte, y = amount / 1e9, fill = type)) +
   geom_area(colour = SURF, linewidth = 0.2) +
-  scale_fill_manual(values = c(Used = PAL[["blue"]], Unused = PAL[["orange"]]),
+  scale_fill_manual(values = c(Used = PAL[["navy"]], Unused = PAL[["red"]]),
                     breaks = c("Used", "Unused")) +
   scale_x_date(date_breaks = "2 years", date_labels = "%Y",
                expand = expansion(mult = 0.01)) +

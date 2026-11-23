@@ -24,6 +24,7 @@
 suppressPackageStartupMessages({
   library(arrow); library(dplyr); library(tidyr); library(ggplot2); library(forcats)
 })
+source("code/00_palette.R")     # LANCET, lancet_n()
 
 PARQUET  <- "data/raw/muestra_anonima_base2015_v2.parquet"
 FIGDIR   <- "output/figures"
@@ -37,7 +38,7 @@ on.exit({ sink(); close(con) }, add = TRUE)
 cat("=== peru_dollarization2.R ===\n", format(Sys.time()), "\n\n")
 options(width = 140, dplyr.width = Inf, pillar.width = 140)
 
-PAL  <- c(blue = "#2a78d6", orange = "#eb6834", aqua = "#1baf7a", yellow = "#eda100")
+PAL  <- LANCET   # project Lancet palette (code/00_palette.R)
 INK  <- c(primary = "#0b0b0b", secondary = "#52514e", muted = "#8a8880")
 SURF <- "#fcfcfb"
 
@@ -132,7 +133,7 @@ ts <- d %>%
 p1 <- ggplot(ts, aes(fecha_reporte, amount, fill = kind)) +
   geom_area(alpha = 0.95, colour = SURF, linewidth = 0.15) +
   facet_wrap(~ currency, ncol = 1, scales = "free_y") +
-  scale_fill_manual(values = c(Used = PAL[["blue"]], Unused = PAL[["orange"]]),
+  scale_fill_manual(values = c(Used = PAL[["navy"]], Unused = PAL[["red"]]),
                     breaks = c("Used", "Unused")) +
   scale_x_date(date_breaks = "2 years", date_labels = "%Y", expand = c(0, 0)) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
@@ -211,7 +212,7 @@ print(as.data.frame(tot), digits = 3, row.names = FALSE)
 prod_tab <- prod_tab %>% mutate(producto = factor(producto, levels = rev(tot$producto)))
 p5 <- ggplot(prod_tab, aes(share, producto, fill = currency)) +
   geom_col(width = 0.7) +
-  scale_fill_manual(values = c(PAL[["blue"]], PAL[["orange"]]), breaks = unname(CUR_LAB)) +
+  scale_fill_manual(values = c(PAL[["navy"]], PAL[["red"]]), breaks = unname(CUR_LAB)) +
   scale_x_continuous(expand = expansion(mult = c(0, 0.05))) +
   labs(title = "Composition of unused credit, by product",
        subtitle = paste0("Share of total unused credit, ", format(SNAPSHOT, "%B %Y"),

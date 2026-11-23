@@ -21,6 +21,7 @@ suppressPackageStartupMessages({
   library(data.table); library(sf); library(ggplot2); library(scales)
   library(patchwork); library(kableExtra); library(knitr)
 })
+source("code/00_palette.R")     # LANCET, lancet_n()
 
 
 # ── Configuration ────────────────────────────────────────────────────────────
@@ -224,7 +225,7 @@ fig2 <- ggplot(curve, aes(rank, share, colour = grp, shape = grp)) +
   scale_x_continuous(breaks = c(1, seq(2, MAX_RANK, 2)), limits = c(1, MAX_RANK)) +
   scale_y_continuous(labels = label_percent(scale = 1, accuracy = 1),
                      limits = c(0, NA), expand = expansion(mult = c(0, .06))) +
-  scale_colour_manual(values = c("grey20", "#C0392B")) +
+  scale_colour_manual(values = c("grey20", LANCET[["red"]])) +
   scale_shape_manual(values = c(21, 24)) +
   labs(title    = "Average Deposit Share by District Rank",
        subtitle = paste0("District #1 refers to the district that raises the greatest amount of ",
@@ -348,7 +349,7 @@ fig3 <- ggplot(tab, aes(100 * branch_share, 100 * dep_share)) +
   geom_abline(slope = 1, intercept = 0, linetype = "22", colour = "grey55", linewidth = 0.4) +
   geom_point(aes(size = bank_branches, fill = single_office), shape = 21,
              colour = "grey20", alpha = 0.85, stroke = 0.3) +
-  scale_fill_manual(values = c(`FALSE` = "#4E79A7", `TRUE` = "#C0392B"),
+  scale_fill_manual(values = c(`FALSE` = LANCET[["navy"]], `TRUE` = LANCET[["red"]]),
                     labels = c(`FALSE` = "Branch network", `TRUE` = "Single office"),
                     name = NULL, guide = guide_legend(override.aes = list(size = 3.5))) +
   # seed = 1 makes the repulsion reproducible. ggrepel defaults to seed = NA and
@@ -445,7 +446,7 @@ zoom_box <- st_as_sfc(st_bbox(c(xmin = zoom[["xmin"]], xmax = zoom[["xmax"]],
 
 p4a <- base_map(map4, title = "Peru", show_legend = TRUE, border = NA) +
   geom_sf(data = adm1, fill = NA, colour = "grey55", linewidth = 0.12) +
-  geom_sf(data = zoom_box, fill = NA, colour = "#C0392B", linewidth = 0.7)
+  geom_sf(data = zoom_box, fill = NA, colour = LANCET[["red"]], linewidth = 0.7)
 
 inset_sf <- suppressWarnings(st_crop(map4, st_bbox(zoom_box)))
 p4b <- base_map(inset_sf, title = "Central Lima", show_legend = FALSE,
