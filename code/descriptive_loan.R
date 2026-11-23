@@ -137,14 +137,6 @@ plots$n_products_all <- count_bar(
   subtitle = sprintf("Pooled 2010-2023, %s firms", comma(n_firms_all))
 )
 
-# ---- Products with non-zero unused lines ------------------------------------
-
-unused_products <- sample[no_utilizado_total != 0,
-                          .(n_rows = .N, unused = sum(no_utilizado_total)),
-                          by = producto][order(-unused)]
-unused_products[, share_unused := unused / sum(unused)]
-print(unused_products)
-
 # ---- Used vs unused credit --------------------------------------------------
 
 # Sep 2010 is dropped: one firm reports ~S/295bn of used credit that month
