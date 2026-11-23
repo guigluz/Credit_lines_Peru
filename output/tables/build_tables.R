@@ -26,9 +26,6 @@ preamble <- "
 "
 postamble <- "\n\\end{document}\n"
 
-unlink(out_dir, recursive = TRUE)
-dir.create(out_dir, recursive = TRUE)
-
 tex_files <- list.files(folder, pattern = "\\.tex$", full.names = TRUE)
 tex_files <- tex_files[basename(tex_files) != "build_tables.R"]
 

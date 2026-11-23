@@ -34,6 +34,7 @@
 #   output/tables/tab_encaje_loan_growth.tex         main table: credit-line commitment growth vs term-loan growth (all lenders)
 #   output/tables/tab_encaje_loan_growth_banks.tex   same table, commercial banks only
 #   output/tables/tab_encaje_loan_growth_drawn.tex   robustness: credit-line drawn-credit growth
+#   output/tables/tab_encaje_loan_growth_lender_fe.tex  minimum-legal-rate columns with and without lender fixed effects
 #   output/validation/encaje_shock_*.csv             diagnostics (coverage, classification, exclusions, regressions)
 #   output/logs/11_loan_reserve_shock_regression.log this script's console log
 # ==============================================================================
@@ -258,7 +259,7 @@ fwrite(agg[, .(entidad, bank_standardized, entity_type, identificador, credit_cl
 # ==============================================================================
 hdr("5. Regressions")
 # Using Wild cluster bootstrap for small number of clusters (Cameron, Gelbach and Miller, 2008; Roodman et al., 2019)
-fit_one <- function(measure, cls, depvar, smp) {
+fit_one <- function(measure, cls, depvar, smp, lender_fe = FALSE) {
   v <- paste0("bank_shock_", measure)
   fit_dat <- agg[credit_class == cls & !is.na(get(depvar)) & !is.na(get(v)) &
                    (smp == "all" | entity_type %in% SAMPLE_TYPES[[smp]]),
@@ -269,7 +270,10 @@ fit_one <- function(measure, cls, depvar, smp) {
   # boottest() re-evaluates the model's `data` argument in the global environment
   assign("fit_dat", fit_dat, envir = globalenv())
 
-  m <- feols(growth ~ bank_shock | cell, data = fit_dat, cluster = ~entidad, notes = FALSE)
+  # lender_fe adds lender (entidad) fixed effects: the shock is then identified only from within-lender
+  # changes over time, net of each lender's average growth
+  fml <- if (lender_fe) growth ~ bank_shock | cell + entidad else growth ~ bank_shock | cell
+  m <- feols(fml, data = fit_dat, cluster = ~entidad, notes = FALSE)
   
   G <- fitstat(m, "g")[[1]]
   set.seed(SEED); dqrng::dqset.seed(SEED)
@@ -299,6 +303,15 @@ for (smp in SAMPLES) for (j in MEASURES) for (k in seq_len(nrow(SPECS))) {
   fits[[key]]$stats[, spec := SPECS$spec[k]]
   print(summary(fits[[key]]$model))
 }
+# minimum-legal-rate main columns again, adding lender fixed effects (all lenders)
+for (k in c("cl_commit", "term_loan")) {
+  sp <- SPECS[spec == k]
+  key <- paste("all", "gen_min_legal", paste0(k, "_lender_fe"), sep = "|")
+  cat(sprintf("\n-- sample all: gen_min_legal, %s, %s, lender fixed effects --\n", sp$cls, sp$depvar))
+  fits[[key]] <- fit_one("gen_min_legal", sp$cls, sp$depvar, "all", lender_fe = TRUE)
+  fits[[key]]$stats[, spec := paste0(k, "_lender_fe")]
+  print(summary(fits[[key]]$model))
+}
 reg <- rbindlist(lapply(fits, `[[`, "stats"))
 write_val(reg, "regressions")
 cat("\nRegression summary:\n")
@@ -313,7 +326,7 @@ if (nrow(few)) cat(sprintf("\nLIMITED-CLUSTER FLAG: %d of %d regressions have fe
 # ==============================================================================
 hdr("6. LaTeX tables")
 pf <- function(p) formatC(p, format = "f", digits = 3)
-dict <- c(bank_shock = "Bank shock", cell = "Firm $\\times$ date")
+dict <- c(bank_shock = "Bank shock", cell = "Firm $\\times$ date", entidad = "Lender")
 
 write_table <- function(keys, file, headers, title, label, notes, postprocess = identity) {
   rg <- reg[match(keys, paste(sample, measure, spec, sep = "|"))]
@@ -380,6 +393,22 @@ write_table(
   notes = paste0("\\textit{Notes:} The dependent variable is the log change between consecutive month-ends of a firm's drawn credit-line balance ",
                  "(\\textit{cr\\'edito vigente}) at a lender, excluding the unused part of the line; the main specification instead uses ",
                  "total commitments (drawn plus unused). ", sample_note[["all"]], common_notes))
+
+# lender fixed effects: minimum-legal-rate columns of the main table, without and with lender fixed effects
+write_table(
+  keys = c("all|gen_min_legal|cl_commit", "all|gen_min_legal|cl_commit_lender_fe",
+           "all|gen_min_legal|term_loan", "all|gen_min_legal|term_loan_lender_fe"),
+  file = file.path(TABS, "tab_encaje_loan_growth_lender_fe.tex"),
+  headers = list("^Credit type" = list("Credit lines" = 2, "Term loans" = 2),
+                 "^Outcome"     = rep(c("Commitment", "Drawn"), each = 2)),
+  title = "Reserve-requirement shocks and credit growth with lender fixed effects",
+  label = "tab:encaje_loan_growth_lender_fe",
+  notes = paste0(main_notes |> sub(pattern = "columns 1 and 3", replacement = "columns 1--2", fixed = TRUE) |>
+                   sub(pattern = "columns 2 and 4", replacement = "columns 3--4", fixed = TRUE),
+                 "The shock is the minimum legal reserve rate shock. Columns (1) and (3) reproduce the corresponding columns of the main table; ",
+                 "columns (2) and (4) add lender fixed effects, so the coefficient is identified only from changes within a lender over time, ",
+                 "net of its average growth. ", sample_note[["all"]], common_notes),
+  postprocess = function(x) sub("(Credit type[^\n]*\\\\ *\n)", "\\1\\\\cmidrule(lr){2-3} \\\\cmidrule(lr){4-5}\n", x))
 
 hdr("Session")
 print(sessionInfo())
