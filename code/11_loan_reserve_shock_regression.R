@@ -35,6 +35,7 @@
 #   output/tables/tab_encaje_loan_growth_banks.tex   same table, commercial banks only
 #   output/tables/tab_encaje_loan_growth_drawn.tex   robustness: credit-line drawn-credit growth
 #   output/tables/tab_encaje_loan_growth_lender_fe.tex  minimum-legal-rate columns with and without lender fixed effects
+#   output/tables/tab_encaje_loan_growth_lender_fe_slides.tex  same, bare tabular for slides (no caption or notes)
 #   output/validation/encaje_shock_*.csv             diagnostics (coverage, classification, exclusions, regressions)
 #   output/logs/11_loan_reserve_shock_regression.log this script's console log
 # ==============================================================================
@@ -328,7 +329,8 @@ hdr("6. LaTeX tables")
 pf <- function(p) formatC(p, format = "f", digits = 3)
 dict <- c(bank_shock = "Bank shock", cell = "Firm $\\times$ date", entidad = "Lender")
 
-write_table <- function(keys, file, headers, title, label, notes, postprocess = identity) {
+# slides = TRUE: bare tabular for a presentation (no caption, label or notes; drops the firm-by-date cells row)
+write_table <- function(keys, file, headers, title = NULL, label = NULL, notes = NULL, postprocess = identity, slides = FALSE) {
   rg <- reg[match(keys, paste(sample, measure, spec, sep = "|"))]
   stopifnot(!anyNA(rg$coef))
   extra <- list(
@@ -337,11 +339,12 @@ write_table <- function(keys, file, headers, title, label, notes, postprocess = 
     "^Firm-by-date cells"               = formatC(rg$n_firm_date_cells, format = "d", big.mark = ","),
     "^Wild cluster bootstrap $p$-value" = pf(rg$p_wild_cluster_boot),
     "^Mean of dependent variable"       = formatC(rg$mean_y, format = "f", digits = 3))
-  etable(lapply(fits[keys], `[[`, "model"), tex = TRUE, file = file, replace = TRUE, dict = dict, tpt = TRUE,
+  if (slides) extra[["^Firm-by-date cells"]] <- NULL
+  etable(lapply(fits[keys], `[[`, "model"), tex = TRUE, file = file, replace = TRUE, dict = dict, tpt = !slides,
          notes = notes, title = title, label = label, headers = headers,
          fitstat = ~ n + r2 + wr2, extralines = extra, style.tex = style.tex("aer"),
          signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.10), digits = "r3", digits.stats = 3,
-         postprocess.tex = postprocess, fontsize = "small", placement = "!h", depvar = FALSE)
+         postprocess.tex = postprocess, fontsize = "small", placement = "!h", depvar = FALSE, float = !slides)
   cat("Wrote ", file, "\n", sep = "")
 }
 
@@ -409,6 +412,15 @@ write_table(
                  "columns (2) and (4) add lender fixed effects, so the coefficient is identified only from changes within a lender over time, ",
                  "net of its average growth. ", sample_note[["all"]], common_notes),
   postprocess = function(x) sub("(Credit type[^\n]*\\\\ *\n)", "\\1\\\\cmidrule(lr){2-3} \\\\cmidrule(lr){4-5}\n", x))
+
+# slide version of the lender fixed-effects table
+write_table(
+  keys = c("all|gen_min_legal|cl_commit", "all|gen_min_legal|cl_commit_lender_fe",
+           "all|gen_min_legal|term_loan", "all|gen_min_legal|term_loan_lender_fe"),
+  file = file.path(TABS, "tab_encaje_loan_growth_lender_fe_slides.tex"),
+  headers = list("^Credit type" = list("Credit lines" = 2, "Term loans" = 2)),
+  postprocess = function(x) sub("(Credit type[^\n]*\\\\ *\n)", "\\1\\\\cmidrule(lr){2-3} \\\\cmidrule(lr){4-5}\n", x),
+  slides = TRUE)
 
 hdr("Session")
 print(sessionInfo())
