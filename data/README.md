@@ -27,6 +27,9 @@ README
   - B-2343 -- "direct" credit by type of product by bank (downloaded by 01_collect_direct.R)
   - B-2322 -- "indirect" credit by type of product by bank (downloaded by 01_collect_indirect.R)
   - B-2358 -- deposits and credit by branch and location (downloaded by 01_collect_deposits.R) 
+  
+- encaje_efectivo_promedio.csv -- monthly average cash reserve requirement (encaje) for the banca múltiple subsystem, in S/ millions.
+  Source: BCRP - Series Mensuales
 
 # Processed
 

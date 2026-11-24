@@ -28,6 +28,11 @@
 # Figure 3) fig_cum_bank_shock_hist  Histogram across institutions of the minimum-legal-rate bank shock
 #      summed over 2013-2021; commercial banks shaded.
 #
+# Figure 4) fig_encaje_funds  Required (exigible) vs effective (efectivo) reserve funds of
+#      commercial banks, MN and ME, daily averages by month. Recreates the BCRP chart; source
+#      data/raw/encaje_efectivo_promedio.csv (BCRP export: series codes in row 1, names in
+#      row 2, Spanish month labels, "n.d." = missing).
+#
 # Usage:  Rscript code/12_figures_regression.R      (output: output/figures/*.pdf)
 # ==============================================================================
 
@@ -266,3 +271,52 @@ p_cum <- ggplot(cum, aes(cum_shock, fill = group)) +
 
 save_fig("fig_cum_bank_shock_hist.pdf", p_cum, height = 3.8)
 message("Wrote ", file.path(fig_dir, "fig_cum_bank_shock_hist.pdf"))
+
+
+# ══ Figure 4: required vs effective reserve funds (BCRP) ═════════════════════
+# Recreates the BCRP chart "Encaje de las empresas bancarias (promedios diarios)",
+# series PN07679NM, PN07680NM, PN07687NM, PN07688NM. MN navy, ME red;
+# required dashed, effective solid. MN (S/) and ME (US$) share one axis, as in the BCRP chart.
+FUNDS_CSV   <- "data/raw/encaje_efectivo_promedio.csv"
+FUNDS_START <- as.Date("2003-04-01")   # window of the BCRP chart (Abr2003 onward)
+stopifnot(file.exists(FUNDS_CSV))
+
+# Rows 1-2 hold series codes and names; months are labelled in Spanish ("Dic01"); missing = "n.d."
+funds <- fread(FUNDS_CSV, skip = 2, header = FALSE, na.strings = "n.d.",
+               col.names = c("mes", "MN_req", "MN_eff", "ME_req", "ME_eff"))
+MESES <- c(Ene = 1, Feb = 2, Mar = 3, Abr = 4, May = 5, Jun = 6,
+           Jul = 7, Ago = 8, Sep = 9, Set = 9, Oct = 10, Nov = 11, Dic = 12)
+funds[, `:=`(month = MESES[substr(mes, 1, 3)], year = 2000L + as.integer(substr(mes, 4, 5)))]
+stopifnot(!anyNA(funds$month), !anyNA(funds$year))
+funds[, date := as.Date(sprintf("%d-%02d-01", year, month))]
+
+funds_long <- melt(funds[date >= FUNDS_START], id.vars = "date",
+                   measure.vars = c("MN_req", "MN_eff", "ME_req", "ME_eff"),
+                   variable.name = "series", value.name = "value")[!is.na(value)]
+
+FUNDS_LAB <- c(MN_req = "MN required (S/ mn)",  MN_eff = "MN effective (S/ mn)",
+               ME_req = "ME required (US$ mn)", ME_eff = "ME effective (US$ mn)")
+FUNDS_COL <- c(MN_req = COL[["MN"]], MN_eff = COL[["MN"]], ME_req = COL[["ME"]], ME_eff = COL[["ME"]])
+FUNDS_LTY <- c(MN_req = "22", MN_eff = "solid", ME_req = "22", ME_eff = "solid")
+funds_long[, series := factor(series, levels = names(FUNDS_LAB))]
+
+p_funds <- ggplot(funds_long, aes(date, value, colour = series, linetype = series)) +
+  geom_line(linewidth = 0.5) +
+  scale_colour_manual(values = FUNDS_COL, labels = FUNDS_LAB) +
+  scale_linetype_manual(values = FUNDS_LTY, labels = FUNDS_LAB) +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y", expand = expansion(mult = 0.01)) +
+  scale_y_continuous(labels = scales::label_comma(), limits = c(0, NA),
+                     expand = expansion(mult = c(0, 0.04))) +
+  guides(colour = guide_legend(nrow = 2, byrow = TRUE),
+         linetype = guide_legend(nrow = 2, byrow = TRUE)) +
+  labs(title    = "Reserve Funds of Commercial Banks, Required versus Effective",
+       subtitle = sprintf("Daily averages, monthly, %s to %s",
+                          format(min(funds_long$date), "%b %Y"), format(max(funds_long$date), "%b %Y")),
+       y = "Millions (S/ for MN, US$ for ME)",
+       caption = paste0(
+         "Source: BCRP, Encaje de las empresas bancarias (promedios diarios), series PN07679NM, PN07680NM, PN07687NM, PN07688NM.\n",
+         "Required = fondos de encaje exigibles; effective = fondos de encaje efectivos. MN in millions of soles, ME in millions of US dollars.")) +
+  base_theme
+
+save_fig("fig_encaje_funds.pdf", p_funds, height = 4.3)
+message("Wrote ", file.path(fig_dir, "fig_encaje_funds.pdf"))
